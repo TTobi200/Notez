@@ -1,0 +1,63 @@
+.background 
+{
+    -fx-background-color:rgb(253, 251, 182);
+}
+
+.background-darker
+{
+    -fx-background-color:rgb(242, 239, 123);
+}
+
+.text-area .scroll-pane 
+{
+    -fx-background-color: transparent;
+}
+
+.text-area .scroll-pane .viewport
+{
+    -fx-background-color: transparent;
+}
+
+
+.text-area .scroll-pane .content
+{
+    -fx-background-color: transparent;
+}
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-opacity: 0;
+}
+
+.tab-pane
+{
+    -fx-tab-min-width:90px;
+}
+
+.tab
+{
+    -fx-background-insets: 0 1 0 1,0,0;
+}
+
+.tab-pane .tab
+{
+    -fx-background-color: #e6e6e6;
+}
+
+.tab-pane .tab:selected
+{
+    -fx-background-color: rgb(253, 251, 182);
+}
+
+.tab .tab-label 
+{ 
+    -fx-alignment: CENTER;
+    -fx-text-fill: black;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.tab:selected .tab-label 
+{ 
+    -fx-alignment: CENTER;
+    -fx-text-fill: black;
+}
