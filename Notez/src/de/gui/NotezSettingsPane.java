@@ -11,19 +11,19 @@ import de.util.NotezSettings.Setting;
 
 public class NotezSettingsPane extends GridPane
 {
-    private TextField txtName;
+	private TextField txtName;
 
-    public NotezSettingsPane(NotezSettings.Setting<?> setting)
-    {
-        init(setting);
-    }
+	public NotezSettingsPane(NotezSettings.Setting<?> setting)
+	{
+		init(setting);
+	}
 
-    public void init(Setting<?> setting)
-    {
-        String name = setting.getName();
-        txtName = new TextField(name);
+	public void init(Setting<?> setting)
+	{
+		String name = setting.getName();
+		txtName = new TextField((String)setting.getValue());
 
-        add(new Label(name), 1, 1);
-        add(txtName, 2, 1);
-    }
+		add(new Label(name), 1, 1);
+		add(txtName, 2, 1);
+	}
 }
