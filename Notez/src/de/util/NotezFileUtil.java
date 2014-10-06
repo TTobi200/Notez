@@ -6,7 +6,11 @@
  */
 package de.util;
 
+import java.awt.Desktop;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
@@ -50,5 +54,33 @@ public class NotezFileUtil
 		FileChooser f = new FileChooser();
 		f.setInitialDirectory(new File(initPath));
 		return f.showOpenDialog(parent);
+	}
+
+	public static String getResourceFile(String path)
+	{
+		return NotezFileUtil.class.getClassLoader().getResource(path).getFile();
+	}
+
+	public static URL getResourceURL(String path)
+	{
+		return NotezFileUtil.class.getClassLoader().getResource(path);
+	}
+
+	public static InputStream getResourceStream(String icon)
+	{
+		return NotezFileUtil.class.getClassLoader()
+			.getResourceAsStream(icon);
+	}
+
+	public static void openParentFolderInBrowser(File file)
+	{
+		try
+		{
+			Desktop.getDesktop().open(file.getParentFile());
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 }

@@ -6,9 +6,12 @@
  */
 package de.gui;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,13 +49,13 @@ import de.util.NotezSettings.Setting;
 
 public class NotezController
 {
-	public static final String ICON_ADD = "/include/icons/new_icon.png";
-	public static final String ICON_SETTINGS = "/include/icons/icon_local_settings.png";
-	public static final String ICON_CLOSE = "/include/icons/icon_close.png";
-	public static final String ICON_UNPINNED = "/include/icons/pin.png";
-	public static final String ICON_PINNED = "/include/icons/pin_2.png";
-	public static final String ICON_RESIZE = "/include/icons/resize.gif";
-	public static final String ICON_PICK_NOTE = "/include/icons/pn-add-source-copy.gif";
+	public static final String ICON_ADD = "include/icons/new_icon.png";
+	public static final String ICON_SETTINGS = "include/icons/icon_local_settings.png";
+	public static final String ICON_CLOSE = "include/icons/icon_close.png";
+	public static final String ICON_UNPINNED = "include/icons/pin.png";
+	public static final String ICON_PINNED = "include/icons/pin_2.png";
+	public static final String ICON_RESIZE = "include/icons/resize.gif";
+	public static final String ICON_PICK_NOTE = "include/icons/pn-add-source-copy.gif";
 
 	@FXML
 	private ToolBar toolBar;
@@ -145,20 +148,21 @@ public class NotezController
 	 */
 	private void loadIcons()
 	{
+
 		resize.setImage(new Image(
-			getClass().getResourceAsStream(ICON_RESIZE)));
+			NotezFileUtil.getResourceStream(ICON_RESIZE)));
 		pickNote.setImage(new Image(
-			getClass().getResourceAsStream(ICON_PICK_NOTE)));
+			NotezFileUtil.getResourceStream(ICON_PICK_NOTE)));
 		btnAdd.setGraphic(new ImageView(new Image(
-			getClass().getResourceAsStream(ICON_ADD))));
+			NotezFileUtil.getResourceStream(ICON_ADD))));
 		btnClose.setGraphic(new ImageView(new Image(
-			getClass().getResourceAsStream(ICON_CLOSE))));
+			NotezFileUtil.getResourceStream(ICON_CLOSE))));
 		btnSettings.setGraphic(new ImageView(new Image(
-			getClass().getResourceAsStream(ICON_SETTINGS))));
+			NotezFileUtil.getResourceStream(ICON_SETTINGS))));
 		btnPin.setGraphic(iVUnpinned = new ImageView(new Image(
-			getClass().getResourceAsStream(ICON_UNPINNED))));
+			NotezFileUtil.getResourceStream(ICON_UNPINNED))));
 		iVPinned = new ImageView(new Image(
-			getClass().getResourceAsStream(ICON_PINNED)));
+			NotezFileUtil.getResourceStream(ICON_PINNED)));
 	}
 
 	/**
@@ -288,6 +292,19 @@ public class NotezController
 		}
 	}
 
+	public void openUrl(URI uri) throws IOException, URISyntaxException
+	{
+		if(Desktop.isDesktopSupported())
+		{
+			Desktop desktop = Desktop.getDesktop();
+
+			if(desktop.isSupported(java.awt.Desktop.Action.BROWSE))
+			{
+				desktop.browse(uri);
+			}
+		}
+	}
+
 	private void removeAllFromStack(StackPane stack)
 	{
 		stack.getChildren().removeAll(stack.getChildren());
@@ -373,7 +390,7 @@ public class NotezController
 			@Override
 			public void handle(ActionEvent e)
 			{
-				System.out.println(link.getText());
+				NotezFileUtil.openParentFolderInBrowser(new File(link.getText()));
 			}
 		});
 	}

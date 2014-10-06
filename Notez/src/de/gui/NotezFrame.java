@@ -26,13 +26,11 @@ public class NotezFrame extends Application
 	public static final double DEF_WIDTH = 299d;
 	public static final double DEF_HEIGTH = 212d;
 
-	public static final String FXML_PATH = "./include/fxml/NotezGui.fxml";
+	public static final String FXML_PATH = "include/fxml/NotezGui.fxml";
 	public static final String SETTINGS_FILE = "./Settings";
 	public static final String NOTEZ_FILE_PREFIX = "Notez_";
 
 	public static String LOCAL_NOTEZ_FOLDER = "LOCAL_NOTEZ_FOLDER";
-
-	public static File fxmlFile;
 
 	public static ArrayList<NotezController> notezOpened;
 
@@ -40,13 +38,12 @@ public class NotezFrame extends Application
 	public void start(Stage primaryStage) throws Exception
 	{
 		notezOpened = new ArrayList<NotezController>();
-		fxmlFile = new File(getClass().getClassLoader().getResource(
-			FXML_PATH).getFile());
 		NotezSettings.load(new File(SETTINGS_FILE));
 
 		LOCAL_NOTEZ_FOLDER = NotezSettings.getString(LOCAL_NOTEZ_FOLDER);
 
-		if(NotezFileUtil.fileCanBeLoad(fxmlFile))
+		// TODO not working inside jar?
+		// if(NotezFileUtil.fileCanBeLoad(fxmlFile))
 		{
 			int foundNotes = 0;
 			for(File f : new File(LOCAL_NOTEZ_FOLDER).listFiles())
@@ -88,9 +85,10 @@ public class NotezFrame extends Application
 	public static Stage createNotezFrame(Stage stage, File f)
 		throws IOException
 	{
+		// FXMLLoader loader = new FXMLLoader(
+		// fxmlFile.toURI().toURL());
 		FXMLLoader loader = new FXMLLoader(
-			new File(fxmlFile.getAbsolutePath()
-			).toURI().toURL());
+			NotezFileUtil.getResourceURL(FXML_PATH));
 
 		NotezController ctrl = new NotezController(stage, f, notezOpened.size());
 
