@@ -49,6 +49,7 @@ import de.util.NotezSettings.Setting;
 
 public class NotezController
 {
+	public static final String ICON_LOGO = "include/icons/logo.png";
 	public static final String ICON_ADD = "include/icons/new_icon.png";
 	public static final String ICON_SETTINGS = "include/icons/icon_local_settings.png";
 	public static final String ICON_CLOSE = "include/icons/icon_close.png";
@@ -148,7 +149,6 @@ public class NotezController
 	 */
 	private void loadIcons()
 	{
-
 		resize.setImage(new Image(
 			NotezFileUtil.getResourceStream(ICON_RESIZE)));
 		pickNote.setImage(new Image(
@@ -163,6 +163,9 @@ public class NotezController
 			NotezFileUtil.getResourceStream(ICON_UNPINNED))));
 		iVPinned = new ImageView(new Image(
 			NotezFileUtil.getResourceStream(ICON_PINNED)));
+
+		stage.getIcons().add(new Image(
+			NotezFileUtil.getResourceStream(ICON_LOGO)));
 	}
 
 	/**
@@ -226,9 +229,21 @@ public class NotezController
 	@FXML
 	public void closeNote() throws Exception
 	{
-		// TODO Do you want to save?
-		saveNote(note);
-		stage.hide();
+		switch(NotezDialog.showWarningDialog(stage, "Save Note",
+			"Do you like to save the Note?"))
+		{
+			case CANCEL:
+			case CLOSE:
+				// Do nothing
+				break;
+
+			case YES:
+				saveNote(note);
+			case NO:
+				stage.hide();
+				break;
+
+		}
 	}
 
 	/**

@@ -25,16 +25,16 @@
 			BorderPane.alignment="CENTER">
 			<items>
 				<Button fx:id="btnClose" mnemonicParsing="false" onAction="#closeNote"
-					styleClass="background-darker" stylesheets="@Stylesheets.css" text="" />
+					styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="false"/>
 				<Button fx:id="btnSettings" mnemonicParsing="false" onAction="#openSettings"
-					styleClass="background-darker" stylesheets="@Stylesheets.css" text="" />
+					styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="false"/>
 				<Button fx:id="btnAdd" mnemonicParsing="false" onAction="#addNewNote"
-					styleClass="background-darker" stylesheets="@Stylesheets.css" text="" />
+					styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="false"/>
 				<ToggleButton fx:id="btnPin" mnemonicParsing="false"
 					onAction="#pinNote" styleClass="background-darker" stylesheets="@Stylesheets.css"
-					text="" />
+					text="" visible="false"/>
 				<ImageView fx:id="pickNote" 
-					pickOnBounds="true" preserveRatio="true" />
+					pickOnBounds="true" preserveRatio="true" visible="false"/>
 			</items>
 		</ToolBar>
 	</top>
