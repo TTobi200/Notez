@@ -134,7 +134,9 @@ public class NotezController
         setupGestureSource(pickNote);
         setupGestureTarget(toolBar);
 
-        initialView(loadNote(note));
+        // Show settings on first start?
+        // initialView(loadNote(note));
+        switchTo(txtNote);
         initSettings(NotezSettings.getAll());
     }
 
@@ -203,6 +205,7 @@ public class NotezController
      * @param initView
      *            = has to show settings?
      */
+    @SuppressWarnings("unused")
     private void initialView(boolean initView)
     {
         switchTo(initView ? borderPaneSettings : txtNote);
@@ -227,7 +230,7 @@ public class NotezController
     @FXML
     public void closeNote() throws Exception
     {
-        switch(NotezDialog.showWarningDialog(stage, "Save Note",
+        switch(NotezDialog.showQuestionDialog(stage, "Save Note",
             "Do you like to save the Note?"))
         {
             case CANCEL:
@@ -235,6 +238,7 @@ public class NotezController
                 // Do nothing
                 break;
 
+            case OK:
             case YES:
                 saveNote(note);
             case NO:
@@ -310,7 +314,7 @@ public class NotezController
         File parent = note.getParentFile();
         if(parent != null && !parent.exists())
         {
-            switch(NotezDialog.showInfoDialog(stage, "Create folder",
+            switch(NotezDialog.showQuestionDialog(stage, "Create folder",
                 "Notez folder not found. Create new?"))
             {
                 default:

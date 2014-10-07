@@ -9,7 +9,7 @@ package de;
 import java.io.FileNotFoundException;
 
 import javafx.application.Application;
-import de.gui.NotezFrame;
+import de.gui.NotezLoadSplash;
 
 public class Startup
 {
@@ -17,6 +17,7 @@ public class Startup
     {
         // FORTEST when running executable jar
         // System.setErr(new PrintStream("./err.txt"));
-        Application.launch(NotezFrame.class, args);
+        Application.launch(NotezLoadSplash.class, args);
+        // Application.launch(NotezFrame.class, args);
     }
 }

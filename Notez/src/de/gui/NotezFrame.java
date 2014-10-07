@@ -37,9 +37,6 @@ public class NotezFrame extends Application
     @Override
     public void start(Stage primaryStage) throws Exception
     {
-        // TODO add starting frame which displays logo and disappears slowly
-        // (fix time)
-
         notezOpened = new ArrayList<NotezController>();
         NotezSettings.load(new File(SETTINGS_FILE));
 
@@ -56,6 +53,7 @@ public class NotezFrame extends Application
                 {
                     if(f.getName().startsWith(NOTEZ_FILE_PREFIX))
                     {
+                        NotezLoadSplash.availableNotez.add(f.getName());
                         createNotezFrame(f);
                         foundNotes++;
                     }

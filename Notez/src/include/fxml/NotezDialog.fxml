@@ -20,9 +20,10 @@
 	<bottom>
 		<HBox fx:id="hBoxButtons" alignment="TOP_RIGHT" styleClass="background" stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
 			<children>
-				<Button fx:id="btnYes" mnemonicParsing="false" onAction="#yes" styleClass="background" stylesheets="@Stylesheets.css" text="Yes" />
-				<Button fx:id="btnNo" mnemonicParsing="false" onAction="#no" styleClass="background" stylesheets="@Stylesheets.css" text="No" />
-				<Button fx:id="btnCancel" mnemonicParsing="false" onAction="#cancel" styleClass="background" stylesheets="@Stylesheets.css" text="Cancel" />
+				<Button fx:id="btnYes" mnemonicParsing="false" onAction="#yes" styleClass="background" stylesheets="@Stylesheets.css" text="Yes" visible="false" />
+				<Button fx:id="btnOk" mnemonicParsing="false" onAction="#ok" styleClass="background" stylesheets="@Stylesheets.css" text="Ok" visible="false" />
+				<Button fx:id="btnNo" mnemonicParsing="false" onAction="#no" styleClass="background" stylesheets="@Stylesheets.css" text="No" visible="false" />
+				<Button fx:id="btnCancel" mnemonicParsing="false" onAction="#cancel" styleClass="background" stylesheets="@Stylesheets.css" text="Cancel" visible="false" />
 			</children>
 		</HBox>
 	</bottom>
