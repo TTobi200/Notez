@@ -13,7 +13,7 @@
 		<HBox fx:id="hBoxButtom" alignment="TOP_RIGHT" styleClass="background"
 			stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
 			<children>
-				<Hyperlink fx:id="fileLink" text="" />
+				<Hyperlink fx:id="fileLink" text="" visible="false"/>
 				<ImageView fx:id="resize" 
 					pickOnBounds="true" preserveRatio="true" />
 			</children>
