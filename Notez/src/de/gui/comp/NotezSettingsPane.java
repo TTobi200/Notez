@@ -1,7 +1,7 @@
 /*
  * Copyright © 2014 Unitechnik Systems GmbH. All Rights Reserved.
  */
-package de.gui;
+package de.gui.comp;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;

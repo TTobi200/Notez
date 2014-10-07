@@ -43,6 +43,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import de.gui.comp.NotezSettingsPane;
 import de.util.NotezFileUtil;
 import de.util.NotezSettings;
 import de.util.NotezSettings.Setting;
@@ -128,14 +129,15 @@ public class NotezController
         loadIcons();
         addDraggableNode(toolBar);
         addResizeCorner(resize);
-        addVisibleToolBtns(toolBar,
+        addVisibleNodeHider(toolBar,
             toolBar.getItems().toArray());
-        addVisibleToolBtns(hBoxButtom, fileLink);
+        addVisibleNodeHider(hBoxButtom, fileLink);
         setupGestureSource(pickNote);
         setupGestureTarget(toolBar);
 
         // Show settings on first start?
         // initialView(loadNote(note));
+        loadNote(note);
         switchTo(txtNote);
         initSettings(NotezSettings.getAll());
     }
@@ -443,7 +445,7 @@ public class NotezController
         });
     }
 
-    private void addVisibleToolBtns(final Node node, Object... objects)
+    private void addVisibleNodeHider(final Node node, Object... objects)
     {
         node.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override

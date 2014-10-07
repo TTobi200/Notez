@@ -132,4 +132,9 @@ public class NotezLoadSplash extends Application
             }
         }
     }
+
+    public static void add(String name)
+    {
+        availableNotez.add(name);
+    }
 }

@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -34,9 +36,16 @@ public class NotezFrame extends Application
 
     public static ArrayList<NotezController> notezOpened;
 
+    public static ObservableList<File> notezFiles =
+                    FXCollections.observableArrayList();
+
     @Override
     public void start(Stage primaryStage) throws Exception
     {
+        // FORTEST test remote notez
+        // new NotezRemoteSync().addUser(new NotezRemoteUser("User 1", new File(
+        // "./remote")));
+
         notezOpened = new ArrayList<NotezController>();
         NotezSettings.load(new File(SETTINGS_FILE));
 
@@ -49,15 +58,7 @@ public class NotezFrame extends Application
             File notezFolder = new File(LOCAL_NOTEZ_FOLDER);
             if(notezFolder.exists())
             {
-                for(File f : notezFolder.listFiles())
-                {
-                    if(f.getName().startsWith(NOTEZ_FILE_PREFIX))
-                    {
-                        NotezLoadSplash.availableNotez.add(f.getName());
-                        createNotezFrame(f);
-                        foundNotes++;
-                    }
-                }
+                foundNotes = loadAllNotez(notezFolder);
             }
             else
             {
@@ -75,6 +76,23 @@ public class NotezFrame extends Application
             }
         }
         // TODO errorcannot load fxml
+    }
+
+    public static int loadAllNotez(File notezFolder) throws IOException
+    {
+        int foundNotes = 0;
+        for(File f : notezFolder.listFiles())
+        {
+            if(f.getName().startsWith(NOTEZ_FILE_PREFIX)
+               && !notezFiles.contains(f))
+            {
+                NotezLoadSplash.add(f.getName());
+                createNotezFrame(f);
+                foundNotes++;
+            }
+        }
+
+        return foundNotes;
     }
 
     public static Stage createNotezFrame() throws IOException
@@ -113,6 +131,7 @@ public class NotezFrame extends Application
         stage.show();
 
         notezOpened.add(ctrl);
+        notezFiles.add(f);
 
         return stage;
     }
