@@ -496,8 +496,12 @@ public class NotezController
             {
                 if(me.getButton() != MouseButton.MIDDLE)
                 {
-                    stage.setWidth(me.getSceneX() + me.getSceneX() - initialYW);
-                    stage.setHeight(me.getSceneY() + me.getSceneY() - initialXH);
+                	double tempH = me.getSceneX() - initialYW;
+    		    	double tempW = me.getSceneY() - initialXH;
+    		        stage.setWidth(me.getSceneX() + me.getSceneX() - initialYW);
+    		        stage.setHeight(me.getSceneY() + me.getSceneY() - initialXH);
+    		        initialYW += tempH;
+    		        initialXH += tempW;
                 }
             }
         });
