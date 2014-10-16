@@ -12,6 +12,13 @@ StickyNotes and has some more features like:
 - generate TODO-lists                   [ ]
 - create remote notes                   [ ]
 - share own notes                       [ ]
+- add settings:                         [ ]
+-   Autosave                            [ ]
+-   which notes to open at startup      [ ]
+- save-option                           [ ]
+- x pages per note                      [ ]
+- header (for taskbar)                  [ ]
+- open closed notez
 
 __________________________________________________________________________
 Developpers:  TTobi200; Dauerdaddlah
