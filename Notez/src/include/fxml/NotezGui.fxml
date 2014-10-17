@@ -10,52 +10,40 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
 	<bottom>
-		<HBox fx:id="hBoxButtom" alignment="TOP_RIGHT" styleClass="background"
-			stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
+		<HBox fx:id="hBoxButtom" alignment="TOP_RIGHT" styleClass="background" stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
 			<children>
-				<Hyperlink fx:id="fileLink" text="" visible="false"/>
-				<ImageView fx:id="resize" 
-					pickOnBounds="true" preserveRatio="true" />
+				<Hyperlink fx:id="fileLink" text="" visible="false" />
+				<ImageView fx:id="resize" pickOnBounds="true" preserveRatio="true" />
 			</children>
 		</HBox>
 	</bottom>
 	<top>
-		<ToolBar fx:id="toolBar" nodeOrientation="RIGHT_TO_LEFT"
-			styleClass="background-darker" stylesheets="@Stylesheets.css"
-			BorderPane.alignment="CENTER">
+		<ToolBar fx:id="toolBar" nodeOrientation="RIGHT_TO_LEFT" styleClass="background-darker" stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
 			<items>
-				<Button fx:id="btnClose" mnemonicParsing="false" onAction="#closeNote"
-					styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="false">
-					<tooltip><Tooltip fx:id="tTipClose" text="Close the Notez"/></tooltip>
+				<Button fx:id="btnClose" mnemonicParsing="false" onAction="#closeNote" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="false">
+					<tooltip><Tooltip fx:id="tTipClose" text="Close the Notez" /></tooltip>
     			</Button>
-				<Button fx:id="btnSettings" mnemonicParsing="false" onAction="#openSettings"
-					styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="false">
-					<tooltip><Tooltip text="Open Notez Settings"/></tooltip>
+				<Button fx:id="btnSettings" mnemonicParsing="false" onAction="#openSettings" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="false">
+					<tooltip><Tooltip text="Open Notez Settings" /></tooltip>
 				</Button>
-				<Button fx:id="btnAdd" mnemonicParsing="false" onAction="#addNewNote"
-					styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="false">
-					<tooltip><Tooltip text="Add new Notez"/></tooltip>
+				<Button fx:id="btnAdd" mnemonicParsing="false" onAction="#addNewNote" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="false">
+					<tooltip><Tooltip text="Add new Notez" /></tooltip>
 				</Button>
-				<ToggleButton fx:id="btnPin" mnemonicParsing="false"
-					onAction="#pinNote" styleClass="background-darker" stylesheets="@Stylesheets.css"
-					text="" visible="false">
-					<tooltip><Tooltip text="Pin Notez on top"/></tooltip>
+				<ToggleButton fx:id="btnPin" mnemonicParsing="false" onAction="#pinNote" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="false">
+					<tooltip><Tooltip text="Pin Notez on top" /></tooltip>
 				</ToggleButton>
-				<ImageView fx:id="pickNote" 
-					pickOnBounds="true" preserveRatio="true" visible="false"/>
+				<ImageView fx:id="pickNote" pickOnBounds="true" preserveRatio="true" visible="false" />
+            <TextField fx:id="txtTitle" nodeOrientation="LEFT_TO_RIGHT" styleClass="background-darker" stylesheets="@Stylesheets.css" />
 			</items>
 		</ToolBar>
 	</top>
 	<center>
 		<StackPane fx:id="stack" BorderPane.alignment="CENTER">
 			<children>
-				<TextArea fx:id="txtNote" styleClass="background"
-					stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER" />
+				<TextArea fx:id="txtNote" styleClass="background" stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER" />
 				<BorderPane fx:id="borderPaneSettings">
 					<center>
-						<TabPane fx:id="tabSettings" styleClass="background"
-							stylesheets="@Stylesheets.css" tabClosingPolicy="UNAVAILABLE"
-							BorderPane.alignment="CENTER">
+						<TabPane fx:id="tabSettings" styleClass="background" stylesheets="@Stylesheets.css" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
 							<tabs>
 								<Tab fx:id="tabLocal" text="Lokal">
 									<content>
@@ -67,15 +55,10 @@
 						</TabPane>
 					</center>
 					<bottom>
-						<HBox alignment="TOP_RIGHT" styleClass="background"
-							stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
+						<HBox alignment="TOP_RIGHT" styleClass="background" stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
 							<children>
-								<Button fx:id="btnSaveSettings" mnemonicParsing="false"
-									onAction="#saveSettings" styleClass="background" stylesheets="@Stylesheets.css"
-									text="Speichern" />
-								<Button fx:id="btnCancelSettings" mnemonicParsing="false"
-									onAction="#cancelSettings" styleClass="background" stylesheets="@Stylesheets.css"
-									text="Abbrechen" />
+								<Button fx:id="btnSaveSettings" mnemonicParsing="false" onAction="#saveSettings" styleClass="background" stylesheets="@Stylesheets.css" text="Speichern" />
+								<Button fx:id="btnCancelSettings" mnemonicParsing="false" onAction="#cancelSettings" styleClass="background" stylesheets="@Stylesheets.css" text="Abbrechen" />
 							</children>
 						</HBox>
 					</bottom>

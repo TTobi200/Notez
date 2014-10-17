@@ -29,6 +29,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.Tooltip;
@@ -95,7 +96,7 @@ public class NotezController
     @FXML
     private ImageView pickNote;
     @FXML
-    private Tooltip tTipClose;
+    private TextField txtTitle;
 
     private double initialX;
     private double initialY;
@@ -133,6 +134,8 @@ public class NotezController
 
         loadIcons();
         addDraggableNode(toolBar);
+        addDraggableNode(txtTitle); // TODO now text selection by mouse is
+                                    // impossible :-(
         addResizeCorner(resize);
         addVisibleToolbarNodeHider(toolBar);
         // addVisibleNodeHider(toolBar,
@@ -212,6 +215,8 @@ public class NotezController
         if(NotezFileUtil.fileCanBeLoad(note))
         {
             txtNote.setText(new String(Files.readAllBytes(note.toPath())));
+            txtTitle.setText(note.getName().replace(
+                NotezFrame.NOTEZ_FILE_POSFIX, ""));
 
             // File exists and loaded
             return true;
@@ -260,7 +265,12 @@ public class NotezController
 
             case OK:
             case YES:
-                saveNote(note);
+                String notezName = txtTitle.getText();
+                saveNote(NotezFileUtil.canBeUsedAsFilename(notezName) ?
+                                new File(note.getParent().replace(".", "")
+                                         + notezName
+                                         + NotezFrame.NOTEZ_FILE_POSFIX)
+                                : note);
             case NO:
                 NotezSettings.store(new File(
                     NotezFrame.SETTINGS_FILE));
@@ -331,6 +341,12 @@ public class NotezController
      */
     private void saveNote(File note) throws Exception
     {
+        // If opened notez differes from to saving note
+        if(note != this.note)
+        {
+            this.note.delete();
+        }
+
         File parent = note.getParentFile();
         if(parent != null && !parent.exists())
         {
