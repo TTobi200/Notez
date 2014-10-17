@@ -20,24 +20,24 @@ public class NotezSettingsPane extends GridPane
     }
 
     private Node node;
-    private Setting<Object>[] setting;
+    private Setting<?>[] setting;
     private NotezSettingsType type;
 
-    public NotezSettingsPane(Setting<Object>... s)
+    public NotezSettingsPane(Setting<?>... s)
     {
         this(NotezSettingsType.TEXT, s);
     }
 
-    public NotezSettingsPane(NotezSettingsType type, Setting<Object>... setting)
+    public NotezSettingsPane(NotezSettingsType type, Setting<?>... setting)
     {
         this.setting = setting;
         this.type = type;
         init(type, setting);
     }
 
-    public void init(NotezSettingsType type, Setting<Object>... setting)
+    public void init(NotezSettingsType type, Setting<?>... setting)
     {
-        for(Setting<Object> s : setting)
+        for(Setting<?> s : setting)
         {
             switch(type)
             {
@@ -47,8 +47,8 @@ public class NotezSettingsPane extends GridPane
                     break;
 
                 case COMBO:
-                    node = new ComboBox<Setting<Object>>();
-                    ((ComboBox<Setting<Object>>)node).getItems()
+                    node = new ComboBox<Setting<?>>();
+                    ((ComboBox<Setting<?>>)node).getItems()
                         .addAll(setting);
                     break;
 
@@ -64,9 +64,9 @@ public class NotezSettingsPane extends GridPane
 
     public void saveSetting()
     {
-        for(Setting<Object> s : setting)
+        for(@SuppressWarnings("rawtypes") Setting s : setting)
         {
-            String value = "";
+            Object value = null;
             switch(type)
             {
                 default:
@@ -75,7 +75,7 @@ public class NotezSettingsPane extends GridPane
                     break;
 
                 case COMBO:
-                    value = String.valueOf(((ComboBox<Setting<Object>>)node).getSelectionModel()
+                    value = String.valueOf(((ComboBox<Setting<?>>)node).getSelectionModel()
                         .getSelectedItem()
                         .getValue());
                     break;
