@@ -25,14 +25,22 @@
 			BorderPane.alignment="CENTER">
 			<items>
 				<Button fx:id="btnClose" mnemonicParsing="false" onAction="#closeNote"
-					styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="false"/>
+					styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="false">
+					<tooltip><Tooltip fx:id="tTipClose" text="Close the Notez"/></tooltip>
+    			</Button>
 				<Button fx:id="btnSettings" mnemonicParsing="false" onAction="#openSettings"
-					styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="false"/>
+					styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="false">
+					<tooltip><Tooltip text="Open Notez Settings"/></tooltip>
+				</Button>
 				<Button fx:id="btnAdd" mnemonicParsing="false" onAction="#addNewNote"
-					styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="false"/>
+					styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="false">
+					<tooltip><Tooltip text="Add new Notez"/></tooltip>
+				</Button>
 				<ToggleButton fx:id="btnPin" mnemonicParsing="false"
 					onAction="#pinNote" styleClass="background-darker" stylesheets="@Stylesheets.css"
-					text="" visible="false"/>
+					text="" visible="false">
+					<tooltip><Tooltip text="Pin Notez on top"/></tooltip>
+				</ToggleButton>
 				<ImageView fx:id="pickNote" 
 					pickOnBounds="true" preserveRatio="true" visible="false"/>
 			</items>

@@ -23,6 +23,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBase;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
@@ -30,6 +31,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToolBar;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
@@ -43,6 +45,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import de.gui.comp.NotezSettingsPane;
 import de.util.NotezFileUtil;
 import de.util.NotezSettings;
@@ -91,6 +94,8 @@ public class NotezController
     private ToggleButton btnPin;
     @FXML
     private ImageView pickNote;
+    @FXML
+    private Tooltip tTipClose;
 
     private double initialX;
     private double initialY;
@@ -129,8 +134,9 @@ public class NotezController
         loadIcons();
         addDraggableNode(toolBar);
         addResizeCorner(resize);
-        addVisibleNodeHider(toolBar,
-            toolBar.getItems().toArray());
+        addVisibleToolbarNodeHider(toolBar);
+        // addVisibleNodeHider(toolBar,
+        // toolBar.getItems().toArray());
         addVisibleNodeHider(hBoxButtom, fileLink);
         setupGestureSource(pickNote);
         setupGestureTarget(toolBar);
@@ -153,6 +159,18 @@ public class NotezController
         {
             vBoxLocalSet.getChildren().add(new NotezSettingsPane(s));
         }
+
+        addLocalNotezAvail();
+    }
+
+    private void addLocalNotezAvail()
+    {
+        NotezLoadSplash.availableNotez.forEach(notez ->
+        {
+        });
+        // vBoxLocalSet.getChildren().add(
+        // new NotezSettingsPane(NotezSettingsType.COMBO), new Setting<>(name,
+        // value));
     }
 
     /**
@@ -445,13 +463,56 @@ public class NotezController
         });
     }
 
-    private void addVisibleNodeHider(final Node node, Object... objects)
+    private void addVisibleToolbarNodeHider(ToolBar toolBar)
+    {
+        Object[] itms = toolBar.getItems().toArray();
+
+        // Add item visibility
+        addVisibleNodeHider(toolBar, itms);
+
+        for(Object o : itms)
+        {
+            if(o instanceof ButtonBase)
+            {
+                Tooltip tT = ((ButtonBase)o).getTooltip();
+                if(tT != null)
+                {
+                    // Add Tooltip visibility
+                    addVisibleNodeHider(tT, itms);
+                }
+            }
+        }
+
+        addVisibleNodeHider(toolBar,
+            toolBar.getItems().toArray());
+    }
+
+    private void addVisibleNodeHider(Tooltip tT, Object... itms)
+    {
+        tT.setOnShowing(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent arg0)
+            {
+                displayChilds(itms, true);
+            }
+        });
+
+        tT.setOnHiding(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent arg0)
+            {
+                displayChilds(itms, true);
+            }
+        });
+    }
+
+    private void addVisibleNodeHider(final Node node, Object... itms)
     {
         node.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent me)
             {
-                displayChilds(objects, true);
+                displayChilds(itms, true);
             }
         });
 
@@ -459,7 +520,7 @@ public class NotezController
             @Override
             public void handle(MouseEvent me)
             {
-                displayChilds(objects, false);
+                displayChilds(itms, false);
             }
         });
     }
@@ -496,12 +557,12 @@ public class NotezController
             {
                 if(me.getButton() != MouseButton.MIDDLE)
                 {
-                	double tempH = me.getSceneX() - initialYW;
-    		    	double tempW = me.getSceneY() - initialXH;
-    		        stage.setWidth(me.getSceneX() + me.getSceneX() - initialYW);
-    		        stage.setHeight(me.getSceneY() + me.getSceneY() - initialXH);
-    		        initialYW += tempH;
-    		        initialXH += tempW;
+                    double tempH = me.getSceneX() - initialYW;
+                    double tempW = me.getSceneY() - initialXH;
+                    stage.setWidth(me.getSceneX() + me.getSceneX() - initialYW);
+                    stage.setHeight(me.getSceneY() + me.getSceneY() - initialXH);
+                    initialYW += tempH;
+                    initialXH += tempW;
                 }
             }
         });

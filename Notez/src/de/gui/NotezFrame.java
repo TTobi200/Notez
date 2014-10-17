@@ -30,7 +30,7 @@ public class NotezFrame extends Application
 
     public static final String FXML_PATH = "include/fxml/NotezGui.fxml";
     public static final String SETTINGS_FILE = "./Settings";
-    public static final String NOTEZ_FILE_PREFIX = "Notez_";
+    public static final String NOTEZ_FILE_POSFIX = ".notez";
 
     public static String LOCAL_NOTEZ_FOLDER = "LOCAL_NOTEZ_FOLDER";
 
@@ -83,7 +83,7 @@ public class NotezFrame extends Application
         int foundNotes = 0;
         for(File f : notezFolder.listFiles())
         {
-            if(f.getName().startsWith(NOTEZ_FILE_PREFIX)
+            if(f.getName().endsWith(NOTEZ_FILE_POSFIX)
                && !notezFiles.contains(f))
             {
                 NotezLoadSplash.add(f.getName());
@@ -100,11 +100,11 @@ public class NotezFrame extends Application
         return createNotezFrame(new File(
             NotezFrame.LOCAL_NOTEZ_FOLDER
                             + File.separator
-                            + NotezFrame.NOTEZ_FILE_PREFIX
                             + new SimpleDateFormat(
                                 "yyyy-MM-dd_HH-mm-ss")
                                 .format(new Date(
-                                    System.currentTimeMillis()))));
+                                    System.currentTimeMillis()))
+                            + NotezFrame.NOTEZ_FILE_POSFIX));
     }
 
     public static Stage createNotezFrame(File f) throws IOException
