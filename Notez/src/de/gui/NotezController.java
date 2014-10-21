@@ -15,8 +15,14 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
+import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
@@ -42,9 +48,11 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import de.gui.comp.NotezSettingsPane;
 import de.util.NotezFileUtil;
 import de.util.NotezSettings;
@@ -159,6 +167,26 @@ public class NotezController
 
 		lastSavedText.set(txtNote.getText());
 		noteChanged = lastSavedText.isNotEqualTo(txtNote.textProperty());
+		
+		// FORTEST
+		DoubleBinding b = null;
+		for(Node n : toolBar.getItems())
+		{
+			if(n instanceof Region)
+			{
+				Region r = (Region)n;
+				if(b == null)
+				{
+					b = Bindings.add(0d, r.widthProperty());
+				}
+				else
+				{
+					b = b.add(r.widthProperty());
+				}
+			}
+		}
+		toolBar.prefWidthProperty().bind(b);
+		stage.minWidthProperty().bind(toolBar.prefWidthProperty());
 	}
 
 	/**
@@ -166,7 +194,7 @@ public class NotezController
 	 * @param all
 	 *            = new {@link HashMap} with {@link Setting}
 	 */
-	private void initSettings(HashMap<String, Setting<Object>> all)
+	private void initSettings(Map<String, Setting<Object>> all)
 	{
 		for(Setting<Object> s : all.values())
 		{
@@ -220,12 +248,12 @@ public class NotezController
 	protected boolean loadNote(File note) throws IOException
 	{
 		addFileLink(fileLink, note);
+		txtTitle.setText(note.getName().replace(
+			NotezFrame.NOTEZ_FILE_POSFIX, ""));
 
 		if(NotezFileUtil.fileCanBeLoad(note))
 		{
 			txtNote.setText(new String(Files.readAllBytes(note.toPath())));
-			txtTitle.setText(note.getName().replace(
-				NotezFrame.NOTEZ_FILE_POSFIX, ""));
 
 			// File exists and loaded
 			return true;
@@ -383,6 +411,7 @@ public class NotezController
 		{
 			throw e;
 		}
+
 		lastSavedText.set(txtNote.getText());
 	}
 
@@ -469,7 +498,7 @@ public class NotezController
 
 	private void addVisibleToolbarNodeHider(ToolBar toolBar)
 	{
-		Object[] itms = toolBar.getItems().toArray();
+		Node[] itms = toolBar.getItems().stream().toArray(Node[]::new);
 
 		// Add item visibility
 		addVisibleNodeHider(toolBar, itms);
@@ -487,32 +516,35 @@ public class NotezController
 			}
 		}
 
-		addVisibleNodeHider(toolBar, toolBar.getItems().toArray());
+		addVisibleNodeHider(toolBar,
+			toolBar.getItems().stream().toArray(Node[]::new));
 	}
 
-	private void addVisibleNodeHider(Tooltip tT, Object... itms)
+	private void addVisibleNodeHider(Tooltip tT, Node... itms)
 	{
 		tT.setOnShowing(arg0 -> displayChilds(itms, true));
 
 		tT.setOnHiding(arg0 -> displayChilds(itms, true));
 	}
 
-	private void addVisibleNodeHider(final Node node, Object... itms)
+	private void addVisibleNodeHider(final Node node, Node... itms)
 	{
 		node.setOnMouseEntered(me -> displayChilds(itms, true));
 
 		node.setOnMouseExited(me -> displayChilds(itms, false));
 	}
 
-	private void displayChilds(Object[] objects, boolean visible)
+	private void displayChilds(Node[] nodes, boolean visible)
 	{
-		for(Object n : objects)
+		Timeline line = new Timeline();
+		final Duration DUR = Duration.seconds(1d);
+		for(Node n : nodes)
 		{
-			if(n instanceof Node)
-			{
-				((Node)n).setVisible(visible);
-			}
+			line.getKeyFrames().add(
+				new KeyFrame(DUR, new KeyValue(n.opacityProperty(),
+					visible ? 1d : 0d)));
 		}
+		line.play();
 		// objects.forEach(itm -> itm.setVisible(visible));
 	}
 
@@ -533,8 +565,20 @@ public class NotezController
 			{
 				double tempH = me.getSceneX() - initialYW;
 				double tempW = me.getSceneY() - initialXH;
-				stage.setWidth(me.getSceneX() + me.getSceneX() - initialYW);
-				stage.setHeight(me.getSceneY() + me.getSceneY() - initialXH);
+				double height = me.getSceneY() + me.getSceneY() - initialXH;
+				double width = me.getSceneX() + me.getSceneX() - initialYW;
+				
+				if(height < stage.getMinHeight())
+				{
+					height = stage.getMinHeight();
+				}
+				if(width < stage.getMinWidth())
+				{
+					width = stage.getMinWidth();
+				}
+				
+				stage.setWidth(width);
+				stage.setHeight(height);
 				initialYW += tempH;
 				initialXH += tempW;
 			}

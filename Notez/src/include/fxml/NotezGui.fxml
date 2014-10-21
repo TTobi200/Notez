@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.image.*?>
-<?import javafx.scene.effect.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import de.gui.*?>
-<?import javafx.scene.control.ToggleButton?>
 
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
 	<bottom>
 		<HBox fx:id="hBoxButtom" alignment="TOP_RIGHT" styleClass="background" stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
 			<children>
-				<Hyperlink fx:id="fileLink" text="" visible="false" />
+				<Hyperlink fx:id="fileLink" opacity="0d" text="" visible="true" />
 				<ImageView fx:id="resize" pickOnBounds="true" preserveRatio="true" />
 			</children>
 		</HBox>
@@ -20,20 +17,28 @@
 	<top>
 		<ToolBar fx:id="toolBar" nodeOrientation="RIGHT_TO_LEFT" styleClass="background-darker" stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
 			<items>
-				<Button fx:id="btnClose" mnemonicParsing="false" onAction="#closeNote" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="false">
-					<tooltip><Tooltip fx:id="tTipClose" text="Close the Notez" /></tooltip>
-    			</Button>
-				<Button fx:id="btnSettings" mnemonicParsing="false" onAction="#openSettings" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="false">
-					<tooltip><Tooltip text="Open Notez Settings" /></tooltip>
+				<Button fx:id="btnClose" mnemonicParsing="false" onAction="#closeNote" opacity="0d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
+					<tooltip>
+						<Tooltip fx:id="tTipClose" text="Close the Notez" />
+					</tooltip>
 				</Button>
-				<Button fx:id="btnAdd" mnemonicParsing="false" onAction="#addNewNote" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="false">
-					<tooltip><Tooltip text="Add new Notez" /></tooltip>
+				<Button fx:id="btnSettings" mnemonicParsing="false" onAction="#openSettings" opacity="0d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
+					<tooltip>
+						<Tooltip text="Open Notez Settings" />
+					</tooltip>
 				</Button>
-				<ToggleButton fx:id="btnPin" mnemonicParsing="false" onAction="#pinNote" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="false">
-					<tooltip><Tooltip text="Pin Notez on top" /></tooltip>
+				<Button fx:id="btnAdd" mnemonicParsing="false" onAction="#addNewNote" opacity="0d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
+					<tooltip>
+						<Tooltip text="Add new Notez" />
+					</tooltip>
+				</Button>
+				<ToggleButton fx:id="btnPin" mnemonicParsing="false" onAction="#pinNote" opacity="0d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
+					<tooltip>
+						<Tooltip text="Pin Notez on top" />
+					</tooltip>
 				</ToggleButton>
-				<ImageView fx:id="pickNote" pickOnBounds="true" preserveRatio="true" visible="false" />
-            <TextField fx:id="txtTitle" nodeOrientation="LEFT_TO_RIGHT" styleClass="background-darker" stylesheets="@Stylesheets.css" />
+				<ImageView fx:id="pickNote" opacity="0d" pickOnBounds="true" preserveRatio="true" visible="true" />
+				<TextField fx:id="txtTitle" nodeOrientation="LEFT_TO_RIGHT" styleClass="background-darker" stylesheets="@Stylesheets.css" />
 			</items>
 		</ToolBar>
 	</top>

@@ -16,7 +16,6 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -123,7 +122,7 @@ public class NotezFrame extends Application
         NotezController ctrl = new NotezController(stage, f, notezOpened.size());
 
         loader.setController(ctrl);
-        Scene scene = new Scene(loader.<Parent> load());
+        Scene scene = new Scene(loader.load());
         stage.setScene(scene);
         stage.setHeight(DEF_HEIGTH);
         stage.setWidth(DEF_WIDTH);
