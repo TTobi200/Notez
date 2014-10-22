@@ -248,6 +248,7 @@ public class NotezController
     protected boolean loadNote(File note) throws IOException
     {
         addFileLink(fileLink, note);
+        getStage().titleProperty().bind(txtTitle.textProperty());
         txtTitle.setText(note.getName().replace(
             NotezFrame.NOTEZ_FILE_POSFIX, ""));
 
@@ -628,5 +629,15 @@ public class NotezController
     public Stage getStage()
     {
         return stage;
+    }
+    
+    public File getNoteFile()
+	{
+		return note;
+	}
+    
+    public String getNoteText()
+    {
+    	return txtNote.getText();
     }
 }

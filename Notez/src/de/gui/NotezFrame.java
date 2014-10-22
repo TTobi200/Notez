@@ -9,7 +9,6 @@ package de.gui;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 import javafx.application.Application;
@@ -33,7 +32,7 @@ public class NotezFrame extends Application
 
     public static String LOCAL_NOTEZ_FOLDER = "LOCAL_NOTEZ_FOLDER";
 
-    public static ArrayList<NotezController> notezOpened;
+    public static ObservableList<NotezController> notezOpened;
 
     public static ObservableList<File> notezFiles =
                     FXCollections.observableArrayList();
@@ -45,7 +44,7 @@ public class NotezFrame extends Application
         // new NotezRemoteSync().addUser(new NotezRemoteUser("User 1", new File(
         // "./remote")));
 
-        notezOpened = new ArrayList<NotezController>();
+        notezOpened = FXCollections.observableArrayList();
         NotezSettings.load(new File(SETTINGS_FILE));
 
         LOCAL_NOTEZ_FOLDER = NotezSettings.getString(LOCAL_NOTEZ_FOLDER);
@@ -86,7 +85,11 @@ public class NotezFrame extends Application
                && !notezFiles.contains(f))
             {
                 NotezLoadSplash.add(f.getName());
-                createNotezFrame(f);
+                if(createNotezFrame(f) == null)
+                {
+                	NotezLoadSplash.add(f.getName() + " failed");
+                	continue;
+                }
                 foundNotes++;
             }
         }
