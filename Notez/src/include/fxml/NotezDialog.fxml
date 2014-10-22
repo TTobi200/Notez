@@ -5,25 +5,42 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0" prefWidth="319.0" styleClass="background" stylesheets="@Stylesheets.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity"
+	prefHeight="100.0" prefWidth="319.0" styleClass="background"
+	stylesheets="@Stylesheets.css" xmlns="http://javafx.com/javafx/8"
+	xmlns:fx="http://javafx.com/fxml/1">
 	<top>
-		<ToolBar fx:id="toolBar" nodeOrientation="RIGHT_TO_LEFT" styleClass="background-darker" stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
+		<ToolBar fx:id="toolBar" nodeOrientation="RIGHT_TO_LEFT"
+			styleClass="background-darker" stylesheets="@Stylesheets.css"
+			BorderPane.alignment="CENTER">
 			<items>
-				<Button fx:id="btnClose" mnemonicParsing="false" onAction="#close" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" />
-				<Label fx:id="lblTitle" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" />
+				<Button fx:id="btnClose" mnemonicParsing="false" onAction="#close"
+					styleClass="background-darker" stylesheets="@Stylesheets.css" text="" />
+				<Label fx:id="lblTitle" styleClass="background-darker"
+					stylesheets="@Stylesheets.css" text="" />
 			</items>
 		</ToolBar>
 	</top>
 	<center>
-		<Label fx:id="lblMsg" styleClass="background" stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER" />
+		<Label fx:id="lblMsg" styleClass="background" stylesheets="@Stylesheets.css"
+			BorderPane.alignment="CENTER" />
 	</center>
 	<bottom>
-		<HBox fx:id="hBoxButtons" alignment="TOP_RIGHT" styleClass="background" stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
+		<HBox fx:id="hBoxButtons" alignment="TOP_RIGHT" styleClass="background"
+			stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
 			<children>
-				<Button fx:id="btnYes" mnemonicParsing="false" onAction="#yes" styleClass="background" stylesheets="@Stylesheets.css" text="Yes" visible="false" />
-				<Button fx:id="btnOk" mnemonicParsing="false" onAction="#ok" styleClass="background" stylesheets="@Stylesheets.css" text="Ok" visible="false" />
-				<Button fx:id="btnNo" mnemonicParsing="false" onAction="#no" styleClass="background" stylesheets="@Stylesheets.css" text="No" visible="false" />
-				<Button fx:id="btnCancel" mnemonicParsing="false" onAction="#cancel" styleClass="background" stylesheets="@Stylesheets.css" text="Cancel" visible="false" />
+				<Button fx:id="btnYes" mnemonicParsing="false" onAction="#yes"
+					styleClass="background" stylesheets="@Stylesheets.css" text="Yes"
+					visible="false" />
+				<Button fx:id="btnOk" mnemonicParsing="false" onAction="#ok"
+					styleClass="background" stylesheets="@Stylesheets.css" text="Ok"
+					visible="false" />
+				<Button fx:id="btnNo" mnemonicParsing="false" onAction="#no"
+					styleClass="background" stylesheets="@Stylesheets.css" text="No"
+					visible="false" />
+				<Button fx:id="btnCancel" mnemonicParsing="false" onAction="#cancel"
+					styleClass="background" stylesheets="@Stylesheets.css" text="Cancel"
+					visible="false" />
 			</children>
 		</HBox>
 	</bottom>
