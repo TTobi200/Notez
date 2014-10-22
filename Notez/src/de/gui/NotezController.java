@@ -66,6 +66,8 @@ public class NotezController
     public static final String ICON_CLOSE = "include/icons/icon_close.png";
     public static final String ICON_UNPINNED = "include/icons/pin.png";
     public static final String ICON_PINNED = "include/icons/pin_2.png";
+    public static final String ICON_SAVE = "include/icons/save.png";
+    public static final String ICON_DELETE = "include/icons/delete.png";
     public static final String ICON_RESIZE = "include/icons/resize.gif";
     public static final String ICON_PICK_NOTE = "include/icons/pn-add-source-copy.gif";
 
@@ -77,6 +79,10 @@ public class NotezController
     private Button btnClose;
     @FXML
     private Button btnSettings;
+    @FXML
+    private Button btnSave;
+    @FXML
+    private Button btnDelete;
     @FXML
     private TextArea txtNote;
     @FXML
@@ -187,6 +193,7 @@ public class NotezController
         }
         toolBar.prefWidthProperty().bind(b);
         stage.minWidthProperty().bind(toolBar.prefWidthProperty());
+        btnSave.disableProperty().bind(noteChanged.not());
     }
 
     /**
@@ -228,6 +235,10 @@ public class NotezController
             NotezFileUtil.getResourceStream(ICON_CLOSE))));
         btnSettings.setGraphic(new ImageView(new Image(
             NotezFileUtil.getResourceStream(ICON_SETTINGS))));
+        btnSave.setGraphic(new ImageView(new Image(
+            NotezFileUtil.getResourceStream(ICON_SAVE))));
+        btnDelete.setGraphic(new ImageView(new Image(
+            NotezFileUtil.getResourceStream(ICON_DELETE))));
         btnPin.setGraphic(iVUnpinned = new ImageView(new Image(
             NotezFileUtil.getResourceStream(ICON_UNPINNED))));
         iVPinned = new ImageView(new Image(
@@ -287,11 +298,22 @@ public class NotezController
 
     /**
      * Method to close this notez.
+     * User gets asked if he likes to save the notez.
      * @throws Exception
      *             See: {@link #saveNote(File)}
      */
     @FXML
     public void closeNote() throws Exception
+    {
+        closeNote(true);
+    }
+
+    /**
+     * Method to close this notez.
+     * @throws Exception
+     *             See: {@link #saveNote(File)}
+     */
+    public void closeNote(boolean askToSave) throws Exception
     {
         if(noteChanged.get())
         {
@@ -305,11 +327,7 @@ public class NotezController
 
                 case OK:
                 case YES:
-                    String notezName = txtTitle.getText();
-                    saveNote(NotezFileUtil.canBeUsedAsFilename(notezName) ? new File(
-                        note.getParent().replace(".", "") + notezName
-                                        + NotezFrame.NOTEZ_FILE_POSFIX)
-                                    : note);
+                    saveNote(genNotezFile(txtTitle.getText()));
                 case NO:
                     NotezSettings.store(new File(NotezFrame.SETTINGS_FILE));
                     break;
@@ -317,6 +335,13 @@ public class NotezController
             }
         }
         stage.hide();
+    }
+
+    private File genNotezFile(String notezName)
+    {
+        return NotezFileUtil.canBeUsedAsFilename(notezName) ? new File(
+            note.getParent().replace(".", "") + notezName
+                            + NotezFrame.NOTEZ_FILE_POSFIX) : note;
     }
 
     /**
@@ -369,6 +394,41 @@ public class NotezController
     {
         removeAllFromStack(stack);
         stack.getChildren().add(node);
+    }
+
+    @FXML
+    private void deleteNote() throws Exception
+    {
+        // TODO Animate that? :-)
+        switch(NotezDialog.showQuestionDialog(stage, "Delete Notez",
+            "Do you really want to delete this Notez?"))
+        {
+            default:
+            case NO:
+            case CANCEL:
+            case CLOSE:
+                return;
+
+            case YES:
+                if(note != null && note.exists())
+                {
+                    note.delete();
+                }
+                closeNote(false); // don't ask to save
+                break;
+        }
+
+    }
+
+    /**
+     * Method to save current note.
+     * @throws Exception
+     *             See: {@link FileWriter}
+     */
+    @FXML
+    private void saveNote() throws Exception
+    {
+        saveNote(note);
     }
 
     /**
@@ -630,14 +690,14 @@ public class NotezController
     {
         return stage;
     }
-    
+
     public File getNoteFile()
-	{
-		return note;
-	}
-    
+    {
+        return note;
+    }
+
     public String getNoteText()
     {
-    	return txtNote.getText();
+        return txtNote.getText();
     }
 }

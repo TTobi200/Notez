@@ -22,9 +22,21 @@
 						<Tooltip fx:id="tTipClose" text="Close the Notez" />
 					</tooltip>
 				</Button>
+				
+				<Button fx:id="btnDelete" mnemonicParsing="false" onAction="#deleteNote" opacity="0d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
+					<tooltip>
+						<Tooltip text="Delete Notez" />
+					</tooltip>
+				</Button>
+				
 				<Button fx:id="btnSettings" mnemonicParsing="false" onAction="#openSettings" opacity="0d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
 					<tooltip>
 						<Tooltip text="Open Notez Settings" />
+					</tooltip>
+				</Button>
+				<Button fx:id="btnSave" mnemonicParsing="false" onAction="#saveNote" opacity="0d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
+					<tooltip>
+						<Tooltip text="Save Notez" />
 					</tooltip>
 				</Button>
 				<Button fx:id="btnAdd" mnemonicParsing="false" onAction="#addNewNote" opacity="0d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
