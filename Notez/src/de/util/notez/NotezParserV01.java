@@ -28,6 +28,6 @@ public class NotezParserV01 extends NotezParserBase
 	protected NotezData parseImpl(File file) throws IOException
 	{
 		return new NotezData(file.getName(), new String(
-			Files.readAllBytes(file.toPath())), null);
+			Files.readAllBytes(file.toPath())), null, null);
 	}
 }

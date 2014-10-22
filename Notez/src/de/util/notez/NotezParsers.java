@@ -26,17 +26,7 @@ public class NotezParsers
 		mapParser.put("0", mapParser.get("0.1"));
 		
 		LinkedList<String> d = new LinkedList<>(mapParser.keySet());
-		d.sort((o1, o2) ->
-		{
-			int temp = o1.substring(0, o1.indexOf('.')).compareTo(o2.substring(0, o2.indexOf('.')));
-			
-			if(temp != 0)
-			{
-				return temp;
-			}
-			
-			return o1.substring(o1.indexOf('.') + 1).compareTo(o2.substring(o2.indexOf('.')));
-		});
+		d.sort(null);
 		
 		latestParser = mapParser.get(d.getLast());
 	}
@@ -78,22 +68,22 @@ public class NotezParsers
 		}
 	}
 	
-	public void save(NotezController controller, String path) throws IOException
+	public static void save(NotezController controller, String path) throws IOException
 	{
 		save(controller, new File(path));
 	}
 	
-	public void save(NotezController controller, File file) throws IOException
+	public static void save(NotezController controller, File file) throws IOException
 	{
 		save(controller, file, null);
 	}
 	
-	public void save(NotezController controller, String path, String version) throws IOException
+	public static void save(NotezController controller, String path, String version) throws IOException
 	{
 		save(controller, new File(path), version);
 	}
 	
-	public void save(NotezController controller, File file, String version) throws IOException
+	public static void save(NotezController controller, File file, String version) throws IOException
 	{
 		NotezParser parser = mapParser.get(version);
 		if(parser == null)

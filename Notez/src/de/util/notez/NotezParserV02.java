@@ -58,14 +58,14 @@ public class NotezParserV02 extends NotezParserBase
 			String[] position = r.readLine().split(" ");
 			double x;
 			double y;
-//			double w = Double.NaN;
-//			double h = Double.NaN;
+			double w = Double.NaN;
+			double h = Double.NaN;
 			switch(position.length)
 			{
 				case 4:
 				{
-//					w = Double.parseDouble(position[2]);
-//					h = Double.parseDouble(position[3]);
+					w = Double.parseDouble(position[2]);
+					h = Double.parseDouble(position[3]);
 				}
 				case 2:
 				{
@@ -86,7 +86,7 @@ public class NotezParserV02 extends NotezParserBase
 				sb.append(line);
 			}
 			
-			return new NotezData(file.getName(), sb.toString(), new Point2D(x, y));
+			return new NotezData(file.getName(), sb.toString(), new Point2D(x, y), new Point2D(w, h));
 		}
 	}
 }
