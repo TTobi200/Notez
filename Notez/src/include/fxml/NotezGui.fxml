@@ -7,99 +7,98 @@
 
 <BorderPane fx:id="root" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
 	<bottom>
-		<HBox fx:id="hBoxButtom" alignment="TOP_RIGHT" styleClass="background"
-			stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
+		<HBox fx:id="hBoxButtom" alignment="TOP_RIGHT" styleClass="background" stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
 			<children>
 				<Hyperlink fx:id="fileLink" opacity="0d" text="" visible="true" />
-				<ImageView fx:id="resize" pickOnBounds="true"
-					preserveRatio="true" />
+				<ImageView fx:id="resize" pickOnBounds="true" preserveRatio="true" />
 			</children>
 		</HBox>
 	</bottom>
 	<top>
-		<ToolBar fx:id="toolBar" nodeOrientation="RIGHT_TO_LEFT"
-			styleClass="background-darker" stylesheets="@Stylesheets.css"
-			BorderPane.alignment="CENTER">
+		<ToolBar fx:id="toolBar" nodeOrientation="RIGHT_TO_LEFT" styleClass="background-darker" stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
 			<items>
-				<Button fx:id="btnClose" mnemonicParsing="false" onAction="#closeNote"
-					opacity="0d" styleClass="background-darker" stylesheets="@Stylesheets.css"
-					text="" visible="true">
+				<Button fx:id="btnClose" mnemonicParsing="false" onAction="#closeNote" opacity="0d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
 					<tooltip>
 						<Tooltip fx:id="tTipClose" text="Close the Notez" />
 					</tooltip>
 				</Button>
-				<Button fx:id="btnSettings" mnemonicParsing="false" onAction="#openSettings"
-					opacity="0d" styleClass="background-darker" stylesheets="@Stylesheets.css"
-					text="" visible="true">
+				<Button fx:id="btnSettings" mnemonicParsing="false" onAction="#openSettings" opacity="0d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
 					<tooltip>
 						<Tooltip text="Open Notez Settings" />
 					</tooltip>
 				</Button>
-				<Button fx:id="btnDelete" mnemonicParsing="false" onAction="#deleteNote"
-					opacity="0d" styleClass="background-darker" stylesheets="@Stylesheets.css"
-					text="" visible="true">
+				<Button fx:id="btnDelete" mnemonicParsing="false" onAction="#deleteNote" opacity="0d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
 					<tooltip>
 						<Tooltip text="Delete Notez" />
 					</tooltip>
 				</Button>
-				<Button fx:id="btnSave" mnemonicParsing="false" onAction="#saveNote"
-					opacity="0d" styleClass="background-darker" stylesheets="@Stylesheets.css"
-					text="" visible="true">
+				<Button fx:id="btnSave" mnemonicParsing="false" onAction="#saveNote" opacity="0d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
 					<tooltip>
 						<Tooltip text="Save Notez" />
 					</tooltip>
 				</Button>
-				<Button fx:id="btnAdd" mnemonicParsing="false" onAction="#addNewNote"
-					opacity="0d" styleClass="background-darker" stylesheets="@Stylesheets.css"
-					text="" visible="true">
+				<Button fx:id="btnAdd" mnemonicParsing="false" onAction="#addNewNote" opacity="0d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
 					<tooltip>
 						<Tooltip text="Add new Notez" />
 					</tooltip>
 				</Button>
-				<ToggleButton fx:id="btnPin" mnemonicParsing="false"
-					onAction="#pinNote" opacity="0d" styleClass="background-darker"
-					stylesheets="@Stylesheets.css" text="" visible="true">
+				<Button fx:id="btnShare" mnemonicParsing="false" onAction="#shareNote" opacity="0d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
+					<tooltip>
+						<Tooltip text="Share Notez" />
+					</tooltip>
+				</Button>
+				<ToggleButton fx:id="btnPin" mnemonicParsing="false" onAction="#pinNote" opacity="0d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
 					<tooltip>
 						<Tooltip text="Pin Notez on top" />
 					</tooltip>
 				</ToggleButton>
-				<ImageView fx:id="pickNote" opacity="0d" pickOnBounds="true"
-					preserveRatio="true" visible="true" />
-				<TextField fx:id="txtTitle" nodeOrientation="LEFT_TO_RIGHT"
-					styleClass="background-darker" stylesheets="@Stylesheets.css" />
+				<ImageView fx:id="pickNote" opacity="0d" pickOnBounds="true" preserveRatio="true" visible="true" />
+				<TextField fx:id="txtTitle" nodeOrientation="LEFT_TO_RIGHT" styleClass="background-darker" stylesheets="@Stylesheets.css" />
 			</items>
 		</ToolBar>
 	</top>
 	<center>
 		<StackPane fx:id="stack" BorderPane.alignment="CENTER">
 			<children>
-				<TextArea fx:id="txtNote" styleClass="background"
-					stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER" />
+				<TextArea fx:id="txtNote" styleClass="background" stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER" />
 				<BorderPane fx:id="borderPaneSettings">
 					<center>
-						<TabPane fx:id="tabSettings" styleClass="background"
-							stylesheets="@Stylesheets.css" tabClosingPolicy="UNAVAILABLE"
-							BorderPane.alignment="CENTER">
+						<TabPane fx:id="tabSettings" styleClass="background" stylesheets="@Stylesheets.css" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
 							<tabs>
-								<Tab fx:id="tabLocal" text="Lokal">
+								<Tab fx:id="tabLocal" text="Local">
 									<content>
 										<VBox fx:id="vBoxLocalSet" />
 									</content>
 								</Tab>
-								<Tab fx:id="tabRemote" text="Remote" />
+								<Tab fx:id="tabRemote" text="Remote">
+                           <content>
+                              <BorderPane prefHeight="200.0" prefWidth="200.0">
+                                 <center>
+                                    <TableView fx:id="tableRemoteuser" styleClass="background" stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
+                                      <columns>
+                                        <TableColumn fx:id="colUsername" prefWidth="100.0" text="User-Name" />
+                                        <TableColumn fx:id="colFolder" minWidth="0.0" prefWidth="158.0" text="Folder" />
+                                      </columns>
+                                    </TableView>
+                                 </center>
+                                 <top>
+                                    <ToolBar nodeOrientation="RIGHT_TO_LEFT" styleClass="background" stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
+                                      <items>
+                                          <Button fx:id="btnDeleteUser" mnemonicParsing="false" styleClass="background" stylesheets="@Stylesheets.css" />
+                                        <Button fx:id="btnAddUser" mnemonicParsing="false" styleClass="background" stylesheets="@Stylesheets.css" />
+                                      </items>
+                                    </ToolBar>
+                                 </top>
+                              </BorderPane>
+                           </content></Tab>
 							</tabs>
 						</TabPane>
 					</center>
 					<bottom>
-						<HBox alignment="TOP_RIGHT" styleClass="background"
-							stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
+						<HBox alignment="TOP_RIGHT" styleClass="background" stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
 							<children>
-								<Button fx:id="btnSaveSettings" mnemonicParsing="false"
-									onAction="#saveSettings" styleClass="background" stylesheets="@Stylesheets.css"
-									text="Speichern" />
-								<Button fx:id="btnCancelSettings" mnemonicParsing="false"
-									onAction="#cancelSettings" styleClass="background" stylesheets="@Stylesheets.css"
-									text="Abbrechen" />
+								<Button fx:id="btnSaveSettings" mnemonicParsing="false" onAction="#saveSettings" styleClass="background" stylesheets="@Stylesheets.css" text="Save" />
+								<Button fx:id="btnCancelSettings" mnemonicParsing="false" onAction="#cancelSettings" styleClass="background" stylesheets="@Stylesheets.css" text="Cancel" />
 							</children>
 						</HBox>
 					</bottom>

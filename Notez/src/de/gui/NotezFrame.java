@@ -19,6 +19,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import de.util.NotezFileUtil;
+import de.util.NotezRemoteSync;
+import de.util.NotezRemoteSync.NotezRemoteUser;
 import de.util.NotezSettings;
 
 public class NotezFrame extends Application
@@ -41,8 +43,10 @@ public class NotezFrame extends Application
     public void start(Stage primaryStage) throws Exception
     {
         // FORTEST test remote notez
-        // new NotezRemoteSync().addUser(new NotezRemoteUser("User 1", new File(
-        // "./remote")));
+        NotezRemoteSync sync = new NotezRemoteSync(new File("./remote"));
+        sync.addUser(new NotezRemoteUser("HERTEL-1",
+            "\\\\hertel-1/Mailbox/von Tobias Ohm/Notez/remote"));
+        sync.start();
 
         notezOpened = FXCollections.observableArrayList();
         NotezSettings.load(new File(SETTINGS_FILE));
@@ -87,8 +91,8 @@ public class NotezFrame extends Application
                 NotezLoadSplash.add(f.getName());
                 if(createNotezFrame(f) == null)
                 {
-                	NotezLoadSplash.add(f.getName() + " failed");
-                	continue;
+                    NotezLoadSplash.add(f.getName() + " failed");
+                    continue;
                 }
                 foundNotes++;
             }

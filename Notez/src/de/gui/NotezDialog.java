@@ -28,6 +28,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import de.util.NotezFileUtil;
+import de.util.NotezRemoteSync.NotezRemoteUser;
 
 public class NotezDialog
 {
@@ -44,6 +45,15 @@ public class NotezDialog
     public enum NotezOption
     {
         YES, NO, CANCEL, CLOSE, OK;
+    }
+
+    public static NotezOption showShareWithDialog(Stage parent, String title,
+                    String msg, ObservableList<NotezRemoteUser> user)
+        throws IOException, InterruptedException
+    {
+
+        return showDialog(parent, title, msg, ICON_QUESTION,
+            NotezOption.YES, NotezOption.NO, NotezOption.CANCEL);
     }
 
     public static NotezOption showQuestionDialog(Stage parent, String title,
