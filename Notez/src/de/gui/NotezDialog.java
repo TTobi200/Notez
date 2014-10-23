@@ -37,6 +37,8 @@ public class NotezDialog
     private static final String ICON_WARNING = "include/icons/dialog-warning.png";
     private static final String ICON_INFO = "include/icons/dialog-info.png";
 
+    private static final double HEIGHT = 100d;
+
     private static NotezOption option;
 
     public enum NotezOption
@@ -87,6 +89,8 @@ public class NotezDialog
         loader.setController(new NotezDialogController(stage, title,
             msg, new Image(NotezFileUtil.getResourceStream(icon)), options));
         stage.setScene(new Scene(loader.load()));
+        stage.setWidth(parent.getWidth());
+        stage.setHeight(HEIGHT);
         setModality(stage, parent);
         stage.initStyle(StageStyle.UNDECORATED);
         stage.showAndWait();
@@ -106,13 +110,9 @@ public class NotezDialog
 
     private static void relativeToOwner(Stage stage, Stage owner)
     {
-        // TODO set default width and height
-
-        // stage.setX(owner.getX());
-        // stage.setY((owner.getY() + (owner.getHeight() / 2)));
-        //
-        // System.out.println(stage.getHeight());
-        // System.out.println(owner.getHeight());
+        stage.setX(owner.getX());
+        stage.setY(owner.getY() + (owner.getHeight() / 2)
+                   - (stage.getHeight() / 2));
     }
 
     static class NotezDialogController
