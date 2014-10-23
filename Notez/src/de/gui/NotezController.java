@@ -427,6 +427,12 @@ public class NotezController
 
         btnPin.setGraphic(pinned ? iVPinned : iVUnpinned);
         stage.setAlwaysOnTop(pinned);
+
+        // Pin grouped notez
+        notezGroup.forEach(notez -> {
+            notez.btnPin.selectedProperty().set(pinned);
+            notez.pinNote();
+        });
     }
 
     private void switchTo(Node node)
