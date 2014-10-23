@@ -31,26 +31,28 @@ public class NotezParsers
 		latestParser = mapParser.get(d.getLast());
 	}
 
-	public static NotezData parseFile(String path) throws IOException
+	public static NotezData parseFile(String path) throws UnsupportedVersionException, IOException
 	{
 		return parseFile(new File(path));
 	}
 
-	public static NotezData parseFile(File file) throws IOException
+	public static NotezData parseFile(File file) throws UnsupportedVersionException, IOException
 	{
 		return getParserForVersion(getVersionOfFile(file)).parse(file);
 	}
 
-	public static NotezParser getParserForVersion(String version)
+	public static NotezParser getParserForVersion(String version) throws UnsupportedVersionException
 	{
 		NotezParser ret = mapParser.get(version);
 
+		if(ret == null && version.contains("."))
+		{
+			ret = getParserForVersion(version.substring(0, version.lastIndexOf('.')));
+		}
+		
 		if(ret == null)
 		{
-			// XXX $DH Version cannot be parsed correctly (Please check)
-			return new NotezParserV02();
-			// return getParserForVersion(version.substring(0,
-			// version.lastIndexOf('.')));
+			throw new UnsupportedVersionException(version);
 		}
 
 		return ret;
@@ -62,7 +64,11 @@ public class NotezParsers
 		{
 			String line = r.readLine();
 
-			if(line == null)
+			if(line != null && line.startsWith(NotezParser.STRING_VERSION))
+			{
+				line = line.substring(NotezParser.STRING_VERSION.length()).trim();
+			}
+			else
 			{
 				return "0";
 			}
