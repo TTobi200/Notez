@@ -3,8 +3,6 @@
  */
 package de.util;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -21,118 +19,100 @@ import de.util.notez.NotezParsers;
 
 public class NotezRemoteSync extends Timer
 {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public static final String THREAD_NAME = NotezRemoteSync.class.getName();
+	public static final String THREAD_NAME = NotezRemoteSync.class.getName();
 
-    final static ObservableList<NotezRemoteUser> availableRemoteUser =
-                    FXCollections.observableArrayList();
+	final static ObservableList<NotezRemoteUser> availableRemoteUser = FXCollections.observableArrayList();
 
-    public NotezRemoteSync(File localRemoteNotezFold)
-    {
-        super(1000, new NotezSyncAction(localRemoteNotezFold));
-    }
+	public NotezRemoteSync(File localRemoteNotezFold)
+	{
+		super(1000, e ->
+		{
+			Platform.runLater(() ->
+			{
+				try
+				{
+					NotezFrame.loadAllNotez(localRemoteNotezFold);
+				}
+				catch(IOException e1)
+				{
+					e1.printStackTrace();
+				}
+			});
+		});
+	}
 
-    public synchronized void addUser(NotezRemoteUser user)
-    {
-        availableRemoteUser.add(user);
-    }
+	public synchronized void addUser(NotezRemoteUser user)
+	{
+		availableRemoteUser.add(user);
+	}
 
-    public static NotezRemoteUser getUser(String username)
-    {
-        for(NotezRemoteUser u : availableRemoteUser)
-        {
-            if(u.getUsername().equals(username))
-            {
-                return u;
-            }
-        }
+	public static NotezRemoteUser getUser(String username)
+	{
+		for(NotezRemoteUser u : availableRemoteUser)
+		{
+			if(u.getUsername().equals(username))
+			{
+				return u;
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    public static class NotezSyncAction implements ActionListener
-    {
-        private File remoteNotezFold;
+	public static class NotezRemoteUser
+	{
+		// private File remoteFolder;
+		private final SimpleStringProperty remoteFolder;
+		// private String userName;
+		private final SimpleStringProperty username;
 
-        public NotezSyncAction(File remoteNotezFold)
-        {
-            this.remoteNotezFold = remoteNotezFold;
-        }
+		public NotezRemoteUser(String userName, String remoteFolder)
+		{
+			// this.userName = userName;
+			// this.remoteFolder = remoteFolder;
+			this.username = new SimpleStringProperty(userName);
+			this.remoteFolder = new SimpleStringProperty(remoteFolder);
+		}
 
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            Platform.runLater(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    try
-                    {
-                        NotezFrame.loadAllNotez(remoteNotezFold);
-                    }
-                    catch(IOException e1)
-                    {
-                        e1.printStackTrace();
-                    }
-                }
-            });
-        }
-    }
+		public String getRemoteFolder()
+		{
+			return remoteFolder.get();
+		}
 
-    public static class NotezRemoteUser
-    {
-        // private File remoteFolder;
-        private final SimpleStringProperty remoteFolder;
-        // private String userName;
-        private final SimpleStringProperty username;
+		public void setRemoteFolder(String remoteFolder)
+		{
+			this.remoteFolder.set(remoteFolder);
+		}
 
-        public NotezRemoteUser(String userName, String remoteFolder)
-        {
-            // this.userName = userName;
-            // this.remoteFolder = remoteFolder;
-            this.username = new SimpleStringProperty(userName);
-            this.remoteFolder = new SimpleStringProperty(remoteFolder);
-        }
+		public String getUsername()
+		{
+			return username.get();
+		}
 
-        public String getRemoteFolder()
-        {
-            return remoteFolder.get();
-        }
+		public void setUsername(String username)
+		{
+			this.username.set(username);
+		}
 
-        public void setRemoteFolder(String remoteFolder)
-        {
-            this.remoteFolder.set(remoteFolder);
-        }
+		public void shareNotez(NotezController ctrl, File notez)
+			throws IOException
+		{
+			File remoteFolder = new File(this.remoteFolder.get());
 
-        public String getUsername()
-        {
-            return username.get();
-        }
+			if(remoteFolder != null && remoteFolder.exists()
+			   && remoteFolder.canWrite())
+			{
+				NotezParsers.save(ctrl,
+					new File(remoteFolder.getAbsolutePath() + File.separator
+							 + notez.getName()));
+			}
+		}
+	}
 
-        public void setUsername(String username)
-        {
-            this.username.set(username);
-        }
-
-        public void shareNotez(NotezController ctrl, File notez)
-            throws IOException
-        {
-            File remoteFolder = new File(this.remoteFolder.get());
-
-            if(remoteFolder != null && remoteFolder.exists()
-               && remoteFolder.canWrite())
-            {
-                NotezParsers.save(ctrl,
-                    new File(remoteFolder.getAbsolutePath() + File.separator
-                             + notez.getName()));
-            }
-        }
-    }
-
-    public static ObservableList<NotezRemoteUser> getAllUsers()
-    {
-        return availableRemoteUser;
-    }
+	public static ObservableList<NotezRemoteUser> getAllUsers()
+	{
+		return availableRemoteUser;
+	}
 }

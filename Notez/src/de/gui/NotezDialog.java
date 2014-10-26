@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -22,7 +21,6 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -42,7 +40,7 @@ public class NotezDialog
 
     private static NotezOption option;
 
-    public enum NotezOption
+    public static enum NotezOption
     {
         YES, NO, CANCEL, CLOSE, OK;
     }
@@ -198,7 +196,6 @@ public class NotezDialog
                     case CLOSE:
                         // Close icon always visible
                         break;
-
                 }
             }
 
@@ -267,33 +264,27 @@ public class NotezDialog
 
         private void addDraggableNode(final Node node)
         {
-            node.setOnMousePressed(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent me)
-                {
-                    if(me.getButton() != MouseButton.MIDDLE)
-                    {
-                        initialX = me.getSceneX();
-                        initialY = me.getSceneY();
-                    }
-                }
-            });
+            node.setOnMousePressed(me ->
+			{
+			    if(me.getButton() != MouseButton.MIDDLE)
+			    {
+			        initialX = me.getSceneX();
+			        initialY = me.getSceneY();
+			    }
+			});
 
-            node.setOnMouseDragged(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent me)
-                {
-                    if(me.getButton() != MouseButton.MIDDLE)
-                    {
-                        node.getScene()
-                            .getWindow()
-                            .setX(me.getScreenX() - initialX);
-                        node.getScene()
-                            .getWindow()
-                            .setY(me.getScreenY() - initialY);
-                    }
-                }
-            });
+            node.setOnMouseDragged(me ->
+			{
+			    if(me.getButton() != MouseButton.MIDDLE)
+			    {
+			        node.getScene()
+			            .getWindow()
+			            .setX(me.getScreenX() - initialX);
+			        node.getScene()
+			            .getWindow()
+			            .setY(me.getScreenY() - initialY);
+			    }
+			});
         }
     }
 }
