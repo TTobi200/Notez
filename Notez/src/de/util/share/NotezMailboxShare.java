@@ -9,24 +9,28 @@ import java.io.IOException;
 import de.gui.NotezController;
 import de.util.notez.NotezParsers;
 
-public class NotezMailboxShare implements NotezShare
+public class NotezMailboxShare extends NotezShareBase
 {
-    private File remoteFolder;
+	protected File mailbox;
 
-    public NotezMailboxShare(File remoteFolder)
-    {
-        this.remoteFolder = remoteFolder;
-    }
+	public NotezMailboxShare(File mailbox)
+	{
+		this.mailbox = mailbox;
+	}
 
-    @Override
-    public void shareNotez(NotezController ctrl, File notez) throws IOException
-    {
-        if(remoteFolder != null && remoteFolder.exists()
-           && remoteFolder.canWrite())
-        {
-            NotezParsers.save(ctrl,
-                new File(remoteFolder.getAbsolutePath() + File.separator
-                         + notez.getName()));
-        }
-    }
+	@Override
+	public NotezShareResult shareNotez(NotezController ctrl, File notez)
+		throws IOException
+	{
+		if(mailbox != null && mailbox.exists()
+			&& mailbox.canWrite())
+		{
+			NotezParsers.save(ctrl,
+				new File(mailbox.getAbsolutePath() + File.separator
+							+ notez.getName()));
+			return NotezShareResult.SHARED;
+		}
+
+		return NotezShareResult.OFFLINE;
+	}
 }

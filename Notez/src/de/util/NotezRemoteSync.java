@@ -7,15 +7,14 @@ import java.io.File;
 import java.io.IOException;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import javax.swing.Timer;
 
-import de.gui.NotezController;
 import de.gui.NotezFrame;
-import de.util.notez.NotezParsers;
 
 public class NotezRemoteSync extends Timer
 {
@@ -23,7 +22,11 @@ public class NotezRemoteSync extends Timer
 
 	public static final String THREAD_NAME = NotezRemoteSync.class.getName();
 
-	final static ObservableList<NotezRemoteUser> availableRemoteUser = FXCollections.observableArrayList();
+	final static ObservableList<NotezRemoteUser> availableRemoteUser =
+					FXCollections.observableArrayList();
+
+	public static ObservableList<File> notezFiles =
+					FXCollections.observableArrayList();
 
 	public NotezRemoteSync(File localRemoteNotezFold)
 	{
@@ -33,7 +36,15 @@ public class NotezRemoteSync extends Timer
 			{
 				try
 				{
-					NotezFrame.loadAllNotez(localRemoteNotezFold);
+					for(File f : localRemoteNotezFold.listFiles())
+					{
+						if(NotezFileUtil.isNotez(f) &&
+							!notezFiles.contains(f))
+						{
+							NotezFrame.loadAllNotez(localRemoteNotezFold);
+							notezFiles.add(f);
+						}
+					}
 				}
 				catch(IOException e1)
 				{
@@ -63,27 +74,23 @@ public class NotezRemoteSync extends Timer
 
 	public static class NotezRemoteUser
 	{
-		// private File remoteFolder;
-		private final SimpleStringProperty remoteFolder;
-		// private String userName;
 		private final SimpleStringProperty username;
+		private final SimpleObjectProperty<Object> share;
 
 		public NotezRemoteUser(String userName, String remoteFolder)
 		{
-			// this.userName = userName;
-			// this.remoteFolder = remoteFolder;
 			this.username = new SimpleStringProperty(userName);
-			this.remoteFolder = new SimpleStringProperty(remoteFolder);
+			this.share = new SimpleObjectProperty<Object>(remoteFolder);
 		}
 
-		public String getRemoteFolder()
+		public Object getShare()
 		{
-			return remoteFolder.get();
+			return share.get();
 		}
 
-		public void setRemoteFolder(String remoteFolder)
+		public void setShare(String share)
 		{
-			this.remoteFolder.set(remoteFolder);
+			this.share.set(share);
 		}
 
 		public String getUsername()
@@ -94,20 +101,6 @@ public class NotezRemoteSync extends Timer
 		public void setUsername(String username)
 		{
 			this.username.set(username);
-		}
-
-		public void shareNotez(NotezController ctrl, File notez)
-			throws IOException
-		{
-			File remoteFolder = new File(this.remoteFolder.get());
-
-			if(remoteFolder != null && remoteFolder.exists()
-			   && remoteFolder.canWrite())
-			{
-				NotezParsers.save(ctrl,
-					new File(remoteFolder.getAbsolutePath() + File.separator
-							 + notez.getName()));
-			}
 		}
 	}
 

@@ -19,131 +19,129 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import de.util.NotezFileUtil;
-import de.util.NotezRemoteSync;
-import de.util.NotezRemoteSync.NotezRemoteUser;
 import de.util.NotezSettings;
 
 public class NotezFrame extends Application
 {
-    public static final double DEF_WIDTH = 299d;
-    public static final double DEF_HEIGTH = 212d;
+	public static final double DEF_WIDTH = 299d;
+	public static final double DEF_HEIGTH = 212d;
 
-    public static final String FXML_PATH = "include/fxml/NotezGui.fxml";
-    public static final String SETTINGS_FILE = "./Settings";
-    public static final String NOTEZ_FILE_POSFIX = ".notez";
+	public static final String FXML_PATH = "include/fxml/NotezGui.fxml";
+	public static final String SETTINGS_FILE = "./Settings";
+	public static final String NOTEZ_FILE_POSFIX = ".notez";
 
-    public static String LOCAL_NOTEZ_FOLDER = "LOCAL_NOTEZ_FOLDER";
+	public static String LOCAL_NOTEZ_FOLDER = "LOCAL_NOTEZ_FOLDER";
 
-    public static ObservableList<NotezController> notezOpened;
+	public static ObservableList<NotezController> notezOpened;
 
-    public static ObservableList<File> notezFiles =
-                    FXCollections.observableArrayList();
+	@Override
+	public void start(Stage primaryStage) throws Exception
+	{
+		// FORTEST test remote notez
+		// NotezRemoteSync sync = new NotezRemoteSync(new File(
+		// "C:/Users/Tobias/Desktop/remote"));
+		// sync.addUser(new NotezRemoteUser("HERTEL-1",
+		// "C:/Users/Tobias/Desktop/remote"));
+		// sync.start();
 
-    @Override
-    public void start(Stage primaryStage) throws Exception
-    {
-        // FORTEST test remote notez
-        NotezRemoteSync sync = new NotezRemoteSync(new File("./remote"));
-        sync.addUser(new NotezRemoteUser("HERTEL-1",
-            "\\\\hertel-1/Mailbox/von Tobias Ohm/Notez/remote"));
-        sync.start();
+		notezOpened = FXCollections.observableArrayList();
+		NotezSettings.load(new File(SETTINGS_FILE));
 
-        notezOpened = FXCollections.observableArrayList();
-        NotezSettings.load(new File(SETTINGS_FILE));
+		LOCAL_NOTEZ_FOLDER = NotezSettings.getString(LOCAL_NOTEZ_FOLDER);
 
-        LOCAL_NOTEZ_FOLDER = NotezSettings.getString(LOCAL_NOTEZ_FOLDER);
+		// TODO not working inside jar?
+		// if(NotezFileUtil.fileCanBeLoad(fxmlFile))
+		{
+			int foundNotes = 0;
+			File notezFolder = new File(LOCAL_NOTEZ_FOLDER);
+			if(notezFolder.exists())
+			{
+				foundNotes = loadAllNotez(notezFolder);
+			}
+			else
+			{
+				NotezDialog.showWarningDialog(
+					primaryStage,
+					"Warning - Notez-Folder",
+					"Cannot find Notez-Folder! " + LOCAL_NOTEZ_FOLDER);
+			}
 
-        // TODO not working inside jar?
-        // if(NotezFileUtil.fileCanBeLoad(fxmlFile))
-        {
-            int foundNotes = 0;
-            File notezFolder = new File(LOCAL_NOTEZ_FOLDER);
-            if(notezFolder.exists())
-            {
-                foundNotes = loadAllNotez(notezFolder);
-            }
-            else
-            {
-                NotezDialog.showWarningDialog(
-                    primaryStage,
-                    "Warning - Notez-Folder",
-                    "Cannot find Notez-Folder! " + LOCAL_NOTEZ_FOLDER);
-            }
+			// No notes found? create default new one
+			if(foundNotes == 0)
+			{
+				// switch to settings (init)
+				createNotezFrame();
+			}
+		}
+		// TODO errorcannot load fxml
+	}
 
-            // No notes found? create default new one
-            if(foundNotes == 0)
-            {
-                // switch to settings (init)
-                createNotezFrame();
-            }
-        }
-        // TODO errorcannot load fxml
-    }
+	public static int loadAllNotez(File notezFolder) throws IOException
+	{
+		int foundNotes = 0;
+		File[] notez = notezFolder.listFiles();
+		if(notez != null)
+		{
+			for(File f : notez)
+			{
+				if(NotezFileUtil.isNotez(f))
+				{
+					NotezLoadSplash.add(f.getName());
+					if(createNotezFrame(f) == null)
+					{
+						NotezLoadSplash.add(f.getName() + " failed");
+						continue;
+					}
+					foundNotes++;
+				}
+			}
+		}
 
-    public static int loadAllNotez(File notezFolder) throws IOException
-    {
-        int foundNotes = 0;
-        for(File f : notezFolder.listFiles())
-        {
-            if(f.getName().endsWith(NOTEZ_FILE_POSFIX)
-               && !notezFiles.contains(f))
-            {
-                NotezLoadSplash.add(f.getName());
-                if(createNotezFrame(f) == null)
-                {
-                    NotezLoadSplash.add(f.getName() + " failed");
-                    continue;
-                }
-                foundNotes++;
-            }
-        }
+		return foundNotes;
+	}
 
-        return foundNotes;
-    }
+	public static Stage createNotezFrame() throws IOException
+	{
+		return createNotezFrame(new File(
+			NotezFrame.LOCAL_NOTEZ_FOLDER
+							+ File.separator
+							+ new SimpleDateFormat(
+								"yyyy-MM-dd_HH-mm-ss")
+								.format(new Date(
+									System.currentTimeMillis()))
+							+ NotezFrame.NOTEZ_FILE_POSFIX));
+	}
 
-    public static Stage createNotezFrame() throws IOException
-    {
-        return createNotezFrame(new File(
-            NotezFrame.LOCAL_NOTEZ_FOLDER
-                            + File.separator
-                            + new SimpleDateFormat(
-                                "yyyy-MM-dd_HH-mm-ss")
-                                .format(new Date(
-                                    System.currentTimeMillis()))
-                            + NotezFrame.NOTEZ_FILE_POSFIX));
-    }
+	public static Stage createNotezFrame(File f) throws IOException
+	{
+		return createNotezFrame(new Stage(), f);
+	}
 
-    public static Stage createNotezFrame(File f) throws IOException
-    {
-        return createNotezFrame(new Stage(), f);
-    }
+	public static Stage createNotezFrame(Stage stage, File f)
+		throws IOException
+	{
+		// FXMLLoader loader = new FXMLLoader(
+		// fxmlFile.toURI().toURL());
+		FXMLLoader loader = new FXMLLoader(
+			NotezFileUtil.getResourceURL(FXML_PATH));
 
-    public static Stage createNotezFrame(Stage stage, File f)
-        throws IOException
-    {
-        // FXMLLoader loader = new FXMLLoader(
-        // fxmlFile.toURI().toURL());
-        FXMLLoader loader = new FXMLLoader(
-            NotezFileUtil.getResourceURL(FXML_PATH));
+		NotezController ctrl = new NotezController(stage, f, notezOpened.size());
 
-        NotezController ctrl = new NotezController(stage, f, notezOpened.size());
+		loader.setController(ctrl);
+		Scene scene = new Scene(loader.load());
+		stage.setScene(scene);
+		stage.setHeight(DEF_HEIGTH);
+		stage.setWidth(DEF_WIDTH);
+		stage.initStyle(StageStyle.UNDECORATED);
+		stage.show();
 
-        loader.setController(ctrl);
-        Scene scene = new Scene(loader.load());
-        stage.setScene(scene);
-        stage.setHeight(DEF_HEIGTH);
-        stage.setWidth(DEF_WIDTH);
-        stage.initStyle(StageStyle.UNDECORATED);
-        stage.show();
+		notezOpened.add(ctrl);
 
-        notezOpened.add(ctrl);
-        notezFiles.add(f);
+		return stage;
+	}
 
-        return stage;
-    }
-
-    public static NotezController getNotez(Integer idx)
-    {
-        return notezOpened.get(idx);
-    }
+	public static NotezController getNotez(Integer idx)
+	{
+		return notezOpened.get(idx);
+	}
 }

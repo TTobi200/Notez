@@ -7,9 +7,16 @@ import java.io.File;
 import java.io.IOException;
 
 import de.gui.NotezController;
+import de.util.share.NotezShareBase.NotezShareResult;
 
 public interface NotezShare
 {
-    public void shareNotez(NotezController ctrl, File notez)
-        throws IOException;
+	public default NotezShareResult shareNotez(NotezController ctrl,
+					String notez) throws IOException
+	{
+		return shareNotez(ctrl, new File(notez));
+	}
+
+	public NotezShareResult shareNotez(NotezController ctrl, File notez)
+		throws IOException;
 }

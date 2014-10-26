@@ -73,6 +73,7 @@ import de.util.NotezSettings;
 import de.util.NotezSettings.Setting;
 import de.util.notez.NotezData;
 import de.util.notez.NotezParsers;
+import de.util.share.NotezShareBase;
 
 public class NotezController
 {
@@ -254,7 +255,9 @@ public class NotezController
 		btnSave.disabledProperty().addListener((bool, old, newOne) ->
 		{
 			// TODO $TTobi200
-			btnSave.setClip(new Rectangle(0d, 0d, btnSave.getWidth() * (newOne ? .5 : 1d), btnSave.getHeight()));
+			btnSave.setClip(new Rectangle(0d, 0d, btnSave.getWidth()
+													* (newOne ? .5 : 1d),
+				btnSave.getHeight()));
 		});
 	}
 
@@ -292,7 +295,7 @@ public class NotezController
 		colUsername.setCellValueFactory(new PropertyValueFactory<NotezRemoteUser, String>(
 			"username"));
 		colFolder.setCellValueFactory(new PropertyValueFactory<NotezRemoteUser, String>(
-			"remoteFolder"));
+			"share"));
 	}
 
 	/**
@@ -483,7 +486,7 @@ public class NotezController
 	private File genNotezFile(String notezName)
 	{
 		return NotezFileUtil.canBeUsedAsFilename(notezName) ? new File(
-			note.getParent().replace(".", "") + notezName
+			NotezFrame.LOCAL_NOTEZ_FOLDER.replace(".", "") + notezName
 							+ NotezFrame.NOTEZ_FILE_POSFIX) : note;
 	}
 
@@ -554,7 +557,8 @@ public class NotezController
 
 			case OK:
 			case YES:
-				NotezRemoteSync.getUser("HERTEL-1").shareNotez(this, note);
+				NotezShareBase.shareNotez(this, note,
+					NotezRemoteSync.getUser("HERTEL-1").getShare());
 				break;
 		}
 	}
@@ -597,7 +601,7 @@ public class NotezController
 	@FXML
 	private void saveNote() throws Exception
 	{
-		saveNote(note);
+		saveNote(genNotezFile(txtTitle.getText()));
 	}
 
 	/**
@@ -747,7 +751,9 @@ public class NotezController
 
 	private void addVisibleToolbarNodeHider(Parent toolBar)
 	{
-		Node[] itms = toolBar.getChildrenUnmodifiable().stream().toArray(Node[]::new);
+		Node[] itms = toolBar.getChildrenUnmodifiable()
+			.stream()
+			.toArray(Node[]::new);
 
 		// Add item visibility
 		addVisibleNodeHider(toolBar, itms);
