@@ -31,6 +31,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
@@ -40,6 +42,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBase;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -138,6 +141,19 @@ public class NotezController
     @FXML
     private Button btnDeleteUser;
 
+    public static ObservableList<String> notezTxt;
+
+    @FXML
+    private BorderPane borderPanePage;
+    @FXML
+    private BorderPane borderPaneNotez;
+    @FXML
+    private Button btnPrevPage;
+    @FXML
+    private Button btnNextPage;
+    @FXML
+    private Label lblPage;
+
     @FXML
     private TableView<NotezRemoteUser> tableRemoteuser;
     @FXML
@@ -185,6 +201,7 @@ public class NotezController
         notezGroup = new ArrayList<>();
         lastSavedText = new SimpleStringProperty("");
         lastSavedSize = new Rectangle();
+        notezTxt = FXCollections.observableArrayList();
 
         stage.showingProperty().addListener(new ChangeListener<Boolean>()
         {
@@ -221,7 +238,7 @@ public class NotezController
         setupGestureTarget(toolBar);
 
         loadNote(note);
-        switchTo(txtNote);
+        switchTo(borderPaneNotez);
         initSettings(NotezSettings.getAll());
 
         lastSavedText.set(txtNote.getText());
@@ -554,7 +571,7 @@ public class NotezController
         });
 
         // TODO only switch if valid?
-        switchTo(txtNote);
+        switchTo(borderPaneNotez);
     }
 
     /**
@@ -564,7 +581,7 @@ public class NotezController
     public void cancelSettings()
     {
         // TODO maybe restore defaults?
-        switchTo(txtNote);
+        switchTo(borderPaneNotez);
     }
 
     /**
@@ -633,6 +650,18 @@ public class NotezController
                 closeNote(false); // don't ask to save
                 break;
         }
+
+    }
+
+    @FXML
+    private void prevPage()
+    {
+
+    }
+
+    @FXML
+    private void nextPage()
+    {
 
     }
 
