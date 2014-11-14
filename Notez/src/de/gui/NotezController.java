@@ -1,6 +1,6 @@
 /*
  * $Header$
- * 
+ *
  * $Log$
  * Copyright © 2014 T.Ohm . All Rights Reserved.
  */
@@ -23,12 +23,10 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -73,6 +71,8 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import de.gui.comp.NotezSettingsPane;
 import de.util.NotezFileUtil;
+import de.util.NotezGuiUtil;
+import de.util.NotezObservablesUtil;
 import de.util.NotezRemoteSync;
 import de.util.NotezRemoteSync.NotezRemoteUser;
 import de.util.NotezSettings;
@@ -164,9 +164,6 @@ public class NotezController
     private double initialX;
     private double initialY;
 
-    private double initialXH;
-    private double initialYW;
-
     private Stage stage;
 
     private File note;
@@ -179,13 +176,15 @@ public class NotezController
 
     private Rectangle lastSavedSize;
 
+    private NotezPagedData data;
+
     /**
      * boolean binding indicating whether the text in {@link #txtNote} differs
      * from the saved on
      */
-    private BooleanBinding noteChanged;
-    /** The text currently written in this notes' file */
-    private StringProperty lastSavedText;
+    private ReadOnlyBooleanProperty noteChanged;
+//    /** The text currently written in this notes' file */
+//    private StringProperty lastSavedText;
 
     public NotezController(Stage stage, int idx)
     {
@@ -199,7 +198,6 @@ public class NotezController
         this.idx = idx;
 
         notezGroup = new ArrayList<>();
-        lastSavedText = new SimpleStringProperty("");
         lastSavedSize = new Rectangle();
         notezTxt = FXCollections.observableArrayList();
 
@@ -241,15 +239,8 @@ public class NotezController
         switchTo(borderPaneNotez);
         initSettings(NotezSettings.getAll());
 
-        lastSavedText.set(txtNote.getText());
-        noteChanged = lastSavedText.isNotEqualTo(txtNote.textProperty());
-        noteChanged = noteChanged.or(
-            lastSavedSize.xProperty().isNotEqualTo(stage.xProperty()))
-            .or(lastSavedSize.yProperty().isNotEqualTo(stage.yProperty()))
-            .or(lastSavedSize.widthProperty().isNotEqualTo(
-                stage.widthProperty()))
-            .or(lastSavedSize.heightProperty().isNotEqualTo(
-                stage.heightProperty()));
+        initPagination();
+        initNoteChanged();
 
         // FORTEST
         DoubleBinding b = null;
@@ -283,7 +274,9 @@ public class NotezController
         // FORTEST set save Accelerator
         stage.showingProperty().addListener(l -> {
             if(stage.isShowing())
-                setAccelerators();
+			{
+				setAccelerators();
+			}
         });
     }
 
@@ -356,6 +349,40 @@ public class NotezController
             "username"));
         colFolder.setCellValueFactory(new PropertyValueFactory<NotezRemoteUser, String>(
             "share"));
+    }
+
+    private void initNoteChanged()
+    {
+    	// TODO set notechanged correctly
+
+    	noteChanged = data.textChangedProperty();
+    }
+
+    private void initPagination()
+    {
+    	data = new NotezPagedData();
+
+    	data.curTextProperty().bind(txtNote.textProperty());
+        data.saveText();
+        // TODO $Dauerdaddlah
+//        noteChanged = lastSavedText.isNotEqualTo(txtNote.textProperty());
+//        noteChanged = noteChanged.or(
+//            lastSavedSize.xProperty().isNotEqualTo(stage.xProperty()))
+//            .or(lastSavedSize.yProperty().isNotEqualTo(stage.yProperty()))
+//            .or(lastSavedSize.widthProperty().isNotEqualTo(
+//                stage.widthProperty()))
+//            .or(lastSavedSize.heightProperty().isNotEqualTo(
+//                stage.heightProperty()));
+        lblPage.textProperty().bind(Bindings.concat(data.curIndexProperty().add(1), " / ", NotezObservablesUtil.sizePropertyForList(data.getPages())));
+        btnPrevPage.disableProperty().bind(data.curIndexProperty().isEqualTo(0));
+
+        data.curDataProperty().addListener(
+        	(c, o, n) ->
+        	{
+        		o.curTextProperty().unbind();
+        		txtNote.setText(n.curTextProperty().get());
+        		n.curTextProperty().bind(txtNote.textProperty());
+        	});
     }
 
     /**
@@ -656,13 +683,13 @@ public class NotezController
     @FXML
     private void prevPage()
     {
-
+    	data.previousPage();
     }
 
     @FXML
     private void nextPage()
     {
-
+    	data.nextPage();
     }
 
     /**
@@ -720,7 +747,7 @@ public class NotezController
         // }
 
         NotezParsers.save(this, note);
-        lastSavedText.set(txtNote.getText());
+        data.saveText();
         lastSavedSize.setX(stage.getX());
         lastSavedSize.setY(stage.getY());
         lastSavedSize.setWidth(stage.getWidth());
@@ -877,43 +904,12 @@ public class NotezController
 
     private void addResizeCorner(final Node node)
     {
-        node.setOnMousePressed(me ->
-        {
-            if(me.getButton() != MouseButton.MIDDLE)
-            {
-                initialXH = me.getSceneX();
-                initialYW = me.getSceneY();
-            }
-        });
-
-        node.setOnMouseDragged(me ->
-        {
-            if(me.getButton() != MouseButton.MIDDLE)
-            {
-                double tempH = me.getSceneX() - initialYW;
-                double tempW = me.getSceneY() - initialXH;
-                double height = me.getSceneY() + me.getSceneY() - initialXH;
-                double width = me.getSceneX() + me.getSceneX() - initialYW;
-
-                if(height < stage.getMinHeight())
-                {
-                    height = stage.getMinHeight();
-                }
-                if(width < stage.getMinWidth())
-                {
-                    width = stage.getMinWidth();
-                }
-
-                stage.setWidth(width);
-                stage.setHeight(height);
-                initialYW += tempH;
-                initialXH += tempW;
-            }
-        });
+    	NotezGuiUtil.setNodeAsResizeCompForStage(node, stage);
     }
 
     private void addDraggableNode(final Node node)
     {
+    	// TODO $Dauerdaddlah outsource to NotezGuiUtil
         node.setOnMousePressed(me ->
         {
             if(me.getButton() != MouseButton.MIDDLE)
@@ -935,8 +931,8 @@ public class NotezController
         {
             if(me.getButton() != MouseButton.MIDDLE)
             {
-                node.getScene().getWindow().setX(me.getScreenX() - initialX);
-                node.getScene().getWindow().setY(me.getScreenY() - initialY);
+            	stage.setX(me.getScreenX() - initialX);
+            	stage.setY(me.getScreenY() - initialY);
 
                 notezGroup.forEach(ctrl ->
                 {
