@@ -10,7 +10,10 @@
 		<HBox fx:id="hBoxButtom" alignment="TOP_RIGHT" styleClass="background" stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
 			<children>
 				<Hyperlink fx:id="fileLink" opacity="1d" text="" visible="true" />
-				<ImageView fx:id="resize" pickOnBounds="true" preserveRatio="true" />
+				<ImageView fx:id="resize" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icons/resize.gif" />
+               </image></ImageView>
 			</children>
 		</HBox>
 	</bottom>
@@ -24,10 +27,10 @@
                <bottom>
                   <BorderPane fx:id="borderPanePage" styleClass="background" stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
                      <left>
-                        <Button fx:id="btnPrevPage" onAction="#prevPage" mnemonicParsing="false" styleClass="background" stylesheets="@Stylesheets.css" text="&lt;" BorderPane.alignment="CENTER" />
+                        <Button fx:id="btnPrevPage" mnemonicParsing="false" onAction="#prevPage" styleClass="background" stylesheets="@Stylesheets.css" text="&lt;" BorderPane.alignment="CENTER" />
                      </left>
                      <right>
-                        <Button fx:id="btnNextPage" onAction="#nextPage" mnemonicParsing="false" styleClass="background" stylesheets="@Stylesheets.css" text="&gt;" BorderPane.alignment="CENTER" />
+                        <Button fx:id="btnNextPage" mnemonicParsing="false" onAction="#nextPage" styleClass="background" stylesheets="@Stylesheets.css" text="&gt;" BorderPane.alignment="CENTER" />
                      </right>
                      <center>
                         <Label fx:id="lblPage" styleClass="background" stylesheets="@Stylesheets.css" text="1/1" BorderPane.alignment="CENTER" />
@@ -90,6 +93,13 @@
 							<tooltip>
 								<Tooltip text="Pin Notez on top" />
 							</tooltip>
+                     <graphic>
+                        <ImageView pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/pin.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
 						</ToggleButton>
 						<TextField fx:id="txtTitle" nodeOrientation="LEFT_TO_RIGHT" styleClass="background-darker" stylesheets="@Stylesheets.css" />
 					</children>
@@ -100,33 +110,78 @@
 							<tooltip>
 								<Tooltip fx:id="tTipClose" text="Close the Notez" />
 							</tooltip>
+                     <graphic>
+                        <ImageView pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/icon_close.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
 						</Button>
 						<Button fx:id="btnSettings" mnemonicParsing="false" onAction="#openSettings" opacity="1d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
 							<tooltip>
 								<Tooltip text="Open Notez Settings" />
 							</tooltip>
+                     <graphic>
+                        <ImageView pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/icon_local_settings.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
 						</Button>
 						<Button fx:id="btnDelete" mnemonicParsing="false" onAction="#deleteNote" opacity="1d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
 							<tooltip>
 								<Tooltip text="Delete Notez" />
 							</tooltip>
+                     <graphic>
+                        <ImageView pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/delete.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
 						</Button>
 						<Button fx:id="btnSave" mnemonicParsing="false" onAction="#saveNote" opacity="1d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
 							<tooltip>
 								<Tooltip text="Save Notez" />
 							</tooltip>
+                     <graphic>
+                        <ImageView pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/save.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
 						</Button>
 						<Button fx:id="btnAdd" mnemonicParsing="false" onAction="#addNewNote" opacity="1d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
 							<tooltip>
 								<Tooltip text="Add new Notez" />
 							</tooltip>
+                     <graphic>
+                        <ImageView pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/new_icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
 						</Button>
 						<Button fx:id="btnShare" mnemonicParsing="false" onAction="#shareNote" opacity="1d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
 							<tooltip>
 								<Tooltip text="Share Notez" />
 							</tooltip>
+                     <graphic>
+                        <ImageView pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/share.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
 						</Button>
-						<ImageView fx:id="pickNote" opacity="1d" pickOnBounds="true" preserveRatio="true" visible="true" />
+						<ImageView fx:id="pickNote" opacity="1d" pickOnBounds="true" preserveRatio="true" visible="true">
+                     <image>
+                        <Image url="@../icons/pinToNote.gif" />
+                     </image></ImageView>
 					</children>
 				</HBox>
 			</children>
