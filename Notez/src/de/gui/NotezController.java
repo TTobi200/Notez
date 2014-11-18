@@ -1,6 +1,6 @@
 /*
  * $Header$
- * 
+ *
  * $Log$
  * Copyright © 2014 T.Ohm . All Rights Reserved.
  */
@@ -12,7 +12,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -31,6 +30,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -133,12 +133,12 @@ public class NotezController
 	protected Stage stage;
 
 	protected File note;
-	protected ImageView iVUnpinned;
-	protected ImageView iVPinned;
-	protected int idx;
+	protected Image iVUnpinned;
+	protected Image iVPinned;
+	protected Integer idx;
 	protected boolean isGrouped = false;
 
-	protected ArrayList<NotezController> notezGroup;
+	protected ObservableList<NotezController> notezGroup;
 
 	protected Rectangle lastSavedSize;
 
@@ -161,9 +161,9 @@ public class NotezController
 	{
 		this.stage = stage;
 		this.note = note;
-		this.idx = idx;
+		this.idx = new Integer(idx);
 
-		notezGroup = new ArrayList<>();
+		notezGroup = FXCollections.observableArrayList();
 		lastSavedSize = new Rectangle();
 		notezTxt = FXCollections.observableArrayList();
 
@@ -296,7 +296,8 @@ public class NotezController
 	{
 		boolean pinned = btnPin.isSelected();
 
-		btnPin.setGraphic(pinned ? iVPinned : iVUnpinned);
+		((ImageView)btnPin.getGraphic()).setImage(pinned ? iVPinned : iVUnpinned);
+//		btnPin.setGraphic(pinned ? iVPinned : iVUnpinned);
 		stage.setAlwaysOnTop(pinned);
 
 		// Pin grouped notez

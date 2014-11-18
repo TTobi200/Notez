@@ -22,11 +22,11 @@ import javafx.collections.ObservableList;
 
 public class NotezPagedData implements NotezData
 {
-	private ObservableList<NotezData> pages;
-	private ReadOnlyIntegerWrapper curIndex;
-	private ReadOnlyObjectWrapper<NotezData> curData;
+	private ObservableList<NotezData>			pages;
+	private ReadOnlyIntegerWrapper				curIndex;
+	private ReadOnlyObjectWrapper<NotezData>	curData;
 
-	private ReadOnlyBooleanWrapper textChanged;
+	private ReadOnlyBooleanWrapper				textChanged;
 
 	public NotezPagedData()
 	{
@@ -44,9 +44,8 @@ public class NotezPagedData implements NotezData
 
 	protected void setListener()
 	{
-		curIndexProperty().addListener((c, o, n) ->
-		{
-			if(n.intValue() != -1)
+		curIndexProperty().addListener((c, o, n) -> {
+			if (n.intValue() != -1)
 			{
 				curDataPropertyOrig().set(getPages().get(n.intValue()));
 			}
@@ -69,7 +68,7 @@ public class NotezPagedData implements NotezData
 		pages.add(new NotezDataImpl());
 		resetTextChanged();
 
-		if(switchToNewPage)
+		if (switchToNewPage)
 		{
 			setCurIndex(pages.size() - 1, false);
 		}
@@ -88,15 +87,15 @@ public class NotezPagedData implements NotezData
 	protected void setCurIndex(int index, boolean creNewPage)
 	{
 		ObservableList<NotezData> pages = getPages();
-		
-		if(index < 0 || index > pages.size())
+
+		if (index < 0 || index > pages.size())
 		{
 			return;
 		}
 
-		if(index == pages.size())
+		if (index == pages.size())
 		{
-			if(!creNewPage || pages.get(pages.size() - 1).curTextProperty().get().isEmpty())
+			if (!creNewPage || pages.get(pages.size() - 1).curTextProperty().get().isEmpty())
 			{
 				return;
 			}
@@ -114,9 +113,10 @@ public class NotezPagedData implements NotezData
 
 	public ObservableList<NotezData> getPages()
 	{
-//		return FXCollections.unmodifiableObservableList(getPagesOrig());
+		// return FXCollections.unmodifiableObservableList(getPagesOrig());
 		return new UnmodifiableObservableList(getPagesOrig());
 	}
+
 	protected ReadOnlyIntegerWrapper curIndexPropertyOrig()
 	{
 		return curIndex == null ? new ReadOnlyIntegerWrapper() : curIndex;
@@ -163,7 +163,7 @@ public class NotezPagedData implements NotezData
 
 		for(NotezData page : getPages())
 		{
-			if(b == null)
+			if (b == null)
 			{
 				b = page.textChangedProperty();
 			}
@@ -175,26 +175,35 @@ public class NotezPagedData implements NotezData
 
 		textChanged.bind(b);
 	}
-	
+
 	private class UnmodifiableObservableList<E> implements ObservableList<E>
 	{
-		private Collection<InvalidationListener> invaliList;
-		private Collection<ListChangeListener<? super E>> changeList;
-		
-		private ObservableList<E> list;
+		private Collection<InvalidationListener>			invaliList;
+		private Collection<ListChangeListener<? super E>>	changeList;
+
+		private ObservableList<E>							list;
 
 		public UnmodifiableObservableList(ObservableList<E> list)
 		{
 			this.list = list;
-			
+
 			invaliList = new LinkedList<>();
 			changeList = new LinkedList<>();
-			
-			this.list.addListener((InvalidationListener)o -> invaliList.forEach(l -> l.invalidated(this)));
-			
+
+			this.list.addListener((InvalidationListener)o -> invaliList.forEach(l -> l
+					.invalidated(this)));
+			this.list.addListener((ListChangeListener)c ->
+			{
+				if(!changeList.isEmpty())
+				{
+					Change ch = new Change(c);
+					changeList.forEach(lis -> lis.onChanged(ch));
+				}
+			});
+
 			// FIXME further listchangeevents
 		}
-		
+
 		@Override
 		public int size()
 		{
@@ -392,6 +401,67 @@ public class NotezPagedData implements NotezData
 		{
 			throw new UnsupportedOperationException();
 		}
-		
+
+		private class Change extends javafx.collections.ListChangeListener.Change<E>
+		{
+			private javafx.collections.ListChangeListener.Change<E>	ch;
+
+			public Change(javafx.collections.ListChangeListener.Change<E>	ch)
+			{
+				super(UnmodifiableObservableList.this);
+
+				this.ch = ch;
+			}
+
+			@Override
+			public boolean next()
+			{
+				return ch.next();
+			}
+
+			@Override
+			public void reset()
+			{
+				ch.reset();
+			}
+
+			@Override
+			public int getFrom()
+			{
+				return ch.getFrom();
+			}
+
+			@Override
+			public int getTo()
+			{
+				return ch.getTo();
+			}
+
+			@Override
+			public List<E> getRemoved()
+			{
+				return ch.getRemoved();
+			}
+
+			@Override
+			public int getPermutation(int i)
+			{
+				return ch.getPermutation(i);
+			}
+
+			@Override
+			public boolean wasPermutated()
+			{
+				// TODO Auto-generated method stub
+				return ch.wasPermutated();
+			}
+
+			@Override
+			protected int[] getPermutation()
+			{
+				return null;
+			}
+
+		}
 	}
 }
