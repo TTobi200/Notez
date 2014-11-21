@@ -20,7 +20,6 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ListChangeListener;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
@@ -43,6 +42,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import de.gui.comp.NotezSettingsPane;
 import de.util.NotezFileUtil;
@@ -89,7 +89,6 @@ public class NotezControllerListeners
 		setAsResizeCorner(c.resize);
 		addVisibleToolbarNodeHider(c.toolBar);
 		addVisibleNodeHider(c.hBoxButtom, c.fileLink);
-		addDissolve(c.pickNote);
 		setupGestureSource(c.pickNote);
 		setupGestureTarget(c.toolBar);
 
@@ -107,6 +106,9 @@ public class NotezControllerListeners
 
 		initPagination();
 		initNoteChanged();
+
+		initPinNote();
+		initStackation();
 
 		// FORTEST
 		DoubleBinding b = null;
@@ -144,13 +146,22 @@ public class NotezControllerListeners
 		});
 
 		c.pickNote.setImage(IMAGE_PICK_NOTE);
-		c.notezGroup.addListener((ListChangeListener<NotezController>)c -> {
-			this.c.pickNote.imageProperty().set(
-				c.getList().isEmpty() ? IMAGE_PICK_NOTE : IMAGE_DISSOLVE);
+
+		c.noteParent.addListener((cc, o, n) ->
+		{
+			System.out.println(c.idx + " parent: " + n.idx);
 		});
-		// c.pickNote.setImage(new Image(NotezFileUtil
-		// .getResourceStream(isGrouped ? NotezController.ICON_DISSOLVE
-		// : NotezController.ICON_PICK_NOTE)));
+		c.noteChild.addListener((cc, o, n) ->
+		{
+			System.out.println(c.idx + " child: " + n.idx);
+		});
+		// TODO does not work correctly
+		c.noteParent.isNotNull().or(c.noteChild.isNotNull())
+			.addListener((g, o, n) ->
+			{
+				c.pickNote.imageProperty().set(n.booleanValue() ? IMAGE_DISSOLVE : IMAGE_PICK_NOTE);
+				System.out.println(n);
+			});
 	}
 
 	private void loadIcons()
@@ -199,13 +210,13 @@ public class NotezControllerListeners
 			{
 				c.initialX = me.getSceneX();
 				c.initialY = me.getSceneY();
-
-				for(int i = 0; i < c.notezGroup.size(); i++)
-				{
-					NotezController ctrl = c.notezGroup.get(i);
-					ctrl.initialX = me.getSceneX();
-					ctrl.initialY = me.getSceneY() - (c.toolBar.getHeight() * (i + 1));
-				}
+//
+//				for(int i = 0; i < c.notezGroup.size(); i++)
+//				{
+//					NotezController ctrl = c.notezGroup.get(i);
+//					ctrl.initialX = me.getSceneX();
+//					ctrl.initialY = me.getSceneY() - (c.toolBar.getHeight() * (i + 1));
+//				}
 			}
 		});
 
@@ -215,14 +226,14 @@ public class NotezControllerListeners
 				c.stage.setX(me.getScreenX() - c.initialX);
 				c.stage.setY(me.getScreenY() - c.initialY);
 
-				c.notezGroup.forEach(ctrl -> {
-					Scene s = ctrl.getStage().getScene();
-					s.getWindow().setX(me.getScreenX() - ctrl.initialX);
-					s.getWindow().setY(me.getScreenY() - ctrl.initialY);
-
-					// TODO This is in-performant-shit
-						ctrl.getStage().toFront();
-					});
+//				c.notezGroup.forEach(ctrl -> {
+//					Scene s = ctrl.getStage().getScene();
+//					s.getWindow().setX(me.getScreenX() - ctrl.initialX);
+//					s.getWindow().setY(me.getScreenY() - ctrl.initialY);
+//
+//					// TODO This is in-performant-shit
+//						ctrl.getStage().toFront();
+//					});
 			}
 		});
 	}
@@ -315,18 +326,6 @@ public class NotezControllerListeners
 		// objects.forEach(itm -> itm.setVisible(visible));
 	}
 
-	protected void addDissolve(ImageView pickNote2)
-	{
-		// isGrouped
-		pickNote2.setOnMouseClicked(event -> {
-			if (c.isGrouped)
-			{
-				c.notezGroup.clear();
-				changePickIcon(c.isGrouped = false);
-			}
-		});
-	}
-
 	/**
 	 * Method to add all settings for Notez.
 	 *
@@ -357,6 +356,26 @@ public class NotezControllerListeners
 		c.noteChanged = c.data.textChangedProperty();
 	}
 
+	protected void initPinNote()
+	{
+		c.btnPin.selectedProperty().addListener((s, o, n) ->
+		{
+			((ImageView)c.btnPin.getGraphic()).setImage(n.booleanValue() ? c.iVPinned : c.iVUnpinned);
+			// btnPin.setGraphic(pinned ? iVPinned : iVUnpinned);
+			c.getStage().setAlwaysOnTop(n.booleanValue());
+
+			// do not bind as there are neede several, which could collide
+			if(c.noteParent.get() != null)
+			{
+				c.noteParent.get().btnPin.setSelected(n.booleanValue());
+			}
+			if(c.noteChild.get() != null)
+			{
+				c.noteChild.get().btnPin.setSelected(n.booleanValue());
+			}
+		});
+	}
+
 	protected void initPagination()
 	{
 		c.data = new NotezPagedData();
@@ -383,13 +402,13 @@ public class NotezControllerListeners
 			n.curTextProperty().bind(this.c.txtNote.textProperty());
 		});
 	}
-
-	protected void changePickIcon(boolean isGrouped)
-	{
-		c.pickNote.setImage(new Image(NotezFileUtil
-				.getResourceStream(isGrouped ? NotezController.ICON_DISSOLVE
-						: NotezController.ICON_PICK_NOTE)));
-	}
+//
+//	protected void changePickIcon(boolean isGrouped)
+//	{
+//		c.pickNote.setImage(new Image(NotezFileUtil
+//				.getResourceStream(isGrouped ? NotezController.ICON_DISSOLVE
+//						: NotezController.ICON_PICK_NOTE)));
+//	}
 
 	protected void setupGestureSource(final Node node)
 	{
@@ -431,11 +450,48 @@ public class NotezControllerListeners
 				// NotezController ctrl = NotezFrame.getNotez(Integer.valueOf(db.getString()));
 				NotezController ctrl = NotezFrame.getNotez((Integer)db
 						.getContent(NOTEZ_CONTROLLER_FORMAT));
-				c.pinToThisNote(ctrl);
+				ctrl.pinToNode(c);
 			}
 
 			event.setDropCompleted(true);
 			event.consume();
+		});
+	}
+
+	protected void initStackation()
+	{
+		// TODO case delete
+		// TODO dissolve
+
+		c.noteParent.addListener((p, o, n) ->
+		{
+			if(n.noteChild.get() != null)
+			{
+				// get recursive to the last part
+				c.noteParent.set(n.noteChild.get());
+				return;
+			}
+
+			n.noteChild.set(c);
+
+			final Stage stage = c.getStage();
+			stage.setX(n.getStage().getX());
+			n.getStage().xProperty().addListener((x, oo, nn) -> {
+				stage.setX(nn.doubleValue());
+			});
+			stage.setY(n.getStage().getY() + n.toolBar.getHeight());
+			n.getStage().yProperty().addListener((y, oo, nn) -> {
+				stage.setY(nn.doubleValue() + c.toolBar.getHeight());
+			});
+
+			c.getStage().xProperty().addListener((x, oo, nn) ->
+			{
+				n.getStage().setX(nn.doubleValue());
+			});
+			c.getStage().yProperty().addListener((y, oo, nn) ->
+			{
+				n.getStage().setY(nn.doubleValue() - c.toolBar.getHeight());
+			});
 		});
 	}
 

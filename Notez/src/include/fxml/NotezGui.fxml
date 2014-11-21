@@ -89,7 +89,7 @@
 			<children>
 				<HBox AnchorPane.leftAnchor="0.0">
 					<children>
-						<ToggleButton fx:id="btnPin" mnemonicParsing="false" onAction="#pinNote" opacity="1d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
+						<ToggleButton fx:id="btnPin" mnemonicParsing="false" opacity="1d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
 							<tooltip>
 								<Tooltip text="Pin Notez on top" />
 							</tooltip>
