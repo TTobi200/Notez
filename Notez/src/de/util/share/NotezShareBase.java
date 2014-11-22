@@ -9,7 +9,7 @@ package de.util.share;
 import java.io.File;
 import java.io.IOException;
 
-import de.gui.NotezController;
+import de.gui.controller.NotezController;
 import de.util.NotezRegexUtil;
 
 public abstract class NotezShareBase implements NotezShare

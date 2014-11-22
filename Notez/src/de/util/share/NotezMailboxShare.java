@@ -6,7 +6,7 @@ package de.util.share;
 import java.io.File;
 import java.io.IOException;
 
-import de.gui.NotezController;
+import de.gui.controller.NotezController;
 import de.util.notez.NotezParsers;
 
 public class NotezMailboxShare extends NotezShareBase

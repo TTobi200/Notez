@@ -10,13 +10,13 @@ import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
 
-import de.gui.NotezController;
+import de.gui.controller.NotezControllerBase;
 
 public class NotezParserV01 extends NotezParserBase
 {
 
 	@Override
-	public void save(NotezController controller, File file) throws IOException
+	public void save(NotezControllerBase<?, ?> controller, File file) throws IOException
 	{
 		try (Writer w = new BufferedWriter(new FileWriter(file)))
 		{

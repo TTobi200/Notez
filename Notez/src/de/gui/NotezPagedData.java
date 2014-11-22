@@ -114,7 +114,7 @@ public class NotezPagedData implements NotezData
 	public ObservableList<NotezData> getPages()
 	{
 		// return FXCollections.unmodifiableObservableList(getPagesOrig());
-		return new UnmodifiableObservableList(getPagesOrig());
+		return new UnmodifiableObservableList<NotezData>(getPagesOrig());
 	}
 
 	protected ReadOnlyIntegerWrapper curIndexPropertyOrig()
@@ -183,6 +183,7 @@ public class NotezPagedData implements NotezData
 
 		private ObservableList<E>							list;
 
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		public UnmodifiableObservableList(ObservableList<E> list)
 		{
 			this.list = list;
@@ -367,13 +368,13 @@ public class NotezPagedData implements NotezData
 		}
 
 		@Override
-		public boolean addAll(E... elements)
+		public boolean addAll(@SuppressWarnings("unchecked") E... elements)
 		{
 			throw new UnsupportedOperationException();
 		}
 
 		@Override
-		public boolean setAll(E... elements)
+		public boolean setAll(@SuppressWarnings("unchecked") E... elements)
 		{
 			throw new UnsupportedOperationException();
 		}
@@ -385,13 +386,13 @@ public class NotezPagedData implements NotezData
 		}
 
 		@Override
-		public boolean removeAll(E... elements)
+		public boolean removeAll(@SuppressWarnings("unchecked") E... elements)
 		{
 			throw new UnsupportedOperationException();
 		}
 
 		@Override
-		public boolean retainAll(E... elements)
+		public boolean retainAll(@SuppressWarnings("unchecked") E... elements)
 		{
 			throw new UnsupportedOperationException();
 		}

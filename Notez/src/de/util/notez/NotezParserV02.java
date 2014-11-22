@@ -12,14 +12,14 @@ import java.io.IOException;
 import java.io.Writer;
 
 import javafx.geometry.Point2D;
-import de.gui.NotezController;
+import de.gui.controller.NotezControllerBase;
 
 public class NotezParserV02 extends NotezParserBase
 {
     public static final String VERSION = "0.2";
 
     @Override
-    public void save(NotezController controller, File file) throws IOException
+    public void save(NotezControllerBase<?, ?> controller, File file) throws IOException
     {
         try (Writer w = new BufferedWriter(new FileWriter(file)))
         {

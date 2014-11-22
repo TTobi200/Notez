@@ -22,6 +22,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import de.gui.controller.NotezController;
 import de.util.NotezFileUtil;
 
 public class NotezLoadSplash extends Application

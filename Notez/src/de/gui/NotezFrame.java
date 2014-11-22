@@ -18,6 +18,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import de.gui.controller.NotezController;
 import de.util.NotezFileUtil;
 import de.util.NotezSettings;
 

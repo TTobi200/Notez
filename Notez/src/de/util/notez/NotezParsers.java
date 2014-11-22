@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import de.gui.NotezController;
+import de.gui.controller.NotezControllerBase;
 
 public class NotezParsers
 {
@@ -49,7 +49,7 @@ public class NotezParsers
 		{
 			ret = getParserForVersion(version.substring(0, version.lastIndexOf('.')));
 		}
-		
+
 		if(ret == null)
 		{
 			throw new UnsupportedVersionException(version);
@@ -77,25 +77,25 @@ public class NotezParsers
 		}
 	}
 
-	public static void save(NotezController controller, String path)
+	public static void save(NotezControllerBase<?, ?> controller, String path)
 		throws IOException
 	{
 		save(controller, new File(path));
 	}
 
-	public static void save(NotezController controller, File file)
+	public static void save(NotezControllerBase<?, ?> controller, File file)
 		throws IOException
 	{
 		save(controller, file, null);
 	}
 
-	public static void save(NotezController controller, String path,
+	public static void save(NotezControllerBase<?, ?> controller, String path,
 					String version) throws IOException
 	{
 		save(controller, new File(path), version);
 	}
 
-	public static void save(NotezController controller, File file,
+	public static void save(NotezControllerBase<?, ?> controller, File file,
 					String version) throws IOException
 	{
 		NotezParser parser = mapParser.get(version);

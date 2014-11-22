@@ -9,7 +9,7 @@ package de.util.share;
 import java.io.File;
 import java.io.IOException;
 
-import de.gui.NotezController;
+import de.gui.controller.NotezController;
 
 public class NotezTcpIpShare extends NotezShareBase
 {

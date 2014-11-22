@@ -9,8 +9,8 @@ import java.io.FileNotFoundException;
 import java.util.prefs.Preferences;
 
 import javafx.application.Application;
-import de.gui.NotezController;
 import de.gui.NotezLoadSplash;
+import de.gui.controller.NotezController;
 
 public class Startup
 {
