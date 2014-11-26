@@ -30,8 +30,7 @@ public class NotezFrame extends Application
     public static final String FXML_PATH = "include/fxml/NotezGui.fxml";
     public static final String NOTEZ_FILE_POSFIX = ".notez";
 
-    private static final String DEF_LOCAL_NOTEZ_FOLDER = ".";
-    public static File localNotezFolder;
+    public static final String DEF_LOCAL_NOTEZ_FOLDER = ".";
 
     public static ObservableList<NotezController> notezOpened;
 
@@ -39,7 +38,7 @@ public class NotezFrame extends Application
     public void start(Stage primaryStage) throws Exception
     {
         notezOpened = FXCollections.observableArrayList();
-        localNotezFolder = new File(NotezProperties.get(
+        File localNotezFolder = new File(NotezProperties.get(
             NotezProperties.PROP_NOTEZ_FOLDER, DEF_LOCAL_NOTEZ_FOLDER));
 
         int foundNotes = 0;
@@ -93,7 +92,8 @@ public class NotezFrame extends Application
     public static Stage createNotezFrame() throws IOException
     {
         return createNotezFrame(new File(
-            NotezFrame.localNotezFolder.getAbsolutePath()
+            new File(NotezProperties.get(
+                NotezProperties.PROP_NOTEZ_FOLDER, DEF_LOCAL_NOTEZ_FOLDER))
                             + File.separator
                             + new SimpleDateFormat(
                                 "yyyy-MM-dd_HH-mm-ss")

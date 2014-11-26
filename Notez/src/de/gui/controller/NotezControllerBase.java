@@ -114,7 +114,7 @@ public abstract class NotezControllerBase<D extends NotezData, L extends NotezCo
      */
     public void closeNote(boolean askToSave) throws Exception
     {
-        if(noteChanged.get())
+        if(noteChanged.get() && askToSave)
         {
             switch(NotezDialog.showQuestionDialog(stage, "Save Changes",
                 "Do you like to save the changes?"))
@@ -140,9 +140,12 @@ public abstract class NotezControllerBase<D extends NotezData, L extends NotezCo
     protected File genNotezFile(String notezName)
     {
         return NotezFileUtil.canBeUsedAsFilename(notezName) ? new File(
-            NotezFrame.localNotezFolder.getAbsolutePath().replace(".", "")
+            NotezProperties.get(
+                NotezProperties.PROP_NOTEZ_FOLDER,
+                NotezFrame.DEF_LOCAL_NOTEZ_FOLDER)
                             + notezName
-                            + NotezFrame.NOTEZ_FILE_POSFIX) : note;
+                            + NotezFrame.NOTEZ_FILE_POSFIX)
+                        : note;
     }
 
     @FXML

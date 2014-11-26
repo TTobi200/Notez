@@ -80,7 +80,11 @@
 //  -fx-background-position: center;
 //}
 
-
+#txtNote .scroll-pane
+{
+     -fx-hbar-policy : never;
+     -fx-vbar-policy : never;
+}
 
 .toggle-button:hover 
 {
