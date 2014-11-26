@@ -1,5 +1,8 @@
 /*
- * Copyright © 2014 Unitechnik Systems GmbH. All Rights Reserved.
+ * $Header$
+ * 
+ * $Log$
+ * Copyright © 2014 T.Ohm . All Rights Reserved.
  */
 package de.util.notez;
 
@@ -8,27 +11,27 @@ import java.io.IOException;
 
 public abstract class NotezParserBase implements NotezParser
 {
-	protected File file;
-	
-	protected NotezParserBase()
-	{
-		file = null;
-	}
-	
-	@Override
-	public NotezData parse(File file) throws IOException
-	{
-		NotezData data = parseImpl(file);
-		
-		this.file = file;
-		
-		return data;
-	}
-	
-	protected abstract NotezData parseImpl(File file) throws IOException;
+    protected File file;
 
-	public File getFile()
-	{
-		return file;
-	}
+    protected NotezParserBase()
+    {
+        file = null;
+    }
+
+    @Override
+    public NotezData parse(File file) throws IOException
+    {
+        NotezData data = parseImpl(file);
+
+        this.file = file;
+
+        return data;
+    }
+
+    protected abstract NotezData parseImpl(File file) throws IOException;
+
+    public File getFile()
+    {
+        return file;
+    }
 }

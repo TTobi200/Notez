@@ -1,5 +1,8 @@
 /*
- * Copyright © 2014 Unitechnik Systems GmbH. All Rights Reserved.
+ * $Header$
+ * 
+ * $Log$
+ * Copyright © 2014 T.Ohm . All Rights Reserved.
  */
 package de.util;
 

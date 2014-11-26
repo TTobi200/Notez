@@ -1,5 +1,8 @@
 /*
- * Copyright © 2014 Unitechnik Systems GmbH. All Rights Reserved.
+ * $Header$
+ * 
+ * $Log$
+ * Copyright © 2014 T.Ohm . All Rights Reserved.
  */
 package de.util.share;
 
@@ -11,12 +14,12 @@ import de.util.share.NotezShareBase.NotezShareResult;
 
 public interface NotezShare
 {
-	public default NotezShareResult shareNotez(NotezController ctrl,
-					String notez) throws IOException
-	{
-		return shareNotez(ctrl, new File(notez));
-	}
+    public default NotezShareResult shareNotez(NotezController ctrl,
+                    String notez) throws IOException
+    {
+        return shareNotez(ctrl, new File(notez));
+    }
 
-	public NotezShareResult shareNotez(NotezController ctrl, File notez)
-		throws IOException;
+    public NotezShareResult shareNotez(NotezController ctrl, File notez)
+        throws IOException;
 }
