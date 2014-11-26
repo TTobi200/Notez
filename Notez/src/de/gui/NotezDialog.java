@@ -16,12 +16,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -38,6 +42,7 @@ public class NotezDialog
     private static final String ICON_INFO = "include/icons/dialog-info.png";
 
     private static final double HEIGHT = 100d;
+    private static final double WIDTH = 300;
 
     private static NotezOption option;
 
@@ -46,47 +51,120 @@ public class NotezDialog
         YES, NO, CANCEL, CLOSE, OK;
     }
 
-    public static NotezOption showShareWithDialog(Stage parent, String title,
+    public static NotezRemoteUser showAddUserDialog(Stage parent)
+        throws IOException, InterruptedException
+    {
+        NotezDialogController ctrl = showDialog(parent,
+            "Add new Notez User",
+            "",
+            ICON_INFO,
+            NotezOption.YES, NotezOption.NO, NotezOption.CANCEL);
+
+        TextField txtName = new TextField();
+        TextField txtShare = new TextField();
+        VBox hBox = new VBox();
+
+        hBox.getChildren().addAll(new VBox(new Label("Name:  "), txtName),
+            new VBox(new Label("Share: "), txtShare));
+        ctrl.hBoxMsg.getChildren().add(hBox);
+
+        ctrl.stage.setHeight(HEIGHT + 50);
+        relativeToOwner(ctrl.stage, parent);
+
+        NotezOption o = ctrl.showAndWait();
+        NotezRemoteUser user = new NotezRemoteUser(txtName.getText(),
+            txtShare.getText());
+
+        return o == NotezOption.YES ? user : null;
+    }
+
+    public static NotezRemoteUser showShareWithDialog(Stage parent,
+                    String title,
                     String msg, ObservableList<NotezRemoteUser> user)
         throws IOException, InterruptedException
     {
-
-        return showDialog(parent, title, msg, ICON_QUESTION,
+        NotezDialogController ctrl = showDialog(parent, title, msg,
+            ICON_QUESTION,
             NotezOption.YES, NotezOption.NO, NotezOption.CANCEL);
+
+        ComboBox<NotezRemoteUser> cbUser = new ComboBox<>(user);
+
+        ctrl.hBoxMsg.getChildren().
+            add(cbUser);
+        ctrl.showAndWait();
+
+        return ctrl.showAndWait() == NotezOption.YES ?
+                        cbUser.getSelectionModel().getSelectedItem() : null;
     }
 
     public static NotezOption showQuestionDialog(Stage parent, String title,
                     String msg) throws IOException, InterruptedException
     {
-
-        return showDialog(parent, title, msg, ICON_QUESTION,
+        NotezDialogController ctrl = showDialog(parent, title, msg,
+            ICON_QUESTION,
             NotezOption.YES, NotezOption.NO, NotezOption.CANCEL);
+
+        return ctrl.showAndWait();
     }
 
     public static NotezOption showInfoDialog(Stage parent, String title,
                     String msg) throws IOException, InterruptedException
     {
-
-        return showDialog(parent, title, msg, ICON_INFO,
+        NotezDialogController ctrl = showDialog(parent, title, msg, ICON_INFO,
             NotezOption.OK, NotezOption.CANCEL);
+
+        return ctrl.showAndWait();
     }
 
     public static NotezOption showWarningDialog(Stage parent, String title,
                     String msg) throws IOException, InterruptedException
     {
-
-        return showDialog(parent, title, msg, ICON_WARNING,
+        NotezDialogController ctrl = showDialog(parent, title, msg,
+            ICON_WARNING,
             NotezOption.OK, NotezOption.CANCEL);
+
+        return ctrl.showAndWait();
+    }
+
+    public static NotezOption showExceptionDialog(Stage parent, String title,
+                    String msg, Throwable t) throws IOException,
+        InterruptedException
+    {
+        NotezDialogController ctrl = showDialog(parent, title, "", ICON_ERROR,
+            NotezOption.OK, NotezOption.CANCEL);
+
+        StringBuilder stack = new StringBuilder(t.getLocalizedMessage());
+        stack.append("\n");
+
+        StackTraceElement[] trace = t.getStackTrace();
+        for(int i = 0; i < trace.length; i++)
+        {
+            stack.append(trace[i])
+                .append("\n");
+        }
+
+        VBox vBoxEx = new VBox();
+
+        vBoxEx.getChildren().addAll(new Label(msg),
+            new TextArea(stack.toString()));
+
+        ctrl.hBoxMsg.getChildren().add(vBoxEx);
+        ctrl.stage.setHeight(200);
+        relativeToOwner(ctrl.stage, parent);
+
+        return ctrl.showAndWait();
     }
 
     public static NotezOption showErrorDialog(Stage parent, String title,
                     String msg) throws IOException, InterruptedException
     {
-        return showDialog(parent, title, msg, ICON_ERROR,
+        NotezDialogController ctrl = showDialog(parent, title, msg, ICON_ERROR,
             NotezOption.YES, NotezOption.NO, NotezOption.CANCEL);
+
+        return ctrl.showAndWait();
     }
 
-    public static NotezOption showDialog(Stage parent, String title,
+    public static NotezDialogController showDialog(Stage parent, String title,
                     String msg, String icon, NotezOption... options)
         throws IOException,
         InterruptedException
@@ -95,16 +173,18 @@ public class NotezDialog
         FXMLLoader loader = new FXMLLoader(
             NotezFileUtil.getResourceURL(NotezDialog.FXML_PATH));
 
-        loader.setController(new NotezDialogController(stage, title,
-            msg, new Image(NotezFileUtil.getResourceStream(icon)), options));
+        NotezDialogController ctrl = new NotezDialogController(stage, title,
+            msg, new Image(NotezFileUtil.getResourceStream(icon)), options);
+
+        loader.setController(ctrl);
         stage.setScene(new Scene(loader.load()));
-        stage.setWidth(parent.getWidth());
+        stage.setWidth(parent.isShowing() ?
+                        parent.getWidth() : WIDTH);
         stage.setHeight(HEIGHT);
         setModality(stage, parent);
         stage.initStyle(StageStyle.UNDECORATED);
-        stage.showAndWait();
 
-        return option;
+        return ctrl;
     }
 
     private static void setModality(Stage stage, Stage parent)
@@ -146,6 +226,8 @@ public class NotezDialog
         private ImageView icon;
         @FXML
         private HBox hBoxButtons;
+        @FXML
+        private HBox hBoxMsg;
 
         private Stage stage;
         private Image imgIcon;
@@ -263,29 +345,35 @@ public class NotezDialog
             stage.close();
         }
 
+        public NotezOption showAndWait()
+        {
+            stage.showAndWait();
+            return option;
+        }
+
         private void addDraggableNode(final Node node)
         {
             node.setOnMousePressed(me ->
-			{
-			    if(me.getButton() != MouseButton.MIDDLE)
-			    {
-			        initialX = me.getSceneX();
-			        initialY = me.getSceneY();
-			    }
-			});
+            {
+                if(me.getButton() != MouseButton.MIDDLE)
+                {
+                    initialX = me.getSceneX();
+                    initialY = me.getSceneY();
+                }
+            });
 
             node.setOnMouseDragged(me ->
-			{
-			    if(me.getButton() != MouseButton.MIDDLE)
-			    {
-			        node.getScene()
-			            .getWindow()
-			            .setX(me.getScreenX() - initialX);
-			        node.getScene()
-			            .getWindow()
-			            .setY(me.getScreenY() - initialY);
-			    }
-			});
+            {
+                if(me.getButton() != MouseButton.MIDDLE)
+                {
+                    node.getScene()
+                        .getWindow()
+                        .setX(me.getScreenX() - initialX);
+                    node.getScene()
+                        .getWindow()
+                        .setY(me.getScreenY() - initialY);
+                }
+            });
         }
     }
 }

@@ -44,7 +44,15 @@
 							<tabs>
 								<Tab fx:id="tabLocal" text="Local">
 									<content>
-										<VBox fx:id="vBoxLocalSet" />
+										<VBox fx:id="vBoxLocalSet" nodeOrientation="LEFT_TO_RIGHT">
+                                 <children>
+                                    <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" spacing="5.0">
+                                       <children>
+                                          <Label alignment="BOTTOM_LEFT" text="Notez-Folder:" />
+                                          <TextField fx:id="txtPropNotezFold" nodeOrientation="LEFT_TO_RIGHT" HBox.hgrow="ALWAYS" />
+                                       </children>
+                                    </HBox>
+                                 </children></VBox>
 									</content>
 								</Tab>
 								<Tab fx:id="tabRemote" text="Remote">
@@ -54,15 +62,29 @@
 												<TableView fx:id="tableRemoteuser" styleClass="background" stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
 													<columns>
 														<TableColumn fx:id="colUsername" prefWidth="100.0" text="User-Name" />
-														<TableColumn fx:id="colFolder" minWidth="0.0" prefWidth="158.0" text="Folder" />
+														<TableColumn fx:id="colShare" minWidth="0.0" prefWidth="158.0" text="Share" />
 													</columns>
 												</TableView>
 											</center>
 											<top>
 												<ToolBar nodeOrientation="RIGHT_TO_LEFT" styleClass="background" stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
 													<items>
-														<Button fx:id="btnDeleteUser" mnemonicParsing="false" styleClass="background" stylesheets="@Stylesheets.css" />
-														<Button fx:id="btnAddUser" mnemonicParsing="false" styleClass="background" stylesheets="@Stylesheets.css" />
+														<Button fx:id="btnDeleteUser" mnemonicParsing="false" onAction="#deleteUser" styleClass="background" stylesheets="@Stylesheets.css">
+                                             <graphic>
+                                                <ImageView pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../icons/delete.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </graphic></Button>
+														<Button fx:id="btnAddUser" mnemonicParsing="false" onAction="#addNewUser" styleClass="background" stylesheets="@Stylesheets.css">
+                                             <graphic>
+                                                <ImageView pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../icons/new_icon.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </graphic></Button>
 													</items>
 												</ToolBar>
 											</top>

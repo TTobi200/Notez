@@ -18,94 +18,105 @@ import de.gui.NotezFrame;
 
 public class NotezRemoteSync extends Timer
 {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public static final String THREAD_NAME = NotezRemoteSync.class.getName();
+    public static final String THREAD_NAME = NotezRemoteSync.class.getName();
 
-	final static ObservableList<NotezRemoteUser> availableRemoteUser =
-					FXCollections.observableArrayList();
+    final static ObservableList<NotezRemoteUser> availableRemoteUser =
+                    FXCollections.observableArrayList();
 
-	public static ObservableList<File> notezFiles =
-					FXCollections.observableArrayList();
+    public static ObservableList<File> notezFiles =
+                    FXCollections.observableArrayList();
 
-	public NotezRemoteSync(File localRemoteNotezFold)
-	{
-		super(1000, e ->
-		{
-			Platform.runLater(() ->
-			{
-				try
-				{
-					for(File f : localRemoteNotezFold.listFiles())
-					{
-						if(NotezFileUtil.isNotez(f) &&
-							!notezFiles.contains(f))
-						{
-							NotezFrame.loadAllNotez(localRemoteNotezFold);
-							notezFiles.add(f);
-						}
-					}
-				}
-				catch(IOException e1)
-				{
-					e1.printStackTrace();
-				}
-			});
-		});
-	}
+    public NotezRemoteSync(File localRemoteNotezFold)
+    {
+        super(1000, e ->
+        {
+            Platform.runLater(() ->
+            {
+                try
+                {
+                    for(File f : localRemoteNotezFold.listFiles())
+                    {
+                        if(NotezFileUtil.isNotez(f) &&
+                           !notezFiles.contains(f))
+                        {
+                            NotezFrame.loadAllNotez(localRemoteNotezFold);
+                            notezFiles.add(f);
+                        }
+                    }
+                }
+                catch(IOException e1)
+                {
+                    e1.printStackTrace();
+                }
+            });
+        });
+    }
 
-	public synchronized void addUser(NotezRemoteUser user)
-	{
-		availableRemoteUser.add(user);
-	}
+    public static synchronized void addUser(NotezRemoteUser user)
+    {
+        availableRemoteUser.add(user);
+    }
 
-	public static NotezRemoteUser getUser(String username)
-	{
-		for(NotezRemoteUser u : availableRemoteUser)
-		{
-			if(u.getUsername().equals(username))
-			{
-				return u;
-			}
-		}
+    public static synchronized void removeUser(NotezRemoteUser user)
+    {
+        availableRemoteUser.remove(user);
+    }
 
-		return null;
-	}
+    public static NotezRemoteUser getUser(String username)
+    {
+        for(NotezRemoteUser u : availableRemoteUser)
+        {
+            if(u.getUsername().equals(username))
+            {
+                return u;
+            }
+        }
 
-	public static class NotezRemoteUser
-	{
-		private final SimpleStringProperty username;
-		private final SimpleObjectProperty<Object> share;
+        return null;
+    }
 
-		public NotezRemoteUser(String userName, String remoteFolder)
-		{
-			this.username = new SimpleStringProperty(userName);
-			this.share = new SimpleObjectProperty<Object>(remoteFolder);
-		}
+    public static class NotezRemoteUser
+    {
+        private final SimpleStringProperty username;
+        private final SimpleObjectProperty<Object> share;
 
-		public Object getShare()
-		{
-			return share.get();
-		}
+        public NotezRemoteUser(String userName, String share)
+        {
+            this.username = new SimpleStringProperty(userName);
+            this.share = new SimpleObjectProperty<Object>(share);
+        }
 
-		public void setShare(String share)
-		{
-			this.share.set(share);
-		}
+        public Object getShare()
+        {
+            return share.get();
+        }
 
-		public String getUsername()
-		{
-			return username.get();
-		}
+        public void setShare(String share)
+        {
+            this.share.set(share);
+        }
 
-		public void setUsername(String username)
-		{
-			this.username.set(username);
-		}
-	}
+        public String getUsername()
+        {
+            return username.get();
+        }
 
-	public static ObservableList<NotezRemoteUser> getAllUsers()
-	{
-		return availableRemoteUser;
-	}
+        public void setUsername(String username)
+        {
+            this.username.set(username);
+        }
+
+        @Override
+        public String toString()
+        {
+            return getUsername();
+        }
+    }
+
+    public static ObservableList<NotezRemoteUser> getAllUsers()
+    {
+        return availableRemoteUser;
+    }
 }
