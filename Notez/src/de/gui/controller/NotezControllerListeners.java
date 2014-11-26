@@ -22,7 +22,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Rectangle;
 
 import com.sun.xml.internal.ws.api.config.management.policy.ManagementAssertion.Setting;
 
@@ -145,10 +144,7 @@ public class NotezControllerListeners extends
 
         c.btnSave.disableProperty().bind(c.noteChanged.not());
         c.btnSave.disabledProperty().addListener((bool, old, newOne) -> {
-            // TODO $TTobi200
-            c.btnSave.setClip(new Rectangle(0d, 0d, c.btnSave.getWidth()
-                                                    * (newOne ? .5 : 1d),
-                c.btnSave.getHeight()));
+            c.btnSave.getGraphic().setOpacity(newOne ? 0.3 : 1);
         });
     }
 

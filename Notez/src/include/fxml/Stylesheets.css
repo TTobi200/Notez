@@ -72,6 +72,16 @@
         rgba(0,0,0,0.05), rgba(0,0,0,0.05));
 }
 
+
+//.button:disabled
+//{
+//  -fx-background-image: url('../icons/gray.png');
+//  -fx-background-repeat: no-repeat;
+//  -fx-background-position: center;
+//}
+
+
+
 .toggle-button:hover 
 {
     -fx-background-color:
