@@ -3,8 +3,12 @@
  */
 package de.util;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
@@ -25,8 +29,12 @@ public class NotezRemoteSync extends Timer
     final static ObservableList<NotezRemoteUser> availableRemoteUser =
                     FXCollections.observableArrayList();
 
+    public static final int SERVER_PORT = 55555;
+
     public static ObservableList<File> notezFiles =
                     FXCollections.observableArrayList();
+
+    private ServerSocket receive;
 
     public NotezRemoteSync(File localRemoteNotezFold)
     {
@@ -52,6 +60,58 @@ public class NotezRemoteSync extends Timer
                 }
             });
         });
+
+        try
+        {
+            receive = new ServerSocket(SERVER_PORT);
+        }
+        catch(IOException e2)
+        {
+            e2.printStackTrace();
+        }
+
+        // FORTEST add server for receiving notez
+        Thread t = new Thread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                try
+                {
+                    Socket socket = receive.accept();
+
+                    BufferedReader bufferedReader =
+                                    new BufferedReader(
+                                        new InputStreamReader(
+                                            socket.getInputStream()));
+                    char[] buffer = new char[200];
+                    int anzahlZeichen = bufferedReader.read(buffer, 0, 200);
+
+                    Platform.runLater(() ->
+                    {
+                        try
+                        {
+                            // This is send text v
+                            // new String(buffer, 0, anzahlZeichen)
+                            NotezFrame.createNotezFrame();
+                        }
+                        catch(Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                    });
+
+                    // reapeat to listen again!
+                    run();
+                }
+                catch(IOException e1)
+                {
+                    e1.printStackTrace();
+                }
+            }
+        });
+        t.setDaemon(true);
+        t.start();
     }
 
     public static synchronized void addUser(NotezRemoteUser user)

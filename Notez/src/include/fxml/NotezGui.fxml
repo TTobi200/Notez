@@ -12,7 +12,7 @@
 				<Hyperlink fx:id="fileLink" opacity="1d" text="" visible="true" />
 				<ImageView fx:id="resize" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../icons/resize.gif" />
+                  <Image url="@../icons/resize.png" />
                </image></ImageView>
 			</children>
 		</HBox>
@@ -202,7 +202,7 @@
 						</Button>
 						<ImageView fx:id="pickNote" opacity="1d" pickOnBounds="true" preserveRatio="true" visible="true">
                      <image>
-                        <Image url="@../icons/pinToNote.gif" />
+                        <Image url="@../icons/pinToNote.png" />
                      </image></ImageView>
 					</children>
 				</HBox>

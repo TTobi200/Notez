@@ -48,7 +48,7 @@ public class NotezController extends
     public static final String ICON_SAVE = "include/icons/save.png";
     public static final String ICON_DELETE = "include/icons/delete.png";
     public static final String ICON_RESIZE = "include/icons/resize.gif";
-    public static final String ICON_PICK_NOTE = "include/icons/pn-add-source-copy.gif";
+    public static final String ICON_PICK_NOTE = "include/icons/pinToNote.png";
     public static final String ICON_DISSOLVE = "include/icons/link_break.png";
 
     @FXML
@@ -187,7 +187,27 @@ public class NotezController extends
 
         if(user != null)
         {
-            NotezShareBase.shareNotez(this, note, user);
+            String msg = "";
+            switch(NotezShareBase.shareNotez(this, note,
+                user.getShare()))
+            {
+                default:
+                case NOT_SUPPORTED:
+                    msg = "Sharing not supported!";
+                    break;
+                case BLOCKED:
+                    msg = "Sharing of Notez blocked!";
+                    break;
+                case OFFLINE:
+                    msg = "Cant reach user!";
+                    break;
+                case SHARED:
+                    msg = "Notez shared successfull!";
+                    break;
+            }
+
+            NotezDialog.showInfoDialog(stage, "Share Notez with "
+                                              + user.getUsername(), msg);
         }
     }
 

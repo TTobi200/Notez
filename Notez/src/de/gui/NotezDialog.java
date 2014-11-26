@@ -91,7 +91,6 @@ public class NotezDialog
 
         ctrl.hBoxMsg.getChildren().
             add(cbUser);
-        ctrl.showAndWait();
 
         return ctrl.showAndWait() == NotezOption.YES ?
                         cbUser.getSelectionModel().getSelectedItem() : null;
