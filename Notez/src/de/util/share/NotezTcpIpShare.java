@@ -8,8 +8,7 @@ package de.util.share;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import de.gui.controller.NotezController;
@@ -30,15 +29,17 @@ public class NotezTcpIpShare extends NotezShareBase
     {
         try (Socket socket = new Socket(ip, NotezRemoteSync.SERVER_PORT))
         {
-            PrintWriter printWriter =
-                            new PrintWriter(
-                                new OutputStreamWriter(
-                                    socket.getOutputStream()));
+        	ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+        	
+        	// TODO $DDD: Send the new data
+        	out.writeObject(ctrl.getData());
+//            PrintWriter printWriter =
+//                            new PrintWriter(
+//                                new OutputStreamWriter(
+//                                    socket.getOutputStream()));
 
-            // TODO: Send notez file as string in xml format!
-            // Or better use a protocol :D
-            printWriter.print(ctrl.getNoteText());
-            printWriter.flush();
+//            printWriter.print(ctrl.getNoteText());
+//            printWriter.flush();
 
             // close connection
             socket.close();

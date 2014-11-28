@@ -6,10 +6,9 @@
  */
 package de.util;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -74,45 +73,33 @@ public class NotezRemoteSync extends Timer
         }
 
         // FORTEST add server for receiving notez
-        Thread t = new Thread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                try
-                {
-                    Socket socket = receive.accept();
+        Thread t = new Thread(() ->
+		{
+		    try
+		    {
+		    	Socket socket;
+		    	while((socket = receive.accept()) != null)
+		    	{
+//		            BufferedReader bufferedReader =
+//		                            new BufferedReader(
+//		                                new InputStreamReader(
+//		                                    socket.getInputStream()));
+//		            char[] buffer = new char[200];
+//		            int anzahlZeichen = bufferedReader.read(buffer, 0, 200);
+		    		
+		    		ObjectInputStream in = new ObjectInputStream(
+		    			socket.getInputStream());
+		    		
+		    		// Read data
+//		    		NotezData data = (NotezData)in.readObject();
 
-                    BufferedReader bufferedReader =
-                                    new BufferedReader(
-                                        new InputStreamReader(
-                                            socket.getInputStream()));
-                    char[] buffer = new char[200];
-                    int anzahlZeichen = bufferedReader.read(buffer, 0, 200);
-
-                    Platform.runLater(() ->
-                    {
-                        try
-                        {
-                            // This is send text v
-                            // new String(buffer, 0, anzahlZeichen)
-                            NotezFrame.createNotezFrame();
-                        }
-                        catch(Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-                    });
-
-                    // reapeat to listen again!
-                    run();
-                }
-                catch(IOException e1)
-                {
-                    e1.printStackTrace();
-                }
-            }
-        });
+		    	}
+		    }
+		    catch(Exception e1)
+		    {
+		        e1.printStackTrace();
+		    }
+		});
         t.setDaemon(true);
         t.start();
     }

@@ -246,6 +246,11 @@ public abstract class NotezControllerBase<D extends NotezData, L extends NotezCo
     {
         return note;
     }
+    
+    public D getData()
+	{
+		return data;
+	}
 
     /**
      * Get the text of the current note. if the note consists of several pages,
