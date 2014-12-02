@@ -10,9 +10,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -24,8 +27,15 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -177,8 +187,9 @@ public class NotezDialog
 
         loader.setController(ctrl);
         stage.setScene(new Scene(loader.load()));
-        stage.setWidth(parent.isShowing() ?
-                        parent.getWidth() : WIDTH);
+        stage.setWidth(WIDTH);
+        // stage.setWidth(parent.isShowing() ?
+        // parent.getWidth() : WIDTH);
         stage.setHeight(HEIGHT);
         setModality(stage, parent);
         stage.initStyle(StageStyle.UNDECORATED);
@@ -193,12 +204,41 @@ public class NotezDialog
             stage.initModality(Modality.WINDOW_MODAL);
             stage.initOwner(parent.getScene().getWindow());
             relativeToOwner(stage, parent);
+            grayOutParent(stage, parent);
         }
+    }
+
+    private static void grayOutParent(Stage stage, Stage parent)
+    {
+        // FORTEST
+        BorderPane root = (BorderPane)parent.getScene().getRoot();
+        StackPane stack = (StackPane)root.getCenter();
+        Pane grayPane = new Pane();
+        grayPane.setBackground(new Background(new BackgroundFill(Color.GRAY,
+            CornerRadii.EMPTY, Insets.EMPTY)));
+        grayPane.setOpacity(0.4);
+        stack.getChildren().add(grayPane);
+
+        stage.showingProperty().addListener(new ChangeListener<Boolean>()
+        {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable,
+                            Boolean oldValue,
+                            Boolean newValue)
+            {
+                if(!newValue.booleanValue())
+                {
+                    stack.getChildren().remove(grayPane);
+                    stage.showingProperty().removeListener(this);
+                }
+            }
+        });
     }
 
     private static void relativeToOwner(Stage stage, Stage owner)
     {
-        stage.setX(owner.getX());
+        stage.setX(owner.getX()
+                   + (owner.getWidth() / 2 - (stage.getWidth() / 2)));
         stage.setY(owner.getY() + (owner.getHeight() / 2)
                    - (stage.getHeight() / 2));
     }
