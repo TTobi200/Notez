@@ -23,6 +23,8 @@ public class NotezProperties
     public static final String PROP = "Prop";
     public static final String PROP_NOTEZ_FOLDER =
                     PROP + ".NotezFolder";
+    public static final String PROP_START_RECEIVER =
+                    PROP + ".StartReceiver";
 
     private static File propFile;
     private static Properties properties;

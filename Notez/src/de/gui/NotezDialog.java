@@ -19,17 +19,18 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -58,7 +59,25 @@ public class NotezDialog
 
     public static enum NotezOption
     {
-        YES, NO, CANCEL, CLOSE, OK;
+        YES(null), NO(null), CANCEL(null), CLOSE(null), OK(null);
+
+        Object data;
+
+        private NotezOption(Object data)
+        {
+            this.data = data;
+        }
+
+        public Object getData()
+        {
+            return data;
+        }
+
+        public NotezOption setData(Object data)
+        {
+            this.data = data;
+            return this;
+        }
     }
 
     public static NotezRemoteUser showAddUserDialog(Stage parent)
@@ -104,6 +123,23 @@ public class NotezDialog
 
         return ctrl.showAndWait() == NotezOption.YES ?
                         cbUser.getSelectionModel().getSelectedItem() : null;
+    }
+
+    public static NotezOption showRememberQuestionDialog(Stage parent,
+                    String title,
+                    String msg) throws IOException,
+        InterruptedException
+    {
+        NotezDialogController ctrl = showDialog(parent, title, msg,
+            ICON_QUESTION,
+            NotezOption.YES, NotezOption.NO, NotezOption.CANCEL);
+
+        CheckBox cbRemember = new CheckBox(
+            "Remember my decission |");
+
+        ctrl.hBoxButtons.getChildren().add(0, cbRemember);
+
+        return ctrl.showAndWait().setData(cbRemember.isSelected());
     }
 
     public static NotezOption showQuestionDialog(Stage parent, String title,
@@ -211,28 +247,35 @@ public class NotezDialog
     private static void grayOutParent(Stage stage, Stage parent)
     {
         // FORTEST
-        BorderPane root = (BorderPane)parent.getScene().getRoot();
-        StackPane stack = (StackPane)root.getCenter();
-        Pane grayPane = new Pane();
-        grayPane.setBackground(new Background(new BackgroundFill(Color.GRAY,
-            CornerRadii.EMPTY, Insets.EMPTY)));
-        grayPane.setOpacity(0.4);
-        stack.getChildren().add(grayPane);
-
-        stage.showingProperty().addListener(new ChangeListener<Boolean>()
+        StackPane stack = (StackPane)parent.getScene().lookup(
+            "#stack");
+        if(stack != null)
         {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable,
-                            Boolean oldValue,
-                            Boolean newValue)
+            Pane grayPane = new Pane();
+            grayPane.setBackground(new Background(new BackgroundFill(
+                Color.GRAY,
+                CornerRadii.EMPTY, Insets.EMPTY)));
+            grayPane.setOpacity(0.4);
+            stack.setEffect(new BoxBlur());
+            stack.getChildren().add(grayPane);
+
+            stage.showingProperty().addListener(new ChangeListener<Boolean>()
             {
-                if(!newValue.booleanValue())
+                @Override
+                public void changed(
+                                ObservableValue<? extends Boolean> observable,
+                                Boolean oldValue,
+                                Boolean newValue)
                 {
-                    stack.getChildren().remove(grayPane);
-                    stage.showingProperty().removeListener(this);
+                    if(!newValue.booleanValue())
+                    {
+                        stack.setEffect(null);
+                        stack.getChildren().remove(grayPane);
+                        stage.showingProperty().removeListener(this);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     private static void relativeToOwner(Stage stage, Stage owner)

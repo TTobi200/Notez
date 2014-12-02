@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.effect.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
@@ -14,7 +16,13 @@
 				<ImageView fx:id="resize" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../icons/resize.png" />
-               </image></ImageView>
+               </image>
+               <cursor>
+                  <Cursor fx:constant="SE_RESIZE" />
+               </cursor>
+               <HBox.margin>
+                  <Insets top="5.0" />
+               </HBox.margin></ImageView>
 			</children>
 		</HBox>
 	</bottom>
@@ -124,7 +132,10 @@
                         </ImageView>
                      </graphic>
 						</ToggleButton>
-						<TextField fx:id="txtTitle" nodeOrientation="LEFT_TO_RIGHT" styleClass="background-darker" stylesheets="@Stylesheets.css" />
+						<TextField fx:id="txtTitle" nodeOrientation="LEFT_TO_RIGHT" styleClass="background-darker" stylesheets="@Stylesheets.css">
+                     <cursor>
+                        <Cursor fx:constant="MOVE" />
+                     </cursor></TextField>
 					</children>
 				</HBox>
 				<HBox nodeOrientation="RIGHT_TO_LEFT" AnchorPane.rightAnchor="0.0">
@@ -204,7 +215,13 @@
 						<ImageView fx:id="pickNote" opacity="1d" pickOnBounds="true" preserveRatio="true" visible="true">
                      <image>
                         <Image url="@../icons/pinToNote.png" />
-                     </image></ImageView>
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="OPEN_HAND" />
+                     </cursor>
+                     <HBox.margin>
+                        <Insets top="5.0" />
+                     </HBox.margin></ImageView>
 					</children>
 				</HBox>
 			</children>

@@ -16,16 +16,19 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import de.gui.controller.NotezController;
 import de.util.NotezFileUtil;
 import de.util.NotezProperties;
+import de.util.NotezRemoteSync;
+import de.util.NotezRemoteSync.NotezRemoteUser;
 
 public class NotezFrame extends Application
 {
-    public static final double DEF_WIDTH = 299d;
-    public static final double DEF_HEIGTH = 212d;
+    public static final double DEF_WIDTH = 400d;
+    public static final double DEF_HEIGTH = 300d;
 
     public static final String FXML_PATH = "include/fxml/NotezGui.fxml";
     public static final String NOTEZ_FILE_POSFIX = ".notez";
@@ -37,6 +40,26 @@ public class NotezFrame extends Application
     @Override
     public void start(Stage primaryStage) throws Exception
     {
+        // FORTEST added remote sync
+        switch(NotezDialog.showRememberQuestionDialog(null,
+            "Receiving service",
+            "Do you like to start the receiving notez service?"))
+        {
+            default:
+            case CANCEL:
+            case CLOSE:
+            case NO:
+                // Do nothing
+                break;
+
+            case OK:
+            case YES:
+                new NotezRemoteSync(new File("."));
+                NotezRemoteSync.addUser(new NotezRemoteUser(
+                    "localhost", "127.0.0.1"));
+                break;
+        }
+
         notezOpened = FXCollections.observableArrayList();
         File localNotezFolder = new File(NotezProperties.get(
             NotezProperties.PROP_NOTEZ_FOLDER, DEF_LOCAL_NOTEZ_FOLDER));
@@ -116,12 +139,25 @@ public class NotezFrame extends Application
         NotezController ctrl = new NotezController(stage, f, notezOpened.size());
 
         loader.setController(ctrl);
-        Scene scene = new Scene(loader.load());
+        BorderPane root = loader.load();
+        Scene scene = new Scene(root);
+
+        // XXX Add this to gain drop shadow (1/2)
+        // Group g = new Group();
+        // Scene scene = new Scene(g);
+        // scene.setFill(null);
+        // root.setPadding(new Insets(10, 10, 10, 10));
+        // root.setEffect(new DropShadow());
+
         stage.setScene(scene);
+        // Fixed set height/width needed for dialogs (relative to)
         stage.setHeight(DEF_HEIGTH);
         stage.setWidth(DEF_WIDTH);
-        stage.initStyle(StageStyle.UNDECORATED);
+        stage.initStyle(StageStyle.TRANSPARENT);
         stage.show();
+
+        // XXX Add this to gain drop shadow (2/2)
+        // g.getChildren().add(root);
 
         notezOpened.add(ctrl);
 

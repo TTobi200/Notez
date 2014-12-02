@@ -119,9 +119,12 @@ public abstract class NotezControllerBase<D extends NotezData, L extends NotezCo
             switch(NotezDialog.showQuestionDialog(stage, "Save Changes",
                 "Do you like to save the changes?"))
             {
-                case NO:
                 case CANCEL:
                 case CLOSE:
+                    // Stop this action!
+                    return;
+
+                case NO:
                     // Do nothing
                     break;
 
@@ -129,7 +132,6 @@ public abstract class NotezControllerBase<D extends NotezData, L extends NotezCo
                 case YES:
                     saveNote();
                     break;
-
             }
         }
 
@@ -246,11 +248,11 @@ public abstract class NotezControllerBase<D extends NotezData, L extends NotezCo
     {
         return note;
     }
-    
+
     public D getData()
-	{
-		return data;
-	}
+    {
+        return data;
+    }
 
     /**
      * Get the text of the current note. if the note consists of several pages,

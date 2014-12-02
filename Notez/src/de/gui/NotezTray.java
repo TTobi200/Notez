@@ -14,64 +14,61 @@ import javax.imageio.ImageIO;
 
 public class NotezTray
 {
-	private static final String TRAY_ICON =
-					"include/icons/tray.png";
+    private static final String TRAY_ICON =
+                    "include/icons/tray.png";
 
-	private static final String TRAY_TOOLTIP =
-					"Service for receiving Notez!";
+    private static final String TRAY_TOOLTIP =
+                    "Service for receiving Notez!";
 
-	private TrayIcon trayIcon;
-	private Stage stage;
+    private TrayIcon trayIcon;
+    private Stage stage;
 
-	public NotezTray()
-	{
-		init();
-	}
+    public NotezTray()
+    {
+        init();
+    }
 
-	private void init()
-	{
-		try
-		{
-			Toolkit.getDefaultToolkit();
+    private void init()
+    {
+        try
+        {
+            Toolkit.getDefaultToolkit();
 
-			if(!SystemTray.isSupported())
-			{
-				return;
-			}
+            if(!SystemTray.isSupported())
+            {
+                return;
+            }
 
-			SystemTray tray = SystemTray.getSystemTray();
+            SystemTray tray = SystemTray.getSystemTray();
 
-			Image image = ImageIO.read(getClass().getClassLoader()
-				.getResource(TRAY_ICON));
-			trayIcon = new TrayIcon(image);
+            Image image = ImageIO.read(getClass().getClassLoader()
+                .getResource(TRAY_ICON));
+            trayIcon = new TrayIcon(image);
+            trayIcon.addActionListener(event -> Platform.runLater(
+                this::showNotez));
+            trayIcon.setToolTip(TRAY_TOOLTIP);
 
-			trayIcon.addActionListener(event -> Platform.runLater(
-				this::showNotez));
+            tray.add(trayIcon);
+        }
+        catch(java.awt.AWTException | IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
 
-			trayIcon.setToolTip(TRAY_TOOLTIP);
+    private void showNotez()
+    {
+        if(stage != null && !stage.isShowing())
+        {
+            stage.show();
+        }
+    }
 
-			tray.add(trayIcon);
-		}
-		catch(java.awt.AWTException | IOException e)
-		{
-			e.printStackTrace();
-		}
-	}
-
-	private void showNotez()
-	{
-		if(stage != null && !stage.isShowing())
-		{
-			stage.show();
-		}
-	}
-
-	public void showMsgNewNotez(Stage notezStage, String
-					caption, String msg)
-	{
-		trayIcon.displayMessage(
-			caption, msg, MessageType.INFO);
-
-		this.stage = notezStage;
-	}
+    public void showMsgNewNotez(Stage notezStage, String
+                    caption, String msg)
+    {
+        trayIcon.displayMessage(
+            caption, msg, MessageType.INFO);
+        this.stage = notezStage;
+    }
 }
