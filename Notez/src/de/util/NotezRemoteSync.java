@@ -24,10 +24,8 @@ import javax.swing.Timer;
 import de.gui.NotezFrame;
 import de.gui.NotezTray;
 
-public class NotezRemoteSync extends Timer
+public class NotezRemoteSync
 {
-	private static final long serialVersionUID = 1L;
-
 	public static final String THREAD_NAME = NotezRemoteSync.class.getName();
 
 	final static ObservableList<NotezRemoteUser> availableRemoteUser =
@@ -38,22 +36,87 @@ public class NotezRemoteSync extends Timer
 	public static ObservableList<File> notezFiles =
 					FXCollections.observableArrayList();
 
-	private ServerSocket receive;
+	private static ServerSocket receive;
+	private static File localRemFold;
+	private static Timer foldSync;
+	private static Thread tcpThread;
+	private static NotezTray tray;
 
-	public NotezRemoteSync(File localRemoteNotezFold)
+	public NotezRemoteSync(File localRemFold)
 	{
-		super(1000, e ->
+		NotezRemoteSync.localRemFold = localRemFold;
+		start();
+	}
+
+	public static void start()
+	{
+		if(foldSync == null)
+		{
+			foldSync = creFoldSync(localRemFold);
+		}
+		foldSync.start();
+
+		if(tcpThread == null)
+		{
+			tcpThread = creTcpThread();
+		}
+		tcpThread.setDaemon(true);
+		tcpThread.start();
+	}
+
+	private static Thread creTcpThread()
+	{
+		return new Thread(() ->
+		{
+			try
+			{
+				receive = new ServerSocket(SERVER_PORT);
+			}
+			catch(IOException e2)
+			{
+				e2.printStackTrace();
+			}
+			try
+			{
+				// TODO commit loaded params
+			tray = new NotezTray(true, true);
+			Socket socket;
+			while((socket = receive.accept()) != null)
+			{
+				ObjectInputStream in = new ObjectInputStream(
+					socket.getInputStream());
+
+				// NotezData data = (NotezData)in.readObject();
+
+				Platform.runLater(() ->
+				{
+					// TODO add sender username
+					tray.showMsgNewNotez(new Stage(),
+						"Username");
+				});
+			}
+		}
+		catch(Exception e1)
+		{
+			e1.printStackTrace();
+		}
+	}	);
+	}
+
+	private static Timer creFoldSync(File folder)
+	{
+		return new Timer(1000, ae ->
 		{
 			Platform.runLater(() ->
 			{
 				try
 				{
-					for(File f : localRemoteNotezFold.listFiles())
+					for(File f : folder.listFiles())
 					{
 						if(NotezFileUtil.isNotez(f) &&
 							!notezFiles.contains(f))
 						{
-							NotezFrame.loadAllNotez(localRemoteNotezFold);
+							NotezFrame.loadAllNotez(folder);
 							notezFiles.add(f);
 						}
 					}
@@ -64,45 +127,6 @@ public class NotezRemoteSync extends Timer
 				}
 			});
 		});
-
-		try
-		{
-			receive = new ServerSocket(SERVER_PORT);
-		}
-		catch(IOException e2)
-		{
-			e2.printStackTrace();
-		}
-
-		// FORTEST add server for receiving notez
-		Thread t = new Thread(() ->
-		{
-			try
-			{
-				NotezTray tray = new NotezTray();
-				Socket socket;
-				while((socket = receive.accept()) != null)
-				{
-					ObjectInputStream in = new ObjectInputStream(
-						socket.getInputStream());
-
-					// NotezData data = (NotezData)in.readObject();
-
-			Platform.runLater(() ->
-			{
-				tray.showMsgNewNotez(new Stage(),
-					"Received new Notez.",
-					"Click here to open");
-			});
-		}
-	}
-	catch(Exception e1)
-	{
-		e1.printStackTrace();
-	}
-}		);
-		t.setDaemon(true);
-		t.start();
 	}
 
 	public static synchronized void addUser(NotezRemoteUser user)
@@ -126,6 +150,30 @@ public class NotezRemoteSync extends Timer
 		}
 
 		return null;
+	}
+
+	public static ObservableList<NotezRemoteUser> getAllUsers()
+	{
+		return availableRemoteUser;
+	}
+
+	public static boolean isRunning()
+	{
+		return foldSync != null && tcpThread != null &&
+				foldSync.isRunning() && tcpThread.isAlive();
+	}
+
+	public static void stopAll()
+	{
+		if(isRunning())
+		{
+			foldSync.stop();
+			tray.remove();
+			tcpThread.interrupt();
+
+			foldSync = null;
+			tcpThread = null;
+		}
 	}
 
 	public static class NotezRemoteUser
@@ -164,10 +212,5 @@ public class NotezRemoteSync extends Timer
 		{
 			return getUsername();
 		}
-	}
-
-	public static ObservableList<NotezRemoteUser> getAllUsers()
-	{
-		return availableRemoteUser;
 	}
 }

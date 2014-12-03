@@ -1,6 +1,10 @@
 package de.gui;
 
+import java.awt.CheckboxMenuItem;
 import java.awt.Image;
+import java.awt.Menu;
+import java.awt.MenuItem;
+import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
@@ -14,61 +18,172 @@ import javax.imageio.ImageIO;
 
 public class NotezTray
 {
-    private static final String TRAY_ICON =
-                    "include/icons/tray.png";
+	private static final String TRAY_ICON =
+					"include/icons/tray.png";
 
-    private static final String TRAY_TOOLTIP =
-                    "Service for receiving Notez!";
+	private static final String TRAY_TOOLTIP =
+					"Service for receiving Notez!";
 
-    private TrayIcon trayIcon;
-    private Stage stage;
+	private TrayIcon trayIcon;
+	private Stage lastAdded;
 
-    public NotezTray()
-    {
-        init();
-    }
+	private SystemTray tray;
 
-    private void init()
-    {
-        try
-        {
-            Toolkit.getDefaultToolkit();
+	private PopupMenu popup;
 
-            if(!SystemTray.isSupported())
-            {
-                return;
-            }
+	private CheckboxMenuItem rIOpenDirect;
 
-            SystemTray tray = SystemTray.getSystemTray();
+	private CheckboxMenuItem rIShowMessage;
 
-            Image image = ImageIO.read(getClass().getClassLoader()
-                .getResource(TRAY_ICON));
-            trayIcon = new TrayIcon(image);
-            trayIcon.addActionListener(event -> Platform.runLater(
-                this::showNotez));
-            trayIcon.setToolTip(TRAY_TOOLTIP);
+	private Menu itmNotOpened;
 
-            tray.add(trayIcon);
-        }
-        catch(java.awt.AWTException | IOException e)
-        {
-            e.printStackTrace();
-        }
-    }
+	public NotezTray(boolean openDirectly, boolean showMessage)
+	{
+		Platform.runLater(() ->
+		{
+			init(openDirectly, showMessage);
+		});
+	}
 
-    private void showNotez()
-    {
-        if(stage != null && !stage.isShowing())
-        {
-            stage.show();
-        }
-    }
+	private void init(boolean openDirectly, boolean showMessage)
+	{
+		try
+		{
+			Toolkit.getDefaultToolkit();
 
-    public void showMsgNewNotez(Stage notezStage, String
-                    caption, String msg)
-    {
-        trayIcon.displayMessage(
-            caption, msg, MessageType.INFO);
-        this.stage = notezStage;
-    }
+			if(!SystemTray.isSupported())
+			{
+				return;
+			}
+
+			tray = SystemTray.getSystemTray();
+
+			Image image = ImageIO.read(getClass().getClassLoader()
+				.getResource(TRAY_ICON));
+			trayIcon = new TrayIcon(image);
+			trayIcon.addActionListener(event -> Platform.runLater(
+				this::showNotez));
+			trayIcon.setToolTip(TRAY_TOOLTIP);
+
+			popup = new PopupMenu();
+			MenuItem itmExit = new MenuItem("Exit");
+			Menu itmNotezRec = new Menu("New Notez...");
+			itmNotOpened = new Menu("Not opened yet");
+
+			rIOpenDirect = new CheckboxMenuItem(
+				"Open directly", openDirectly);
+			rIShowMessage = new CheckboxMenuItem(
+				"Show message", showMessage);
+
+			itmNotezRec.add(rIOpenDirect);
+			itmNotezRec.add(rIShowMessage);
+
+			popup.add(itmNotOpened);
+			popup.add(itmNotezRec);
+			popup.addSeparator();
+			popup.add(itmExit);
+
+			itmNotOpened.setEnabled(false);
+
+			trayIcon.setPopupMenu(popup);
+			tray.add(trayIcon);
+		}
+		catch(java.awt.AWTException | IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	private void showNotez()
+	{
+		showNotez(lastAdded);
+	}
+
+	private void showNotez(Stage stage)
+	{
+		if(stage != null && !stage.isShowing())
+		{
+			Platform.runLater(() ->
+			{
+				stage.show();
+			});
+		}
+	}
+
+	public void showMsgNewNotez(Stage notezStage, String
+					name)
+	{
+		Platform.runLater(() ->
+		{
+			boolean openDirect = rIOpenDirect.getState();
+			boolean dshowMsg = rIShowMessage.getState();
+
+			if(dshowMsg)
+			{
+				trayIcon.displayMessage(
+					"Received Notez from " + name,
+					openDirect ?
+									"Notez from " + name + " opened!" :
+									"Click here to view it", MessageType.INFO);
+			}
+
+			this.lastAdded = notezStage;
+
+			if(openDirect)
+			{
+				showNotez(lastAdded);
+			}
+			else
+			{
+				addToNotOpened(new NotezNotOpened(
+					lastAdded, name));
+			}
+		});
+	}
+
+	private void addToNotOpened(NotezNotOpened notezNotOpened)
+	{
+		itmNotOpened.setEnabled(true);
+		MenuItem tmp = new MenuItem(
+			notezNotOpened.getUsername());
+		itmNotOpened.add(tmp);
+
+		tmp.addActionListener(e ->
+		{
+			showNotez(notezNotOpened.getStage());
+			itmNotOpened.remove(tmp);
+
+			itmNotOpened.setEnabled(itmNotOpened.getItemCount() > 0);
+		});
+	}
+
+	public void remove()
+	{
+		Platform.runLater(() ->
+		{
+			tray.remove(trayIcon);
+		});
+	}
+
+	public class NotezNotOpened
+	{
+		private String username;
+		private Stage stage;
+
+		public NotezNotOpened(Stage stage, String username)
+		{
+			this.username = username;
+			this.stage = stage;
+		}
+
+		public Stage getStage()
+		{
+			return stage;
+		}
+
+		public String getUsername()
+		{
+			return username;
+		}
+	}
 }
