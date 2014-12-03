@@ -55,13 +55,102 @@
 									<content>
 										<VBox fx:id="vBoxLocalSet" nodeOrientation="LEFT_TO_RIGHT">
                                  <children>
-                                    <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" spacing="5.0">
-                                       <children>
-                                          <Label alignment="BOTTOM_LEFT" text="Notez-Folder:" />
-                                          <TextField fx:id="txtPropNotezFold" nodeOrientation="LEFT_TO_RIGHT" HBox.hgrow="ALWAYS" />
-                                       </children>
-                                    </HBox>
-                                 </children></VBox>
+                                    <Accordion>
+                                      <panes>
+                                        <TitledPane expanded="false" text="Folder">
+                                             <content>
+                                                <VBox>
+                                                   <children>
+                                                      <HBox>
+                                                         <children>
+                                                            <Label alignment="BOTTOM_LEFT" text="Work-Folder:" HBox.hgrow="ALWAYS">
+                                                               <HBox.margin>
+                                                                  <Insets top="4.0" />
+                                                               </HBox.margin>
+                                                            </Label>
+                                                            <TextField fx:id="txtPropNotezFold" nodeOrientation="LEFT_TO_RIGHT" HBox.hgrow="ALWAYS" />
+                                                         </children>
+                                                      </HBox>
+                                                      <HBox>
+                                                         <children>
+                                                            <Label alignment="BOTTOM_LEFT" text="Remote-Folder:" HBox.hgrow="ALWAYS">
+                                                               <HBox.margin>
+                                                                  <Insets top="4.0" />
+                                                               </HBox.margin>
+                                                            </Label>
+                                                            <TextField nodeOrientation="LEFT_TO_RIGHT" HBox.hgrow="ALWAYS" />
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                </VBox>
+                                             </content>
+                                        </TitledPane>
+                                        <TitledPane expanded="false" text="Button">
+                                             <content>
+                                                <AnchorPane styleClass="background" stylesheets="@Stylesheets.css">
+                                                   <children>
+                                                      <CheckBox mnemonicParsing="false" stylesheets="@Stylesheets.css" text="Pin the Notez">
+                                                         <graphic>
+                                                            <ImageView pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../icons/pin.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </CheckBox>
+                                                      <CheckBox layoutY="68.0" mnemonicParsing="false" text="Save the Notez">
+                                                         <graphic>
+                                                            <ImageView pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../icons/save.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </CheckBox>
+                                                      <CheckBox layoutY="51.0" mnemonicParsing="false" text="Adding new Notez">
+                                                         <graphic>
+                                                            <ImageView pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../icons/new_icon.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </CheckBox>
+                                                      <CheckBox layoutY="17.0" mnemonicParsing="false" text="Grouping of Notez">
+                                                         <graphic>
+                                                            <ImageView pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../icons/pinToNote.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </CheckBox>
+                                                      <CheckBox layoutY="34.0" mnemonicParsing="false" text="Sharing of Notez">
+                                                         <graphic>
+                                                            <ImageView pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../icons/share.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </CheckBox>
+                                                      <CheckBox layoutY="85.0" mnemonicParsing="false" text="Remove the Notez">
+                                                         <graphic>
+                                                            <ImageView pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../icons/delete.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </CheckBox>
+                                                   </children>
+                                                </AnchorPane>
+                                             </content>
+                                        </TitledPane>
+                                      </panes>
+                                    </Accordion>
+                                 </children>
+                              </VBox>
 									</content>
 								</Tab>
 								<Tab fx:id="tabRemote" text="Remote">
