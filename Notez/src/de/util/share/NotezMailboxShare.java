@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 
 import de.gui.controller.NotezController;
-import de.util.notez.NotezParsers;
+import de.util.notez.parser.NotezParsers;
 
 public class NotezMailboxShare extends NotezShareBase
 {

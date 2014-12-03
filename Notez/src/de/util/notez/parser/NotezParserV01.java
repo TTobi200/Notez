@@ -4,7 +4,7 @@
  * $Log$
  * Copyright © 2014 T.Ohm . All Rights Reserved.
  */
-package de.util.notez;
+package de.util.notez.parser;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14,6 +14,7 @@ import java.io.Writer;
 import java.nio.file.Files;
 
 import de.gui.controller.NotezControllerBase;
+import de.util.notez.NotezData;
 
 public class NotezParserV01 extends NotezParserBase
 {

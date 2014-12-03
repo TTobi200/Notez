@@ -36,7 +36,7 @@ import de.util.NotezProperties;
 import de.util.NotezRemoteSync;
 import de.util.NotezRemoteSync.NotezRemoteUser;
 import de.util.notez.NotezData;
-import de.util.notez.NotezParsers;
+import de.util.notez.parser.NotezParsers;
 
 public class NotezControllerListeners extends
                 NotezControllerListenerBase<NotezController>

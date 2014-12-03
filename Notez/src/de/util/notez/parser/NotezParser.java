@@ -4,12 +4,13 @@
  * $Log$
  * Copyright © 2014 T.Ohm . All Rights Reserved.
  */
-package de.util.notez;
+package de.util.notez.parser;
 
 import java.io.File;
 import java.io.IOException;
 
 import de.gui.controller.NotezControllerBase;
+import de.util.notez.NotezData;
 
 public interface NotezParser
 {

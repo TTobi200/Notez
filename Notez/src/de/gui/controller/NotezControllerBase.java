@@ -16,7 +16,7 @@ import de.gui.NotezFrame;
 import de.util.NotezFXMLInitializable;
 import de.util.NotezFileUtil;
 import de.util.NotezProperties;
-import de.util.notez.NotezParsers;
+import de.util.notez.parser.NotezParsers;
 
 public abstract class NotezControllerBase<D extends NotezData, L extends NotezControllerListenerBase<?>>
                 implements NotezFXMLInitializable
