@@ -59,7 +59,7 @@
                                       <panes>
                                         <TitledPane expanded="false" text="Folder">
                                              <content>
-                                                <VBox>
+                                                <VBox styleClass="background" stylesheets="@Stylesheets.css">
                                                    <children>
                                                       <HBox>
                                                          <children>
