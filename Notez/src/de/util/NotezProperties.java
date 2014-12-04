@@ -105,17 +105,22 @@ public class NotezProperties
 
     public static void save()
     {
-        if(NotezFileUtil.fileCanBeSaved(propFile))
+        try
         {
-            try
+            if(!propFile.exists())
+            {
+                propFile.createNewFile();
+            }
+
+            if(NotezFileUtil.fileCanBeSaved(propFile))
             {
                 properties.store(new FileWriter(propFile),
                     COMMENT);
             }
-            catch(IOException e)
-            {
-                e.printStackTrace();
-            }
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
         }
     }
 }
