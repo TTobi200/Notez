@@ -1,8 +1,5 @@
 package de.gui.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -82,22 +79,12 @@ public abstract class NotezControllerListenerBase<C extends NotezControllerBase<
             }
         });
 
-        doOnFirstShowing(() -> {
+        doOnShowing(() -> {
             stageSize.setX(c.stage.getX());
             stageSize.setY(c.stage.getY());
             stageSize.setWidth(c.stage.getWidth());
             stageSize.setHeight(c.stage.getHeight());
         });
-
-        try
-        {
-            loadNote(c.note);
-        }
-        catch(IOException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
 
         initSettings();
 
@@ -136,9 +123,16 @@ public abstract class NotezControllerListenerBase<C extends NotezControllerBase<
         c.stage.minWidthProperty().bind(c.toolBar.prefWidthProperty());
     }
 
-    protected void doOnFirstShowing(Runnable run)
+    protected void doOnShowing(Runnable run)
     {
-        onShowing.add(run);
+    	if(c.getStage().isShowing())
+    	{
+    		run.run();
+    	}
+    	else
+    	{
+    		onShowing.add(run);
+    	}
     }
 
     protected void setNodeForDragging(final Node node)
@@ -376,17 +370,6 @@ public abstract class NotezControllerListenerBase<C extends NotezControllerBase<
             });
         });
     }
-
-    /**
-     * Method to load note from file.
-     *
-     * @param note
-     *            = the {@link File} to load note from
-     * @return true if file could be loaded
-     * @throws IOException
-     *             See: {@link Files#readAllBytes(java.nio.file.Path)}
-     */
-    protected abstract boolean loadNote(File note) throws IOException;
 
     protected abstract void initSettings();
 }

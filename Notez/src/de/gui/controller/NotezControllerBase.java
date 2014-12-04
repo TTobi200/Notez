@@ -3,6 +3,7 @@ package de.gui.controller;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ObjectProperty;
@@ -78,6 +79,12 @@ public abstract class NotezControllerBase<L extends NotezControllerListenerBase<
 
 		c = creNotezControllerListener();
 		data = new BaseNotezData(note.getName(), new BaseNotezStageData(), new BaseNotezPagedData());
+
+		// XXX should be done at another place
+		stage.xProperty().addListener((p, o, n) -> data.getStageData().setStageX(n.doubleValue()));
+		stage.yProperty().addListener((p, o, n) -> data.getStageData().setStageY(n.doubleValue()));
+		stage.widthProperty().addListener((p, o, n) -> data.getStageData().setStageWidth(n.doubleValue()));
+		stage.heightProperty().addListener((p, o, n) -> data.getStageData().setStageHeight(n.doubleValue()));
 	}
 
 	protected abstract L creNotezControllerListener();
@@ -288,4 +295,45 @@ public abstract class NotezControllerBase<L extends NotezControllerListenerBase<
 	 * @return The text of the current note
 	 */
 	public abstract String getNoteText();
+
+	protected abstract void setNoteText(String text);
+
+	/**
+     * Method to load note from file.
+     *
+     * @param note
+     *            = the {@link File} to load note from
+     * @return true if file could be loaded
+     * @throws IOException
+     *             See: {@link Files#readAllBytes(java.nio.file.Path)}
+     */
+    protected abstract boolean loadNote(File note) throws IOException;
+
+ // TODO just for tests
+    @FXML
+    protected void prevPage()
+    {
+    	saveOldTextData();
+        data.getPageData().prevPage();
+        getNewTextData();
+    }
+
+    @FXML
+    protected void nextPage()
+    {
+    	saveOldTextData();
+        data.getPageData().nextPage();
+        getNewTextData();
+    }
+
+    // XXX should be done by something like binding or so
+    protected void saveOldTextData()
+    {
+    	data.getPageData().setText(getNoteText());
+    }
+
+    protected void getNewTextData()
+    {
+    	setNoteText(data.getPageData().getText());
+    }
 }

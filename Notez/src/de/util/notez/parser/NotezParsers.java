@@ -14,6 +14,12 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import de.gui.controller.NotezControllerBase;
 import de.util.notez.data.NotezData;
 
@@ -27,6 +33,7 @@ public class NotezParsers
         mapParser = new HashMap<>();
         mapParser.put("0.1", new NotezParserV01());
         mapParser.put(NotezParserV02.VERSION, new NotezParserV02());
+        mapParser.put(BaseNotezXmlParser.VERSION, new BaseNotezXmlParser());
         mapParser.put("0", mapParser.get("0.1"));
 
         LinkedList<String> d = new LinkedList<>(mapParser.keySet());
@@ -72,17 +79,36 @@ public class NotezParsers
         {
             String line = r.readLine();
 
-            if(line != null && line.startsWith(NotezParser.STRING_VERSION))
-            {
-                line = line.substring(NotezParser.STRING_VERSION.length())
-                    .trim();
-            }
-            else
-            {
-                return "0";
-            }
+			if (line != null)
+			{
+				if (line.startsWith(NotezParser.STRING_VERSION))
+				{
+					line = line.substring(NotezParser.STRING_VERSION.length()).trim();
+				}
+				else if(line.startsWith(NotezXmlParserBase.NOTEZ_XML_FILE_START))
+				{
+					// TODO could be very inperformant on huge files.
+					try
+					{
+						DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+						DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+						Document doc = dBuilder.parse(file);
 
-            return line;
+						Element notezElement = doc.getDocumentElement();
+
+						if(notezElement.getNodeName().equals(NotezXmlParserBase.NOTEZ_XML_ROOT_ELEMENT))
+						{
+							line = notezElement.getAttribute(NotezParserBase.STRING_VERSION);
+						}
+					}
+					catch(Exception e)
+					{
+						line = null;
+					}
+				}
+			}
+
+            return (line == null || line.isEmpty()) ? "0" : line;
         }
     }
 
