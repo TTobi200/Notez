@@ -1,6 +1,6 @@
 /*
  * $Header$
- * 
+ *
  * $Log$
  * Copyright © 2014 T.Ohm . All Rights Reserved.
  */
@@ -13,8 +13,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
 
-import javafx.beans.binding.Bindings;
-import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Hyperlink;
@@ -31,11 +29,11 @@ import com.sun.xml.internal.ws.api.config.management.policy.ManagementAssertion.
 import de.gui.NotezDialog;
 import de.gui.NotezFrame;
 import de.util.NotezFileUtil;
-import de.util.NotezObservablesUtil;
 import de.util.NotezProperties;
 import de.util.NotezRemoteSync;
 import de.util.NotezRemoteSync.NotezRemoteUser;
-import de.util.notez.NotezData;
+import de.util.notez.data.NotezData;
+import de.util.notez.data.NotezStageData;
 import de.util.notez.parser.NotezParsers;
 
 public class NotezControllerListeners extends
@@ -193,28 +191,20 @@ public class NotezControllerListeners extends
 
     protected void initPagination()
     {
-        c.data.curTextProperty().bind(c.txtNote.textProperty());
-        c.data.saveText();
-        // TODO $Dauerdaddlah
-        // noteChanged = lastSavedText.isNotEqualTo(txtNote.textProperty());
-        // noteChanged = noteChanged.or(
-        // lastSavedSize.xProperty().isNotEqualTo(stage.xProperty()))
-        // .or(lastSavedSize.yProperty().isNotEqualTo(stage.yProperty()))
-        // .or(lastSavedSize.widthProperty().isNotEqualTo(
-        // stage.widthProperty()))
-        // .or(lastSavedSize.heightProperty().isNotEqualTo(
-        // stage.heightProperty()));
-        c.lblPage.textProperty().bind(
-            Bindings.concat(c.data.curIndexProperty().add(1), " / ",
-                NotezObservablesUtil.sizePropertyForList(c.data.getPages())));
-        c.btnPrevPage.disableProperty().bind(
-            c.data.curIndexProperty().isEqualTo(0));
-
-        c.data.curDataProperty().addListener((c, o, n) -> {
-            o.curTextProperty().unbind();
-            this.c.txtNote.setText(n.curTextProperty().get());
-            n.curTextProperty().bind(this.c.txtNote.textProperty());
-        });
+    	// XXX $DDD enable pagination
+//        c.data.curTextProperty().bind(c.txtNote.textProperty());
+//        c.data.saveText();
+//        c.lblPage.textProperty().bind(
+//            Bindings.concat(c.data.curIndexProperty().add(1), " / ",
+//                NotezObservablesUtil.sizePropertyForList(c.data.getPages())));
+//        c.btnPrevPage.disableProperty().bind(
+//            c.data.curIndexProperty().isEqualTo(0));
+//
+//        c.data.curDataProperty().addListener((c, o, n) -> {
+//            o.curTextProperty().unbind();
+//            this.c.txtNote.setText(n.curTextProperty().get());
+//            n.curTextProperty().bind(this.c.txtNote.textProperty());
+//        });
     }
 
     /**
@@ -237,34 +227,41 @@ public class NotezControllerListeners extends
         if(NotezFileUtil.fileCanBeLoad(note))
         {
             NotezData data = NotezParsers.parseFile(note);
-            Point2D pos = data.getPosition();
-
-            Point2D size = data.getSize();
-            c.stage.setWidth(size.getX());
-            c.stage.setHeight(size.getY());
+            NotezStageData stageData = data.getStageData();
+            c.stage.setWidth(stageData.getStageWidth());
+            c.stage.setHeight(stageData.getStageHeight());
 
             final Dimension D = Toolkit.getDefaultToolkit().getScreenSize();
-            if(pos.getX() < 0d)
+            if(stageData.getStageWidth() > D.getWidth())
             {
-                pos = new Point2D(0d, pos.getY());
+            	stageData.setStageX(0d);
+            	stageData.setStageWidth(D.getWidth());
             }
-            else if(pos.getX() + size.getX() > D.getWidth())
+            else if(stageData.getStageX() < 0d)
             {
-                pos = new Point2D(D.getWidth() - pos.getX(), pos.getY());
+            	stageData.setStageX(0d);
             }
-
-            if(pos.getY() < 0d)
+            else if(stageData.getStageX() + stageData.getStageWidth() > D.getWidth())
             {
-                pos = new Point2D(pos.getX(), 0d);
-            }
-            else if(pos.getY() + size.getY() > D.getHeight())
-            {
-                pos = new Point2D(pos.getX(), D.getHeight() - pos.getY());
+            	stageData.setStageX(D.getWidth() - stageData.getStageWidth());
             }
 
-            final Point2D p = pos;
-            c.txtNote.setText(data.getText());
-            doOnFirstShowing(() -> moveStageAnimatedTo(p));
+            if(stageData.getStageHeight() > D.getHeight())
+            {
+            	stageData.setStageY(0d);
+            	stageData.setStageHeight(D.getHeight());
+            }
+            else if(stageData.getStageY() < 0d)
+            {
+            	stageData.setStageY(0d);
+            }
+            else if(stageData.getStageY() + stageData.getStageHeight() > D.getHeight())
+            {
+            	stageData.setStageY(D.getHeight() - stageData.getStageHeight());
+            }
+
+            c.txtNote.setText(data.getPageData().getText());
+            doOnFirstShowing(() -> moveStageAnimatedTo(stageData.getStageX(), stageData.getStageY()));
 
             // File exists and loaded
             return true;

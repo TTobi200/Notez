@@ -1,6 +1,6 @@
 /*
  * $Header$
- * 
+ *
  * $Log$
  * Copyright © 2014 T.Ohm . All Rights Reserved.
  */
@@ -13,17 +13,21 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Arrays;
 
-import javafx.geometry.Point2D;
 import de.gui.controller.NotezControllerBase;
-import de.util.notez.NotezData;
+import de.util.notez.data.NotezData;
+import de.util.notez.data.base.BaseNotezData;
+import de.util.notez.data.base.BaseNotezPagedData;
+import de.util.notez.data.base.BaseNotezStageData;
+import de.util.notez.data.base.BaseNotezTextData;
 
 public class NotezParserV02 extends NotezParserBase
 {
     public static final String VERSION = "0.2";
 
     @Override
-    public void save(NotezControllerBase<?, ?> controller, File file)
+    public void save(NotezControllerBase<?> controller, File file)
         throws IOException
     {
         try (Writer w = new BufferedWriter(new FileWriter(file)))
@@ -92,8 +96,10 @@ public class NotezParserV02 extends NotezParserBase
                 sb.append("\n");
             }
 
-            return new NotezData(file.getName(), sb.toString(), new Point2D(x,
-                y), new Point2D(w, h));
+            return new BaseNotezData(
+            	file.getName(),
+            	new BaseNotezStageData(x, y, w, h),
+            	new BaseNotezPagedData(Arrays.asList(new BaseNotezTextData(sb.toString()))));
         }
     }
 }

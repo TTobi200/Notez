@@ -1,6 +1,6 @@
 /*
  * $Header$
- * 
+ *
  * $Log$ Copyright © 2014 T.Ohm . All Rights Reserved.
  */
 package de.gui.controller;
@@ -32,14 +32,13 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import de.gui.NotezDialog;
-import de.gui.NotezPagedData;
 import de.util.NotezProperties;
 import de.util.NotezRemoteSync;
 import de.util.NotezRemoteSync.NotezRemoteUser;
 import de.util.share.NotezShareBase;
 
 public class NotezController extends
-                NotezControllerBase<NotezPagedData, NotezControllerListeners>
+                NotezControllerBase<NotezControllerListeners>
 {
 
     public static final String ICON_LOGO = "include/icons/logo.png";
@@ -349,13 +348,13 @@ public class NotezController extends
     @FXML
     protected void prevPage()
     {
-        data.previousPage();
+        data.getPageData().prevPage();
     }
 
     @FXML
     protected void nextPage()
     {
-        data.nextPage();
+        data.getPageData().nextPage();
     }
 
     @FXML
@@ -399,11 +398,5 @@ public class NotezController extends
     public String getNoteText()
     {
         return txtNote.getText();
-    }
-
-    @Override
-    protected NotezPagedData creNotezData()
-    {
-        return new NotezPagedData();
     }
 }

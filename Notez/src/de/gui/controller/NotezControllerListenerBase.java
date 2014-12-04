@@ -16,7 +16,6 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -34,7 +33,7 @@ import javafx.util.Duration;
 import de.gui.NotezFrame;
 import de.util.NotezFXMLInitializable;
 
-public abstract class NotezControllerListenerBase<C extends NotezControllerBase<?, ?>>
+public abstract class NotezControllerListenerBase<C extends NotezControllerBase<?>>
                 implements
                 NotezFXMLInitializable
 {
@@ -255,13 +254,21 @@ public abstract class NotezControllerListenerBase<C extends NotezControllerBase<
     protected void initNoteChanged()
     {
         // TODO set notechanged correctly
-        c.noteChanged = c.data.textChangedProperty()
-            .or(stageSize.xProperty().isEqualTo(c.getStage().xProperty(), 0.2))
-            .or(stageSize.yProperty().isEqualTo(c.getStage().yProperty(), 0.2))
-            .or(stageSize.widthProperty().isEqualTo(
-                c.getStage().widthProperty(), 0.2))
-            .or(stageSize.heightProperty().isEqualTo(
-                c.getStage().heightProperty(), 0.2));
+//        c.noteChanged = c.data.textChangedProperty()
+//            .or(stageSize.xProperty().isEqualTo(c.getStage().xProperty(), 0.2))
+//            .or(stageSize.yProperty().isEqualTo(c.getStage().yProperty(), 0.2))
+//            .or(stageSize.widthProperty().isEqualTo(
+//                c.getStage().widthProperty(), 0.2))
+//            .or(stageSize.heightProperty().isEqualTo(
+//                c.getStage().heightProperty(), 0.2));
+    	c.noteChanged = new BooleanBinding()
+		{
+			@Override
+			protected boolean computeValue()
+			{
+				return true;
+			}
+		};
     }
 
     protected abstract void initPinNote();
@@ -316,7 +323,7 @@ public abstract class NotezControllerListenerBase<C extends NotezControllerBase<
         });
     }
 
-    protected void moveStageAnimatedTo(Point2D pos)
+    protected void moveStageAnimatedTo(double toX, double toY)
     {
         final Duration DUR = Duration.seconds(1d);
 
@@ -328,8 +335,8 @@ public abstract class NotezControllerListenerBase<C extends NotezControllerBase<
         ChangeListener<Number> yLis = (yy, old, newOne) -> c.stage.setY(newOne.doubleValue());
         y.addListener(yLis);
 
-        new Timeline(new KeyFrame(DUR, new KeyValue(x, pos.getX()),
-            new KeyValue(y, pos.getY())))
+        new Timeline(new KeyFrame(DUR, new KeyValue(x, toX),
+            new KeyValue(y, toY)))
             .play();
     }
 
@@ -345,7 +352,7 @@ public abstract class NotezControllerListenerBase<C extends NotezControllerBase<
             if(nn.noteChild.get() != null)
             {
                 // get recursive to the last part
-                c.noteParent.set((NotezControllerBase<?, ?>)nn.noteChild.get());
+                c.noteParent.set((NotezControllerBase<?>)nn.noteChild.get());
                 return;
             }
 

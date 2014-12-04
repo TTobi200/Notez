@@ -1,6 +1,6 @@
 /*
  * $Header$
- * 
+ *
  * $Log$
  * Copyright © 2014 T.Ohm . All Rights Reserved.
  */
@@ -9,7 +9,7 @@ package de.util.notez.parser;
 import java.io.File;
 import java.io.IOException;
 
-import de.util.notez.NotezData;
+import de.util.notez.data.NotezData;
 
 public abstract class NotezParserBase implements NotezParser
 {

@@ -1,6 +1,6 @@
 /*
  * $Header$
- * 
+ *
  * $Log$
  * Copyright © 2014 T.Ohm . All Rights Reserved.
  */
@@ -15,7 +15,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import de.gui.controller.NotezControllerBase;
-import de.util.notez.NotezData;
+import de.util.notez.data.NotezData;
 
 public class NotezParsers
 {
@@ -86,25 +86,25 @@ public class NotezParsers
         }
     }
 
-    public static void save(NotezControllerBase<?, ?> controller, String path)
+    public static void save(NotezControllerBase<?> controller, String path)
         throws IOException
     {
         save(controller, new File(path));
     }
 
-    public static void save(NotezControllerBase<?, ?> controller, File file)
+    public static void save(NotezControllerBase<?> controller, File file)
         throws IOException
     {
         save(controller, file, null);
     }
 
-    public static void save(NotezControllerBase<?, ?> controller, String path,
+    public static void save(NotezControllerBase<?> controller, String path,
                     String version) throws IOException
     {
         save(controller, new File(path), version);
     }
 
-    public static void save(NotezControllerBase<?, ?> controller, File file,
+    public static void save(NotezControllerBase<?> controller, File file,
                     String version) throws IOException
     {
         NotezParser parser = mapParser.get(version);

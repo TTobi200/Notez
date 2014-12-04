@@ -26,10 +26,11 @@ public class BaseNotezData implements NotezData
 	/** The pagedata of this data */
 	protected NotezPagedData pageData;
 
-	public BaseNotezData(NotezStageData stageData, NotezPagedData pageData)
+	public BaseNotezData(String title, NotezStageData stageData, NotezPagedData pageData)
 	{
 		super();
 
+		this.title = title;
 		this.stageData = stageData == null ? new BaseNotezStageData() : stageData;
 		this.pageData = pageData == null ? new BaseNotezPagedData() : pageData;
 	}
@@ -86,7 +87,8 @@ public class BaseNotezData implements NotezData
 
 		public SerializableNotezData(NotezData data)
 		{
-			super(new SerializableNotezStageData(Objects.requireNonNull(data.getStageData())),
+			super(data.getTitle(),
+				new SerializableNotezStageData(Objects.requireNonNull(data.getStageData())),
 					new SerializableNotezPagedData(Objects.requireNonNull(data.getPageData())));
 		}
 
