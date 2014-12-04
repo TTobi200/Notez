@@ -348,13 +348,29 @@ public class NotezController extends
     @FXML
     protected void prevPage()
     {
+    	saveOldTextData();
         data.getPageData().prevPage();
+        getNewTextData();
     }
 
     @FXML
     protected void nextPage()
     {
+    	saveOldTextData();
         data.getPageData().nextPage();
+        getNewTextData();
+    }
+
+    // TODO just for tests
+    private void saveOldTextData()
+    {
+    	data.getPageData().setText(txtNote.getText());
+    }
+
+    private void getNewTextData()
+    {
+    	txtNote.setText(data.getPageData().getText());
+    	lblPage.setText((data.getPageData().getCurPageIndex() + 1) + " / " + data.getPageData().getPages().size());
     }
 
     @FXML

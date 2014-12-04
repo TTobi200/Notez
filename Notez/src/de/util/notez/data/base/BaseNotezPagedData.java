@@ -25,6 +25,8 @@ public class BaseNotezPagedData extends NotezPagedDataBase
 	{
 		super();
 		this.pages = pages == null ? new ArrayList<>() : pages;
+
+		setCurPageIndex(0);
 	}
 
 	@Override
