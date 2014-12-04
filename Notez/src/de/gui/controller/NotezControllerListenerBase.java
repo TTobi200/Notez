@@ -195,7 +195,7 @@ public abstract class NotezControllerListenerBase<C extends NotezControllerBase<
             }
         });
 
-        node.setCursor(Cursor.SE_RESIZE);
+        // node.setCursor(Cursor.SE_RESIZE);
     }
 
     protected void displayChilds(Node[] nodes, boolean visible)

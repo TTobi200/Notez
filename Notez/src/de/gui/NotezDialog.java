@@ -353,6 +353,8 @@ public class NotezDialog
         private HBox hBoxButtons;
         @FXML
         private HBox hBoxMsg;
+        @FXML
+        private ImageView resize;
 
         private Stage stage;
         private Image imgIcon;
@@ -361,6 +363,8 @@ public class NotezDialog
         private double initialX;
         private double initialY;
         private NotezOption[] options;
+        private double curX;
+        private double curY;
 
         public NotezDialogController(Stage stage, String title, String msg,
                                      Image imgIcon, NotezOption... options)
@@ -377,6 +381,7 @@ public class NotezDialog
         {
             loadIcons();
             addDraggableNode(toolBar);
+            setAsResizeCorner(resize);
             lblTitle.setText(title);
             lblMsg.setText(msg);
 
@@ -474,6 +479,45 @@ public class NotezDialog
         {
             stage.showAndWait();
             return option;
+        }
+
+        // TODO put this in one util class?
+        protected void setAsResizeCorner(final Node node)
+        {
+            node.setOnMousePressed(event -> {
+                if(event.getButton() == MouseButton.PRIMARY)
+                {
+                    curX = event.getSceneX();
+                    curY = event.getSceneY();
+                }
+            });
+
+            node.setOnMouseDragged(event -> {
+                if(event.getButton() == MouseButton.PRIMARY)
+                {
+                    double tempH = event.getSceneX() - curY;
+                    double tempW = event.getSceneY() - curX;
+                    double height = event.getSceneY() + event.getSceneY()
+                                    - curX;
+                    double width = event.getSceneX() + event.getSceneX() - curY;
+
+                    if(height < stage.getMinHeight())
+                    {
+                        height = stage.getMinHeight();
+                    }
+                    if(width < stage.getMinWidth())
+                    {
+                        width = stage.getMinWidth();
+                    }
+
+                    stage.setWidth(width);
+                    stage.setHeight(height);
+                    curY += tempH;
+                    curX += tempW;
+                }
+            });
+
+            // node.setCursor(Cursor.SE_RESIZE);
         }
 
         private void addDraggableNode(final Node node)

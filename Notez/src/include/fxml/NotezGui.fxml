@@ -21,7 +21,7 @@
                   <Cursor fx:constant="SE_RESIZE" />
                </cursor>
                <HBox.margin>
-                  <Insets top="5.0" />
+                  <Insets top="6.0" />
                </HBox.margin></ImageView>
 			</children>
 		</HBox>
