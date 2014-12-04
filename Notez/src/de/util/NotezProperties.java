@@ -21,10 +21,33 @@ public class NotezProperties
     public static final String PROP_FILE = "./Notez.properties";
 
     public static final String PROP = "Prop";
-    public static final String PROP_NOTEZ_FOLDER =
-                    PROP + ".NotezFolder";
+    public static final String PROP_NOTEZ_WORK_FOLDER =
+                    PROP + ".NotezWorkFolder";
+    public static final String PROP_NOTEZ_REMOTE_FOLDER =
+                    PROP + ".NotezRemoteFolder";
     public static final String PROP_START_RECEIVER =
                     PROP + ".StartReceiver";
+    public static final String PROP_LET_RECEIVER_RUNNING =
+                    PROP + ".LetReceiverRunning";
+    public static final String PROP_RECEIVE_OPEN_DIRECT =
+                    PROP + ".OpenReceivedNotezDirectly";
+    public static final String PROP_RECEIVE_SHOW_MESSAGE =
+                    PROP + ".ShowReceivedMessage";
+    public static final String PROP_ALWAYS_SAVE_ON_EXIT =
+                    PROP + ".AlwaysSaveOnExit";
+
+    public static final String PROP_BTN_PIN_VISIBLE =
+                    PROP + ".BtnPinVisible";
+    public static final String PROP_BTN_GROUP_VISIBLE =
+                    PROP + ".BtnGroupVisible";
+    public static final String PROP_BTN_SHARE_VISIBLE =
+                    PROP + ".BtnShareVisible";
+    public static final String PROP_BTN_ADD_VISIBLE =
+                    PROP + ".BtnAddVisible";
+    public static final String PROP_BTN_SAVE_VISIBLE =
+                    PROP + ".BtnSaveVisible";
+    public static final String PROP_BTN_REMOVE_VISIBLE =
+                    PROP + ".BtnRemoveVisible";
 
     private static File propFile;
     private static Properties properties;
@@ -49,6 +72,11 @@ public class NotezProperties
                 e.printStackTrace();
             }
         }
+    }
+
+    public static boolean contains(String key)
+    {
+        return properties.containsKey(key);
     }
 
     public static String get(String key)

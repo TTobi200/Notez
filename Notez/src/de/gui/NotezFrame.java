@@ -43,7 +43,8 @@ public class NotezFrame extends Application
         // FORTEST added remote sync
         switch(NotezDialog.showRememberQuestionDialog(null,
             "Receiving service",
-            "Do you like to start the receiving notez service?"))
+            "Do you like to start the receiving notez service?",
+            NotezProperties.PROP_START_RECEIVER))
         {
             default:
             case CANCEL:
@@ -54,7 +55,9 @@ public class NotezFrame extends Application
 
             case OK:
             case YES:
-                new NotezRemoteSync(new File("."));
+                NotezRemoteSync.initialize(new File(NotezProperties.get(
+                    NotezProperties.PROP_NOTEZ_REMOTE_FOLDER,
+                    DEF_LOCAL_NOTEZ_FOLDER)));
                 NotezRemoteSync.addUser(new NotezRemoteUser(
                     "localhost", "127.0.0.1"));
                 break;
@@ -62,7 +65,7 @@ public class NotezFrame extends Application
 
         notezOpened = FXCollections.observableArrayList();
         File localNotezFolder = new File(NotezProperties.get(
-            NotezProperties.PROP_NOTEZ_FOLDER, DEF_LOCAL_NOTEZ_FOLDER));
+            NotezProperties.PROP_NOTEZ_WORK_FOLDER, DEF_LOCAL_NOTEZ_FOLDER));
 
         int foundNotes = 0;
         if(localNotezFolder.exists())
@@ -116,7 +119,7 @@ public class NotezFrame extends Application
     {
         return createNotezFrame(new File(
             new File(NotezProperties.get(
-                NotezProperties.PROP_NOTEZ_FOLDER, DEF_LOCAL_NOTEZ_FOLDER))
+                NotezProperties.PROP_NOTEZ_WORK_FOLDER, DEF_LOCAL_NOTEZ_FOLDER))
                             + File.separator
                             + new SimpleDateFormat(
                                 "yyyy-MM-dd_HH-mm-ss")

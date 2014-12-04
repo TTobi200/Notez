@@ -26,191 +26,199 @@ import de.gui.NotezTray;
 
 public class NotezRemoteSync
 {
-	public static final String THREAD_NAME = NotezRemoteSync.class.getName();
+    public static final String THREAD_NAME = NotezRemoteSync.class.getName();
 
-	final static ObservableList<NotezRemoteUser> availableRemoteUser =
-					FXCollections.observableArrayList();
+    final static ObservableList<NotezRemoteUser> availableRemoteUser =
+                    FXCollections.observableArrayList();
 
-	public static final int SERVER_PORT = 55555;
+    public static final int SERVER_PORT = 55555;
 
-	public static ObservableList<File> notezFiles =
-					FXCollections.observableArrayList();
+    public static ObservableList<File> notezFiles =
+                    FXCollections.observableArrayList();
 
-	private static ServerSocket receive;
-	private static File localRemFold;
-	private static Timer foldSync;
-	private static Thread tcpThread;
-	private static NotezTray tray;
+    private static ServerSocket receive;
+    private static File localRemFold;
+    private static Timer foldSync;
+    private static Thread tcpThread;
+    private static NotezTray tray;
 
-	public NotezRemoteSync(File localRemFold)
-	{
-		NotezRemoteSync.localRemFold = localRemFold;
-		start();
-	}
+    private NotezRemoteSync()
+    {
 
-	public static void start()
-	{
-		if(foldSync == null)
-		{
-			foldSync = creFoldSync(localRemFold);
-		}
-		foldSync.start();
+    }
 
-		if(tcpThread == null)
-		{
-			tcpThread = creTcpThread();
-		}
-		tcpThread.setDaemon(true);
-		tcpThread.start();
-	}
+    public static void initialize(File localRemFold)
+    {
+        NotezRemoteSync.localRemFold = localRemFold;
+        start();
+    }
 
-	private static Thread creTcpThread()
-	{
-		return new Thread(() ->
-		{
-			try
-			{
-				receive = new ServerSocket(SERVER_PORT);
-			}
-			catch(IOException e2)
-			{
-				e2.printStackTrace();
-			}
-			try
-			{
-				// TODO commit loaded params
-			tray = new NotezTray(true, true);
-			Socket socket;
-			while((socket = receive.accept()) != null)
-			{
-				ObjectInputStream in = new ObjectInputStream(
-					socket.getInputStream());
+    public static void start()
+    {
+        if(foldSync == null)
+        {
+            foldSync = creFoldSync(localRemFold);
+        }
+        foldSync.start();
 
-				// NotezData data = (NotezData)in.readObject();
+        if(tcpThread == null)
+        {
+            tcpThread = creTcpThread();
+        }
+        tcpThread.setDaemon(true);
+        tcpThread.start();
+    }
 
-				Platform.runLater(() ->
-				{
-					// TODO add sender username
-					tray.showMsgNewNotez(new Stage(),
-						"Username");
-				});
-			}
-		}
-		catch(Exception e1)
-		{
-			e1.printStackTrace();
-		}
-	}	);
-	}
+    private static Thread creTcpThread()
+    {
+        return new Thread(() ->
+        {
+            try
+            {
+                receive = new ServerSocket(SERVER_PORT);
+            }
+            catch(IOException e2)
+            {
+                e2.printStackTrace();
+            }
+            try
+            {
+                // TODO commit loaded params
+            tray = new NotezTray();
+            Socket socket;
+            while((socket = receive.accept()) != null)
+            {
+                ObjectInputStream in = new ObjectInputStream(
+                    socket.getInputStream());
 
-	private static Timer creFoldSync(File folder)
-	{
-		return new Timer(1000, ae ->
-		{
-			Platform.runLater(() ->
-			{
-				try
-				{
-					for(File f : folder.listFiles())
-					{
-						if(NotezFileUtil.isNotez(f) &&
-							!notezFiles.contains(f))
-						{
-							NotezFrame.loadAllNotez(folder);
-							notezFiles.add(f);
-						}
-					}
-				}
-				catch(IOException e1)
-				{
-					e1.printStackTrace();
-				}
-			});
-		});
-	}
+                // NotezData data = (NotezData)in.readObject();
 
-	public static synchronized void addUser(NotezRemoteUser user)
-	{
-		availableRemoteUser.add(user);
-	}
+                Platform.runLater(() ->
+                {
+                    // TODO add sender username
+                    tray.showMsgNewNotez(new Stage(),
+                        "Username");
+                });
+            }
+        }
+        catch(Exception e1)
+        {
+            e1.printStackTrace();
+        }
+    }   );
+    }
 
-	public static synchronized void removeUser(NotezRemoteUser user)
-	{
-		availableRemoteUser.remove(user);
-	}
+    private static Timer creFoldSync(File folder)
+    {
+        return new Timer(1000, ae ->
+        {
+            Platform.runLater(() ->
+            {
+                try
+                {
+                    if(NotezFileUtil.directoryExists(folder))
+                    {
+                        for(File f : folder.listFiles())
+                        {
+                            if(NotezFileUtil.isNotez(f) &&
+                               !notezFiles.contains(f))
+                            {
+                                NotezFrame.loadAllNotez(folder);
+                                notezFiles.add(f);
+                            }
+                        }
+                    }
+                }
+                catch(IOException e1)
+                {
+                    e1.printStackTrace();
+                }
+            });
+        });
+    }
 
-	public static NotezRemoteUser getUser(String username)
-	{
-		for(NotezRemoteUser u : availableRemoteUser)
-		{
-			if(u.getUsername().equals(username))
-			{
-				return u;
-			}
-		}
+    public static synchronized void addUser(NotezRemoteUser user)
+    {
+        availableRemoteUser.add(user);
+    }
 
-		return null;
-	}
+    public static synchronized void removeUser(NotezRemoteUser user)
+    {
+        availableRemoteUser.remove(user);
+    }
 
-	public static ObservableList<NotezRemoteUser> getAllUsers()
-	{
-		return availableRemoteUser;
-	}
+    public static NotezRemoteUser getUser(String username)
+    {
+        for(NotezRemoteUser u : availableRemoteUser)
+        {
+            if(u.getUsername().equals(username))
+            {
+                return u;
+            }
+        }
 
-	public static boolean isRunning()
-	{
-		return foldSync != null && tcpThread != null &&
-				foldSync.isRunning() && tcpThread.isAlive();
-	}
+        return null;
+    }
 
-	public static void stopAll()
-	{
-		if(isRunning())
-		{
-			foldSync.stop();
-			tray.remove();
-			tcpThread.interrupt();
+    public static ObservableList<NotezRemoteUser> getAllUsers()
+    {
+        return availableRemoteUser;
+    }
 
-			foldSync = null;
-			tcpThread = null;
-		}
-	}
+    public static boolean isRunning()
+    {
+        return foldSync != null && tcpThread != null &&
+               foldSync.isRunning() && tcpThread.isAlive();
+    }
 
-	public static class NotezRemoteUser
-	{
-		private final SimpleStringProperty username;
-		private final SimpleObjectProperty<Object> share;
+    public static void stopAll()
+    {
+        if(isRunning())
+        {
+            foldSync.stop();
+            tray.remove();
+            tcpThread.interrupt();
 
-		public NotezRemoteUser(String userName, String share)
-		{
-			this.username = new SimpleStringProperty(userName);
-			this.share = new SimpleObjectProperty<Object>(share);
-		}
+            foldSync = null;
+            tcpThread = null;
+        }
+    }
 
-		public Object getShare()
-		{
-			return share.get();
-		}
+    public static class NotezRemoteUser
+    {
+        private final SimpleStringProperty username;
+        private final SimpleObjectProperty<Object> share;
 
-		public void setShare(String share)
-		{
-			this.share.set(share);
-		}
+        public NotezRemoteUser(String userName, String share)
+        {
+            this.username = new SimpleStringProperty(userName);
+            this.share = new SimpleObjectProperty<Object>(share);
+        }
 
-		public String getUsername()
-		{
-			return username.get();
-		}
+        public Object getShare()
+        {
+            return share.get();
+        }
 
-		public void setUsername(String username)
-		{
-			this.username.set(username);
-		}
+        public void setShare(String share)
+        {
+            this.share.set(share);
+        }
 
-		@Override
-		public String toString()
-		{
-			return getUsername();
-		}
-	}
+        public String getUsername()
+        {
+            return username.get();
+        }
+
+        public void setUsername(String username)
+        {
+            this.username.set(username);
+        }
+
+        @Override
+        public String toString()
+        {
+            return getUsername();
+        }
+    }
 }

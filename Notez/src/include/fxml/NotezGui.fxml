@@ -52,53 +52,28 @@
 						<TabPane fx:id="tabSettings" styleClass="background" stylesheets="@Stylesheets.css" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
 							<tabs>
 								<Tab fx:id="tabLocal" text="Local">
-									<content>
-										<VBox fx:id="vBoxLocalSet" nodeOrientation="LEFT_TO_RIGHT">
-                                 <children>
-                                    <Accordion>
-                                      <panes>
-                                        <TitledPane expanded="false" text="Folder">
-                                             <content>
-                                                <VBox styleClass="background" stylesheets="@Stylesheets.css">
-                                                   <children>
-                                                      <HBox>
-                                                         <children>
-                                                            <Label alignment="BOTTOM_LEFT" text="Work-Folder:" HBox.hgrow="ALWAYS">
-                                                               <HBox.margin>
-                                                                  <Insets top="4.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                            <TextField fx:id="txtPropNotezFold" nodeOrientation="LEFT_TO_RIGHT" HBox.hgrow="ALWAYS" />
-                                                         </children>
-                                                      </HBox>
-                                                      <HBox>
-                                                         <children>
-                                                            <Label alignment="BOTTOM_LEFT" text="Remote-Folder:" HBox.hgrow="ALWAYS">
-                                                               <HBox.margin>
-                                                                  <Insets top="4.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                            <TextField nodeOrientation="LEFT_TO_RIGHT" HBox.hgrow="ALWAYS" />
-                                                         </children>
-                                                      </HBox>
-                                                   </children>
-                                                </VBox>
-                                             </content>
-                                        </TitledPane>
-                                        <TitledPane expanded="false" text="Button">
+                           <content>
+                              <Accordion>
+                                <panes>
+                                  <TitledPane expanded="false" text="Folder">
+                                       <content>
+                                          <ScrollPane fitToHeight="true" fitToWidth="true" prefViewportHeight="100.0" prefViewportWidth="251.0">
                                              <content>
                                                 <AnchorPane styleClass="background" stylesheets="@Stylesheets.css">
                                                    <children>
-                                                      <CheckBox mnemonicParsing="false" stylesheets="@Stylesheets.css" text="Pin the Notez">
-                                                         <graphic>
-                                                            <ImageView pickOnBounds="true" preserveRatio="true">
-                                                               <image>
-                                                                  <Image url="@../icons/pin.png" />
-                                                               </image>
-                                                            </ImageView>
-                                                         </graphic>
-                                                      </CheckBox>
-                                                      <CheckBox layoutY="68.0" mnemonicParsing="false" text="Save the Notez">
+                                                      <Label alignment="BOTTOM_LEFT" layoutY="4.0" text="Work-Folder" />
+                                                      <TextField fx:id="txtPropNotezRemoteFold" layoutX="81.0" layoutY="28.0" nodeOrientation="LEFT_TO_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                      	<tooltip>
+															<Tooltip text="Folder to search for remote Notez" />
+														</tooltip>
+                                                      </TextField>
+                                                      <Label alignment="BOTTOM_LEFT" layoutY="32.0" text="Remote-Folder" GridPane.rowIndex="1" />
+                                                      <TextField fx:id="txtPropNotezWorkFold" layoutX="81.0" nodeOrientation="LEFT_TO_RIGHT" GridPane.columnIndex="1">
+                                                      	<tooltip>
+															<Tooltip text="Folder to store and load Notez from" />
+														</tooltip>
+                                                      </TextField>
+                                                      <CheckBox fx:id="cbAlwaysAskToSave" layoutY="53.0" mnemonicParsing="false" stylesheets="@Stylesheets.css" text="Always save on close">
                                                          <graphic>
                                                             <ImageView pickOnBounds="true" preserveRatio="true">
                                                                <image>
@@ -107,34 +82,28 @@
                                                             </ImageView>
                                                          </graphic>
                                                       </CheckBox>
-                                                      <CheckBox layoutY="51.0" mnemonicParsing="false" text="Adding new Notez">
+                                                   </children>
+                                                </AnchorPane>
+                                             </content>
+                                          </ScrollPane>
+                                       </content>
+                                  </TitledPane>
+                                  <TitledPane expanded="false" text="Button">
+                                       <content>
+                                          <ScrollPane fitToHeight="true" fitToWidth="true" prefViewportHeight="103.0" prefViewportWidth="141.0">
+                                             <content>
+                                                <AnchorPane styleClass="background" stylesheets="@Stylesheets.css">
+                                                   <children>
+                                                      <CheckBox fx:id="cbPinNotez" mnemonicParsing="false" stylesheets="@Stylesheets.css" text="Pin the Notez">
                                                          <graphic>
                                                             <ImageView pickOnBounds="true" preserveRatio="true">
                                                                <image>
-                                                                  <Image url="@../icons/new_icon.png" />
+                                                                  <Image url="@../icons/pin.png" />
                                                                </image>
                                                             </ImageView>
                                                          </graphic>
                                                       </CheckBox>
-                                                      <CheckBox layoutY="17.0" mnemonicParsing="false" text="Grouping of Notez">
-                                                         <graphic>
-                                                            <ImageView pickOnBounds="true" preserveRatio="true">
-                                                               <image>
-                                                                  <Image url="@../icons/pinToNote.png" />
-                                                               </image>
-                                                            </ImageView>
-                                                         </graphic>
-                                                      </CheckBox>
-                                                      <CheckBox layoutY="34.0" mnemonicParsing="false" text="Sharing of Notez">
-                                                         <graphic>
-                                                            <ImageView pickOnBounds="true" preserveRatio="true">
-                                                               <image>
-                                                                  <Image url="@../icons/share.png" />
-                                                               </image>
-                                                            </ImageView>
-                                                         </graphic>
-                                                      </CheckBox>
-                                                      <CheckBox layoutY="85.0" mnemonicParsing="false" text="Remove the Notez">
+                                                      <CheckBox fx:id="cbRemoveNotez" layoutY="85.0" mnemonicParsing="false" text="Remove the Notez">
                                                          <graphic>
                                                             <ImageView pickOnBounds="true" preserveRatio="true">
                                                                <image>
@@ -143,51 +112,127 @@
                                                             </ImageView>
                                                          </graphic>
                                                       </CheckBox>
+                                                      <CheckBox fx:id="cbAddNotez" layoutY="51.0" mnemonicParsing="false" text="Adding new Notez">
+                                                         <graphic>
+                                                            <ImageView pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../icons/new_icon.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </CheckBox>
+                                                      <CheckBox fx:id="cbSaveNotez" layoutY="68.0" mnemonicParsing="false" text="Save the Notez">
+                                                         <graphic>
+                                                            <ImageView pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../icons/save.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </CheckBox>
+                                                      <CheckBox fx:id="cbShareNotez" layoutY="34.0" mnemonicParsing="false" text="Sharing of Notez">
+                                                         <graphic>
+                                                            <ImageView pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../icons/share.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </CheckBox>
+                                                      <CheckBox fx:id="cbGroupNotez" layoutY="17.0" mnemonicParsing="false" text="Grouping of Notez">
+                                                         <graphic>
+                                                            <ImageView pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../icons/pinToNote.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </CheckBox>
                                                    </children>
                                                 </AnchorPane>
                                              </content>
-                                        </TitledPane>
-                                      </panes>
-                                    </Accordion>
-                                 </children>
-                              </VBox>
-									</content>
+                                          </ScrollPane>
+                                       </content>
+                                  </TitledPane>
+                                </panes>
+                              </Accordion>
+                           </content>
 								</Tab>
 								<Tab fx:id="tabRemote" text="Remote">
-									<content>
-										<BorderPane prefHeight="200.0" prefWidth="200.0">
-											<center>
-												<TableView fx:id="tableRemoteuser" styleClass="background" stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
-													<columns>
-														<TableColumn fx:id="colUsername" prefWidth="100.0" text="User-Name" />
-														<TableColumn fx:id="colShare" minWidth="0.0" prefWidth="158.0" text="Share" />
-													</columns>
-												</TableView>
-											</center>
-											<top>
-												<ToolBar nodeOrientation="RIGHT_TO_LEFT" styleClass="background" stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
-													<items>
-														<Button fx:id="btnDeleteUser" mnemonicParsing="false" onAction="#deleteUser" styleClass="background" stylesheets="@Stylesheets.css">
-                                             <graphic>
-                                                <ImageView pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../icons/delete.png" />
-                                                   </image>
-                                                </ImageView>
-                                             </graphic></Button>
-														<Button fx:id="btnAddUser" mnemonicParsing="false" onAction="#addNewUser" styleClass="background" stylesheets="@Stylesheets.css">
-                                             <graphic>
-                                                <ImageView pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../icons/new_icon.png" />
-                                                   </image>
-                                                </ImageView>
-                                             </graphic></Button>
-													</items>
-												</ToolBar>
-											</top>
-										</BorderPane>
-									</content>
+                           <content>
+                              <Accordion>
+                                <panes>
+                                  <TitledPane text="Synchronisation">
+                                       <content>
+                                          <ScrollPane fitToHeight="true" fitToWidth="true" prefViewportWidth="251.0">
+                                             <content>
+                                                <AnchorPane styleClass="background" stylesheets="@Stylesheets.css">
+                                                   <children>
+                                                      <CheckBox fx:id="cbStartRecOnStartup" mnemonicParsing="false" stylesheets="@Stylesheets.css" text="Start Receiver on Startup">
+                                                         <graphic>
+                                                            <ImageView pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../icons/tray.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </CheckBox>
+                                                      <CheckBox fx:id="cbStartRecKeepRun" layoutY="17.0" mnemonicParsing="false" stylesheets="@Stylesheets.css" text="Keep Receiver running">
+                                                         <graphic>
+                                                            <ImageView pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../icons/tray.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </CheckBox>
+                                                   </children>
+                                                </AnchorPane>
+                                             </content>
+                                          </ScrollPane>
+                                       </content>
+                                    </TitledPane>
+                                  <TitledPane text="Share User">
+                                       <content>
+            										<BorderPane prefHeight="200.0" prefWidth="200.0" styleClass="background" stylesheets="@Stylesheets.css">
+            											<center>
+            												<TableView fx:id="tableRemoteuser" styleClass="background-darker" stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
+            													<columns>
+            														<TableColumn fx:id="colUsername" prefWidth="100.0" text="User-Name" />
+            														<TableColumn fx:id="colShare" minWidth="0.0" prefWidth="158.0" text="Share" />
+            													</columns>
+            												</TableView>
+            											</center>
+            											<top>
+            												<ToolBar nodeOrientation="RIGHT_TO_LEFT" styleClass="background" stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
+            													<items>
+            														<Button fx:id="btnDeleteUser" mnemonicParsing="false" onAction="#deleteUser" styleClass="background" stylesheets="@Stylesheets.css">
+                                                         <graphic>
+                                                            <ImageView pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../icons/delete.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </Button>
+            														<Button fx:id="btnAddUser" mnemonicParsing="false" onAction="#addNewUser" styleClass="background" stylesheets="@Stylesheets.css">
+                                                         <graphic>
+                                                            <ImageView pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../icons/new_icon.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </Button>
+            													</items>
+            												</ToolBar>
+            											</top>
+            										</BorderPane>
+                                       </content>
+                                    </TitledPane>
+                                </panes>
+                              </Accordion>
+                           </content>
 								</Tab>
 							</tabs>
 						</TabPane>

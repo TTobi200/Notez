@@ -10,6 +10,7 @@ import java.io.IOException;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -94,7 +95,28 @@ public class NotezController extends
     @FXML
     protected Button btnDeleteUser;
     @FXML
-    protected TextField txtPropNotezFold;
+    protected TextField txtPropNotezWorkFold;
+    @FXML
+    protected TextField txtPropNotezRemoteFold;
+    @FXML
+    protected CheckBox cbStartRecOnStartup;
+    @FXML
+    protected CheckBox cbStartRecKeepRun;
+    @FXML
+    protected CheckBox cbAlwaysAskToSave;
+
+    @FXML
+    protected CheckBox cbPinNotez;
+    @FXML
+    protected CheckBox cbRemoveNotez;
+    @FXML
+    protected CheckBox cbAddNotez;
+    @FXML
+    protected CheckBox cbSaveNotez;
+    @FXML
+    protected CheckBox cbShareNotez;
+    @FXML
+    protected CheckBox cbGroupNotez;
 
     @FXML
     protected BorderPane borderPanePage;
@@ -137,7 +159,6 @@ public class NotezController extends
     public void initialize()
     {
         c.initialize();
-
     }
 
     /**
@@ -152,8 +173,32 @@ public class NotezController extends
     @FXML
     public void saveSettings() throws IOException
     {
-        NotezProperties.set(NotezProperties.PROP_NOTEZ_FOLDER,
-            txtPropNotezFold.getText());
+        NotezProperties.set(NotezProperties.PROP_NOTEZ_WORK_FOLDER,
+            txtPropNotezWorkFold.getText());
+
+        NotezProperties.set(NotezProperties.PROP_NOTEZ_REMOTE_FOLDER,
+            txtPropNotezRemoteFold.getText());
+
+        NotezProperties.set(NotezProperties.PROP_START_RECEIVER,
+            String.valueOf(cbStartRecOnStartup.isSelected()));
+        NotezProperties.set(NotezProperties.PROP_LET_RECEIVER_RUNNING,
+            String.valueOf(cbStartRecKeepRun.isSelected()));
+
+        NotezProperties.set(NotezProperties.PROP_ALWAYS_SAVE_ON_EXIT,
+            String.valueOf(cbAlwaysAskToSave.isSelected()));
+
+        NotezProperties.set(NotezProperties.PROP_BTN_PIN_VISIBLE,
+            String.valueOf(cbPinNotez.isSelected()));
+        NotezProperties.set(NotezProperties.PROP_BTN_GROUP_VISIBLE,
+            String.valueOf(cbGroupNotez.isSelected()));
+        NotezProperties.set(NotezProperties.PROP_BTN_SHARE_VISIBLE,
+            String.valueOf(cbShareNotez.isSelected()));
+        NotezProperties.set(NotezProperties.PROP_BTN_ADD_VISIBLE,
+            String.valueOf(cbAddNotez.isSelected()));
+        NotezProperties.set(NotezProperties.PROP_BTN_SAVE_VISIBLE,
+            String.valueOf(cbSaveNotez.isSelected()));
+        NotezProperties.set(NotezProperties.PROP_BTN_REMOVE_VISIBLE,
+            String.valueOf(cbRemoveNotez.isSelected()));
 
         // TODO only switch if valid?
         c.switchTo(borderPaneNotez);

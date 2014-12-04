@@ -42,6 +42,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import de.gui.controller.NotezController;
 import de.util.NotezFileUtil;
+import de.util.NotezProperties;
 import de.util.NotezRemoteSync.NotezRemoteUser;
 
 public class NotezDialog
@@ -127,19 +128,61 @@ public class NotezDialog
 
     public static NotezOption showRememberQuestionDialog(Stage parent,
                     String title,
-                    String msg) throws IOException,
+                    String msg,
+                    String propKey) throws IOException,
+        InterruptedException
+    {
+        return showRememberQuestionDialog(parent, title, msg, propKey, false);
+    }
+
+    public static NotezOption showRememberQuestionDialog(Stage parent,
+                    String title,
+                    String msg,
+                    String propKey,
+                    boolean evenShowDialog) throws IOException,
         InterruptedException
     {
         NotezDialogController ctrl = showDialog(parent, title, msg,
             ICON_QUESTION,
             NotezOption.YES, NotezOption.NO, NotezOption.CANCEL);
 
+        if(NotezProperties.contains(propKey) && !evenShowDialog)
+        {
+            return Boolean.valueOf(NotezProperties.get(propKey)) ?
+                            NotezOption.YES : NotezOption.NO;
+        }
+
         CheckBox cbRemember = new CheckBox(
-            "Remember my decission |");
+            "Remember my decission ");
+        ctrl.hBoxButtons.getChildren().add(0,
+            cbRemember);
 
-        ctrl.hBoxButtons.getChildren().add(0, cbRemember);
+        NotezOption o = ctrl.showAndWait();
 
-        return ctrl.showAndWait().setData(cbRemember.isSelected());
+        if(cbRemember.isSelected())
+        {
+            switch(o)
+            {
+                default:
+                case CANCEL:
+                case CLOSE:
+                    // Do nothing
+                    break;
+
+                case NO:
+                    NotezProperties.set(propKey,
+                        String.valueOf(false));
+                    break;
+
+                case OK:
+                case YES:
+                    NotezProperties.set(propKey,
+                        String.valueOf(true));
+                    break;
+            }
+        }
+
+        return o;
     }
 
     public static NotezOption showQuestionDialog(Stage parent, String title,

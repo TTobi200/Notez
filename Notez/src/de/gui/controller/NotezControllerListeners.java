@@ -111,8 +111,44 @@ public class NotezControllerListeners extends
 
     protected void initProperties()
     {
-        c.txtPropNotezFold.setText(NotezProperties.get(
-            NotezProperties.PROP_NOTEZ_FOLDER));
+        c.txtPropNotezWorkFold.setText(NotezProperties.get(
+            NotezProperties.PROP_NOTEZ_WORK_FOLDER));
+        c.txtPropNotezRemoteFold.setText(NotezProperties.get(
+            NotezProperties.PROP_NOTEZ_REMOTE_FOLDER));
+
+        c.cbStartRecOnStartup.setSelected(Boolean.valueOf(NotezProperties.get(
+            NotezProperties.PROP_START_RECEIVER)));
+        c.cbStartRecKeepRun.setSelected(Boolean.valueOf(NotezProperties.get(
+            NotezProperties.PROP_LET_RECEIVER_RUNNING)));
+
+        c.cbAlwaysAskToSave.setSelected(Boolean.valueOf(NotezProperties.get(
+            NotezProperties.PROP_ALWAYS_SAVE_ON_EXIT)));
+
+        c.cbAddNotez.selectedProperty().bindBidirectional(
+            c.btnAdd.visibleProperty());
+        c.cbPinNotez.selectedProperty().bindBidirectional(
+            c.btnPin.visibleProperty());
+        c.cbRemoveNotez.selectedProperty().bindBidirectional(
+            c.btnDelete.visibleProperty());
+        c.cbSaveNotez.selectedProperty().bindBidirectional(
+            c.btnSave.visibleProperty());
+        c.cbShareNotez.selectedProperty().bindBidirectional(
+            c.btnShare.visibleProperty());
+        c.cbGroupNotez.selectedProperty().bindBidirectional(
+            c.pickNote.visibleProperty());
+
+        c.cbPinNotez.setSelected(Boolean.valueOf(NotezProperties.get(
+            NotezProperties.PROP_BTN_PIN_VISIBLE)));
+        c.cbGroupNotez.setSelected(Boolean.valueOf(NotezProperties.get(
+            NotezProperties.PROP_BTN_GROUP_VISIBLE)));
+        c.cbShareNotez.setSelected(Boolean.valueOf(NotezProperties.get(
+            NotezProperties.PROP_BTN_SHARE_VISIBLE)));
+        c.cbAddNotez.setSelected(Boolean.valueOf(NotezProperties.get(
+            NotezProperties.PROP_BTN_ADD_VISIBLE)));
+        c.cbSaveNotez.setSelected(Boolean.valueOf(NotezProperties.get(
+            NotezProperties.PROP_BTN_SAVE_VISIBLE)));
+        c.cbRemoveNotez.setSelected(Boolean.valueOf(NotezProperties.get(
+            NotezProperties.PROP_BTN_REMOVE_VISIBLE)));
     }
 
     @Override
