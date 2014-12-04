@@ -18,7 +18,6 @@
     -fx-background-color: transparent;
 }
 
-
 .text-area .scroll-pane .content
 {
     -fx-background-color: transparent;
@@ -31,6 +30,11 @@
 .tab-pane
 {
     -fx-tab-min-width:90px;
+}
+
+.titled-pane > .title 
+{
+	-fx-background-color:rgb(242, 239, 123);
 }
 
 .tab

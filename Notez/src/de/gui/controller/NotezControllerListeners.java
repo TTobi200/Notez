@@ -136,6 +136,8 @@ public class NotezControllerListeners extends
             c.btnShare.visibleProperty());
         c.cbGroupNotez.selectedProperty().bindBidirectional(
             c.pickNote.visibleProperty());
+        c.cbPrintNotez.selectedProperty().bindBidirectional(
+            c.btnPrint.visibleProperty());
 
         c.cbPinNotez.setSelected(Boolean.valueOf(NotezProperties.get(
             NotezProperties.PROP_BTN_PIN_VISIBLE)));
@@ -149,6 +151,8 @@ public class NotezControllerListeners extends
             NotezProperties.PROP_BTN_SAVE_VISIBLE)));
         c.cbRemoveNotez.setSelected(Boolean.valueOf(NotezProperties.get(
             NotezProperties.PROP_BTN_REMOVE_VISIBLE)));
+        c.cbPrintNotez.setSelected(Boolean.valueOf(NotezProperties.get(
+            NotezProperties.PROP_BTN_PRINT_VISIBLE)));
     }
 
     @Override

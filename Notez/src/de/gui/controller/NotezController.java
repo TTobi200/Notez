@@ -7,8 +7,11 @@ package de.gui.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import javafx.fxml.FXML;
+import javafx.print.PrinterJob;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Hyperlink;
@@ -52,6 +55,8 @@ public class NotezController extends
     public static final String ICON_PICK_NOTE = "include/icons/pinToNote.png";
     public static final String ICON_DISSOLVE = "include/icons/link_break.png";
 
+    private static final String TODO_BOX = "[ ]";
+
     @FXML
     protected Button btnAdd;
     @FXML
@@ -62,6 +67,8 @@ public class NotezController extends
     protected Button btnSave;
     @FXML
     protected Button btnShare;
+    @FXML
+    protected Button btnPrint;
     @FXML
     protected Button btnDelete;
     @FXML
@@ -117,6 +124,8 @@ public class NotezController extends
     protected CheckBox cbShareNotez;
     @FXML
     protected CheckBox cbGroupNotez;
+    @FXML
+    protected CheckBox cbPrintNotez;
 
     @FXML
     protected BorderPane borderPanePage;
@@ -199,6 +208,8 @@ public class NotezController extends
             String.valueOf(cbSaveNotez.isSelected()));
         NotezProperties.set(NotezProperties.PROP_BTN_REMOVE_VISIBLE,
             String.valueOf(cbRemoveNotez.isSelected()));
+        NotezProperties.set(NotezProperties.PROP_BTN_PRINT_VISIBLE,
+            String.valueOf(cbPrintNotez.isSelected()));
 
         // TODO only switch if valid?
         c.switchTo(borderPaneNotez);
@@ -214,6 +225,85 @@ public class NotezController extends
         c.initProperties();
 
         c.switchTo(borderPaneNotez);
+    }
+
+    @FXML
+    protected void printNote() throws Exception
+    {
+        TextArea toPrint = null;
+
+        switch(NotezDialog.showQuestionDialog(stage, "Print the Notez",
+            "Print the Notez as TODO-List?"))
+        {
+            default:
+            case CANCEL:
+            case CLOSE:
+                // Stop printing action
+                return;
+            case NO:
+                toPrint = txtNote;
+                break;
+
+            case OK:
+            case YES:
+                toPrint = formatToTODO(txtNote);
+                break;
+        }
+
+        PrinterJob print = PrinterJob.createPrinterJob();
+        if(toPrint != null && print.showPrintDialog(stage))
+        {
+            // TODO add the logo in background
+            // toPrint.setStyle("-fx-background-image: url('../icons/tray.png'); "
+            // + "-fx-background-position: bottom right; "
+            // + "-fx-background-repeat: stretch");
+
+            print.printPage(toPrint);
+            print.endJob();
+        }
+        else
+        {
+            print.cancelJob();
+        }
+    }
+
+    private TextArea formatToTODO(TextArea toPrint)
+    {
+        String[] tmp = toPrint.getText().split("\n");
+        StringBuilder result = new StringBuilder(
+            "TODO: ");
+
+        int maxLen = 0;
+        for(String s : tmp)
+        {
+            if(s.length() > maxLen)
+            {
+                maxLen = s.length();
+            }
+        }
+
+        result.append(txtTitle.getText())
+            .append("\r\n")
+            .append("Date: ")
+            .append(
+                new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").
+                    format(Calendar.getInstance().getTime()))
+            .append("\r\n\r\n");
+
+        for(String s : tmp)
+        {
+            result.append(s);
+
+            for(int i = s.length(); i <= maxLen; i++)
+            {
+                result.append(" ");
+            }
+
+            result.append(TODO_BOX)
+                .append("\r\n");
+        }
+
+        return new TextArea(result.toString());
     }
 
     @Override

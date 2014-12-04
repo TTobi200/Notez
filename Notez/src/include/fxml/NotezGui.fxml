@@ -8,7 +8,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:id="root" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="root" prefHeight="310.0" prefWidth="253.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
 	<bottom>
 		<HBox fx:id="hBoxButtom" alignment="TOP_RIGHT" styleClass="background" stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
 			<children>
@@ -92,7 +92,7 @@
                                        <content>
                                           <ScrollPane fitToHeight="true" fitToWidth="true" prefViewportHeight="103.0" prefViewportWidth="141.0">
                                              <content>
-                                                <AnchorPane styleClass="background" stylesheets="@Stylesheets.css">
+                                                <AnchorPane prefHeight="126.0" prefWidth="251.0" styleClass="background" stylesheets="@Stylesheets.css">
                                                    <children>
                                                       <CheckBox fx:id="cbPinNotez" mnemonicParsing="false" stylesheets="@Stylesheets.css" text="Pin the Notez">
                                                          <graphic>
@@ -144,6 +144,15 @@
                                                             <ImageView pickOnBounds="true" preserveRatio="true">
                                                                <image>
                                                                   <Image url="@../icons/pinToNote.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </CheckBox>
+                                                      <CheckBox fx:id="cbPrintNotez" layoutY="102.0" mnemonicParsing="false" text="Print the Notez">
+                                                         <graphic>
+                                                            <ImageView pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../icons/print.png" />
                                                                </image>
                                                             </ImageView>
                                                          </graphic>
@@ -334,6 +343,18 @@
                         </ImageView>
                      </graphic>
 						</Button>
+                  <Button fx:id="btnPrint" mnemonicParsing="false" onAction="#printNote" opacity="1d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
+                     <graphic>
+                        <ImageView pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/print.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <tooltip>
+                        <Tooltip text="Print Notez" />
+                     </tooltip>
+                  </Button>
 						<Button fx:id="btnShare" mnemonicParsing="false" onAction="#shareNote" opacity="1d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
 							<tooltip>
 								<Tooltip text="Share Notez" />

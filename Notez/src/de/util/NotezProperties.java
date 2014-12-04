@@ -48,6 +48,8 @@ public class NotezProperties
                     PROP + ".BtnSaveVisible";
     public static final String PROP_BTN_REMOVE_VISIBLE =
                     PROP + ".BtnRemoveVisible";
+    public static final String PROP_BTN_PRINT_VISIBLE =
+                    PROP + ".BtnPrintVisible";
 
     private static File propFile;
     private static Properties properties;
