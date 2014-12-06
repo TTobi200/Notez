@@ -16,7 +16,30 @@ public abstract class NotezShareBase implements NotezShare
 {
     public enum NotezShareResult
     {
-        SHARED, OFFLINE, BLOCKED, NOT_SUPPORTED
+        SHARED(null), OFFLINE(null), BLOCKED(null), NOT_SUPPORTED(null);
+
+        private String detailMsg;
+
+        private NotezShareResult(String detailMsg)
+        {
+            this.detailMsg = detailMsg;
+        }
+
+        public String getDetailMsg()
+        {
+            return detailMsg;
+        }
+
+        public NotezShareResult setDetailMsg(String detailMsg)
+        {
+            this.detailMsg = detailMsg;
+            return this;
+        }
+
+        public boolean hasDetailMsg()
+        {
+            return detailMsg != null;
+        }
     }
 
     public static NotezShareResult shareNotez(NotezController ctrl, File notez,

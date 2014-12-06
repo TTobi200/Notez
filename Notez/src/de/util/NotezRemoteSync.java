@@ -17,12 +17,13 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.stage.Stage;
 
 import javax.swing.Timer;
 
 import de.gui.NotezFrame;
 import de.gui.NotezTray;
+import de.util.notez.data.NotezData;
+import de.util.notez.data.base.BaseNotezData;
 
 public class NotezRemoteSync
 {
@@ -91,13 +92,21 @@ public class NotezRemoteSync
                 ObjectInputStream in = new ObjectInputStream(
                     socket.getInputStream());
 
-                // NotezData data = (NotezData)in.readObject();
+                NotezData data = (BaseNotezData)in.readObject();
 
                 Platform.runLater(() ->
                 {
                     // TODO add sender username
-                    tray.showMsgNewNotez(new Stage(),
-                        "Username");
+                    try
+                    {
+                        tray.showMsgNewNotez(NotezFrame.createNotezFrame(data)
+                            .getStage(),
+                            "Username");
+                    }
+                    catch(Exception e)
+                    {
+                        e.printStackTrace();
+                    }
                 });
             }
         }

@@ -10,6 +10,7 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -38,6 +39,8 @@ public abstract class NotezControllerListenerBase<C extends NotezControllerBase<
         NotezController.class.getName(),
         NotezControllerListeners.class.getName());
 
+    protected SimpleBooleanProperty initialized;
+
     private Collection<Runnable> onShowing;
 
     protected C c;
@@ -52,6 +55,7 @@ public abstract class NotezControllerListenerBase<C extends NotezControllerBase<
     public NotezControllerListenerBase(C controller)
     {
         this.c = controller;
+        initialized = new SimpleBooleanProperty(false);
     }
 
     @Override
@@ -98,6 +102,8 @@ public abstract class NotezControllerListenerBase<C extends NotezControllerBase<
 
         // must be saved
         grouped = c.noteParent.isNotNull().or(c.noteChild.isNotNull());
+
+        initialized.set(true);
     }
 
     protected void bindMinSizes()
@@ -125,14 +131,14 @@ public abstract class NotezControllerListenerBase<C extends NotezControllerBase<
 
     protected void doOnShowing(Runnable run)
     {
-    	if(c.getStage().isShowing())
-    	{
-    		run.run();
-    	}
-    	else
-    	{
-    		onShowing.add(run);
-    	}
+        if(c.getStage().isShowing())
+        {
+            run.run();
+        }
+        else
+        {
+            onShowing.add(run);
+        }
     }
 
     protected void setNodeForDragging(final Node node)
@@ -248,21 +254,21 @@ public abstract class NotezControllerListenerBase<C extends NotezControllerBase<
     protected void initNoteChanged()
     {
         // TODO set notechanged correctly
-//        c.noteChanged = c.data.textChangedProperty()
-//            .or(stageSize.xProperty().isEqualTo(c.getStage().xProperty(), 0.2))
-//            .or(stageSize.yProperty().isEqualTo(c.getStage().yProperty(), 0.2))
-//            .or(stageSize.widthProperty().isEqualTo(
-//                c.getStage().widthProperty(), 0.2))
-//            .or(stageSize.heightProperty().isEqualTo(
-//                c.getStage().heightProperty(), 0.2));
-    	c.noteChanged = new BooleanBinding()
-		{
-			@Override
-			protected boolean computeValue()
-			{
-				return true;
-			}
-		};
+        // c.noteChanged = c.data.textChangedProperty()
+        // .or(stageSize.xProperty().isEqualTo(c.getStage().xProperty(), 0.2))
+        // .or(stageSize.yProperty().isEqualTo(c.getStage().yProperty(), 0.2))
+        // .or(stageSize.widthProperty().isEqualTo(
+        // c.getStage().widthProperty(), 0.2))
+        // .or(stageSize.heightProperty().isEqualTo(
+        // c.getStage().heightProperty(), 0.2));
+        c.noteChanged = new BooleanBinding()
+        {
+            @Override
+            protected boolean computeValue()
+            {
+                return true;
+            }
+        };
     }
 
     protected abstract void initPinNote();

@@ -13,6 +13,8 @@ import java.net.Socket;
 
 import de.gui.controller.NotezController;
 import de.util.NotezRemoteSync;
+import de.util.notez.data.NotezData;
+import de.util.notez.data.base.BaseNotezData;
 
 public class NotezTcpIpShare extends NotezShareBase
 {
@@ -29,22 +31,30 @@ public class NotezTcpIpShare extends NotezShareBase
     {
         try (Socket socket = new Socket(ip, NotezRemoteSync.SERVER_PORT))
         {
-        	ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-        	
-        	// TODO $DDD: Send the new data
-        	out.writeObject(ctrl.getData());
-//            PrintWriter printWriter =
-//                            new PrintWriter(
-//                                new OutputStreamWriter(
-//                                    socket.getOutputStream()));
+            ObjectOutputStream out = new ObjectOutputStream(
+                socket.getOutputStream());
 
-//            printWriter.print(ctrl.getNoteText());
-//            printWriter.flush();
+            NotezData data = ctrl.getData();
 
-            // close connection
+            if(!socket.isConnected())
+            {
+                return NotezShareResult.OFFLINE
+                    .setDetailMsg("Can't connect to " + ip);
+            }
+            else if(!(data instanceof BaseNotezData))
+            {
+                return NotezShareResult.NOT_SUPPORTED
+                    .setDetailMsg("The data used is not sharable. Please update!");
+            }
+
+            out.writeObject(((BaseNotezData)data)
+                .asSerializableData());
+            out.flush();
+
             socket.close();
 
-            return NotezShareResult.SHARED;
+            return NotezShareResult.SHARED
+                .setDetailMsg("Notez sucsessfull shared with " + ip);
         }
     }
 }

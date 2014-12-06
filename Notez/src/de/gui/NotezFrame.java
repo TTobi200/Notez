@@ -24,6 +24,7 @@ import de.util.NotezFileUtil;
 import de.util.NotezProperties;
 import de.util.NotezRemoteSync;
 import de.util.NotezRemoteSync.NotezRemoteUser;
+import de.util.notez.data.NotezData;
 
 public class NotezFrame extends Application
 {
@@ -87,7 +88,7 @@ public class NotezFrame extends Application
         if(foundNotes == 0)
         {
             // switch to settings (init)
-            createNotezFrame();
+            createNotezFrame().getStage().show();
         }
     }
 
@@ -102,12 +103,17 @@ public class NotezFrame extends Application
                 if(NotezFileUtil.isNotez(f))
                 {
                     NotezLoadSplash.add(f.getName());
-                    if(createNotezFrame(f) == null)
+                    NotezController ctrl;
+                    if((ctrl = createNotezFrame(f)) == null)
                     {
                         NotezLoadSplash.add(f.getName() + " failed");
                         continue;
                     }
-                    foundNotes++;
+                    else
+                    {
+                        ctrl.getStage().show();
+                        foundNotes++;
+                    }
                 }
             }
         }
@@ -115,7 +121,7 @@ public class NotezFrame extends Application
         return foundNotes;
     }
 
-    public static Stage createNotezFrame() throws IOException
+    public static NotezController createNotezFrame() throws IOException
     {
         return createNotezFrame(new File(
             new File(NotezProperties.get(
@@ -128,12 +134,29 @@ public class NotezFrame extends Application
                             + NotezFrame.NOTEZ_FILE_POSFIX));
     }
 
-    public static Stage createNotezFrame(File f) throws IOException
+    public static NotezController createNotezFrame(File f) throws IOException
     {
         return createNotezFrame(new Stage(), f);
     }
 
-    public static Stage createNotezFrame(Stage stage, File f)
+    public static NotezController createNotezFrame(NotezData data)
+    {
+        NotezController ctrl = null;
+        try
+        {
+            ctrl = createNotezFrame();
+            ctrl.loadNote(data);
+        }
+        catch(IOException e)
+        {
+            // TODO Exception handling here
+            e.printStackTrace();
+        }
+
+        return ctrl;
+    }
+
+    public static NotezController createNotezFrame(Stage stage, File f)
         throws IOException
     {
         FXMLLoader loader = new FXMLLoader(
@@ -157,14 +180,14 @@ public class NotezFrame extends Application
         stage.setHeight(DEF_HEIGTH);
         stage.setWidth(DEF_WIDTH);
         stage.initStyle(StageStyle.TRANSPARENT);
-        stage.show();
+        // stage.show();
 
         // XXX Add this to gain drop shadow (2/2)
         // g.getChildren().add(root);
 
         notezOpened.add(ctrl);
 
-        return stage;
+        return ctrl;
     }
 
     public static NotezController getNotez(Integer idx)
