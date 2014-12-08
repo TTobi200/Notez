@@ -1,25 +1,33 @@
 package de.util.notez.parser;
 
+import static de.util.NotezXmlDomUtil.addAttribute;
+import static de.util.NotezXmlDomUtil.addElement;
+import static de.util.NotezXmlDomUtil.getDocumentBuilder;
+import static de.util.NotezXmlDomUtil.getDoubleAttributeValue;
+import static de.util.NotezXmlDomUtil.getElements;
+import static de.util.NotezXmlDomUtil.getIntAttributeValue;
+import static de.util.NotezXmlDomUtil.getSingleElement;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 import de.gui.controller.NotezControllerBase;
 import de.util.notez.data.NotezData;
 import de.util.notez.data.NotezPagedData;
 import de.util.notez.data.NotezStageData;
-import de.util.notez.data.NotezTextData;
 import de.util.notez.data.base.BaseNotezData;
 import de.util.notez.data.base.BaseNotezPagedData;
 import de.util.notez.data.base.BaseNotezStageData;
@@ -54,70 +62,19 @@ public abstract class NotezXmlParserBase extends NotezParserBase
 
 		try
 		{
-			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+			Document doc = getDocumentBuilder().newDocument();
 
-			// root elements
-			Document doc = docBuilder.newDocument();
+			Element root = addElement(doc, doc, NOTEZ_XML_ROOT_ELEMENT);
 
-			// ************************************************************************************
+			addAttribute(doc, root, STRING_VERSION, getVersionString());
 
-			Element root = doc.createElement(NOTEZ_XML_ROOT_ELEMENT);
-			doc.appendChild(root);
+			saveTitle(doc, root, data.getTitle());
 
-			Attr version = doc.createAttribute(STRING_VERSION);
-			version.setValue(getVersionString());
-			root.setAttributeNode(version);
+			saveStageData(doc, root, data.getStageData());
 
-			Element title = doc.createElement(NOTEZ_XML_TITLE_ELEMENT);
-			title.setTextContent(data.getTitle());
-			root.appendChild(title);
+			savePagedData(doc, root, data.getPageData());
 
-			Element stage = doc.createElement(NOTEZ_XML_STAGE_ELEMENT);
-			root.appendChild(stage);
-
-			Attr stageX = doc.createAttribute(NOTEZ_XML_STAGEX_ATTRIBUTE);
-			stageX.setValue(String.valueOf(data.getStageData().getStageX()));
-			stage.setAttributeNode(stageX);
-
-			Attr stageY = doc.createAttribute(NOTEZ_XML_STAGEY_ATTRIBUTE);
-			stageY.setValue(String.valueOf(data.getStageData().getStageY()));
-			stage.setAttributeNode(stageY);
-
-			Attr stageWidth = doc.createAttribute(NOTEZ_XML_STAGEWIDTH_ATTRIBUTE);
-			stageWidth.setValue(String.valueOf(data.getStageData().getStageWidth()));
-			stage.setAttributeNode(stageWidth);
-
-			Attr stageHeight = doc.createAttribute(NOTEZ_XML_STAGEHEIGHT_ATTRIBUTE);
-			stageHeight.setValue(String.valueOf(data.getStageData().getStageHeight()));
-			stage.setAttributeNode(stageHeight);
-
-			Element pages = doc.createElement(NOTEZ_XML_PAGES_ELEMENT);
-			root.appendChild(pages);
-
-			Attr curIndex = doc.createAttribute(NOTEZ_XML_CURINDEX_ATTRIBUTE);
-			curIndex.setValue(String.valueOf(data.getPageData().getCurPageIndex()));
-			pages.setAttributeNode(curIndex);
-
-			for(NotezTextData textData : data.getPageData().getPages())
-			{
-				Element page = doc.createElement(NOTEZ_XML_PAGE_ELEMENT);
-				page.setTextContent(textData.getText());
-				pages.appendChild(page);
-			}
-
-			// ************************************************************************************
-
-			// write the content into xml file
-			TransformerFactory transformerFactory = TransformerFactory.newInstance();
-			Transformer transformer = transformerFactory.newTransformer();
-			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(file);
-
-			// Output to console for testing
-			// StreamResult result = new StreamResult(System.out);
-
-			transformer.transform(source, result);
+			saveFile(doc, file);
 
 			System.out.println("File saved!");
 		}
@@ -125,6 +82,46 @@ public abstract class NotezXmlParserBase extends NotezParserBase
 		{
 			throw new IOException(e);
 		}
+	}
+
+	protected void saveTitle(Document doc, Element root, String title)
+	{
+		addElement(doc, root, NOTEZ_XML_TITLE_ELEMENT, title);
+	}
+
+	protected void saveStageData(Document doc, Element root, NotezStageData stageData)
+	{
+		Element stage = addElement(doc, root, NOTEZ_XML_STAGE_ELEMENT);
+
+		addAttribute(doc, stage, NOTEZ_XML_STAGEX_ATTRIBUTE, stageData.getStageX());
+		addAttribute(doc, stage, NOTEZ_XML_STAGEY_ATTRIBUTE, stageData.getStageY());
+		addAttribute(doc, stage, NOTEZ_XML_STAGEWIDTH_ATTRIBUTE, stageData.getStageWidth());
+		addAttribute(doc, stage, NOTEZ_XML_STAGEHEIGHT_ATTRIBUTE, stageData.getStageHeight());
+	}
+
+	protected void savePagedData(Document doc, Element root, NotezPagedData pageData)
+	{
+		Element pages = addElement(doc, root, NOTEZ_XML_PAGES_ELEMENT);
+
+		addAttribute(doc, pages, NOTEZ_XML_CURINDEX_ATTRIBUTE, pageData.getCurPageIndex());
+
+		pageData.getPages().forEach(
+			page -> addElement(doc, pages, NOTEZ_XML_PAGE_ELEMENT, page.getText()));
+	}
+
+	protected void saveFile(Document doc, File file) throws TransformerException
+	{
+		// write the content into xml file
+		TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		Transformer transformer = transformerFactory.newTransformer();
+		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+		DOMSource source = new DOMSource(doc);
+		StreamResult result = new StreamResult(file);
+
+		// Output to console for testing
+		// StreamResult result = new StreamResult(System.out);
+
+		transformer.transform(source, result);
 	}
 
 	public abstract String getVersionString();
@@ -135,65 +132,13 @@ public abstract class NotezXmlParserBase extends NotezParserBase
 		NotezData data;
 		try
 		{
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			Document doc = dBuilder.parse(file);
+			Element root = getDocumentBuilder().parse(file).getDocumentElement();
 
-			Element root = doc.getDocumentElement();
+			String title = loadTitle(root);
 
-			// title
-			NodeList titles = root.getElementsByTagName(NOTEZ_XML_TITLE_ELEMENT);
-			String title = titles.getLength() == 0 ? file.getName() : titles.item(0).getTextContent();
-			if (title.isEmpty())
-			{
-				title = file.getName();
-			}
+			NotezStageData stageData = loadStageData(root);
 
-			// stage
-			NodeList stages = root.getElementsByTagName(NOTEZ_XML_STAGE_ELEMENT);
-			NotezStageData stageData = new BaseNotezStageData();
-
-			if (stages.getLength() != 0)
-			{
-				Element stage = (Element)stages.item(0);
-				stageData.setStageX(getDoubleAttributeValue(stage, NOTEZ_XML_STAGEX_ATTRIBUTE));
-				stageData.setStageY(getDoubleAttributeValue(stage, NOTEZ_XML_STAGEY_ATTRIBUTE));
-				stageData.setStageWidth(getDoubleAttributeValue(stage,
-					NOTEZ_XML_STAGEWIDTH_ATTRIBUTE));
-				stageData.setStageHeight(getDoubleAttributeValue(stage,
-					NOTEZ_XML_STAGEHEIGHT_ATTRIBUTE));
-			}
-
-			NodeList pages = root.getElementsByTagName(NOTEZ_XML_PAGES_ELEMENT);
-			NotezPagedData pageData = new BaseNotezPagedData();
-
-			if (pages.getLength() != 0)
-			{
-				NodeList page = ((Element)pages.item(0))
-						.getElementsByTagName(NOTEZ_XML_PAGE_ELEMENT);
-
-				if (page.getLength() != 0)
-				{
-					pageData.setText((page.item(0).getTextContent()));
-					for(int i = 1; i < page.getLength(); i++)
-					{
-						pageData.addPages(new BaseNotezTextData(page.item(i).getTextContent()));
-					}
-				}
-
-				int curIndex;
-				try
-				{
-					curIndex = Integer.parseInt(((Element)pages.item(0))
-							.getAttribute(NOTEZ_XML_CURINDEX_ATTRIBUTE));
-				}
-				catch(NumberFormatException e)
-				{
-					curIndex = 0;
-				}
-
-				pageData.setCurPageIndex(curIndex);
-			}
+			NotezPagedData pageData = loadPagedData(root);
 
 			data = new BaseNotezData(title, stageData, pageData);
 		}
@@ -205,20 +150,51 @@ public abstract class NotezXmlParserBase extends NotezParserBase
 		return data;
 	}
 
-	private double getDoubleAttributeValue(Element element, String attribute)
+	protected String loadTitle(Element root)
 	{
-		double ret;
+		Element title = getSingleElement(root, NOTEZ_XML_TITLE_ELEMENT);
 
-		Attr attr = element.getAttributeNode(attribute);
+		return Objects.isNull(title) ? getFile().getName() : title.getTextContent();
+	}
 
-		try
+	protected NotezStageData loadStageData(Element root)
+	{
+		Element stage = getSingleElement(root, NOTEZ_XML_STAGE_ELEMENT);
+		NotezStageData stageData = new BaseNotezStageData();
+
+		if (Objects.nonNull(stage))
 		{
-			ret = Double.valueOf(attr.getValue());
+			stageData.setStageX(getDoubleAttributeValue(stage, NOTEZ_XML_STAGEX_ATTRIBUTE));
+			stageData.setStageY(getDoubleAttributeValue(stage, NOTEZ_XML_STAGEY_ATTRIBUTE));
+			stageData.setStageWidth(getDoubleAttributeValue(stage, NOTEZ_XML_STAGEWIDTH_ATTRIBUTE));
+			stageData
+					.setStageHeight(getDoubleAttributeValue(stage, NOTEZ_XML_STAGEHEIGHT_ATTRIBUTE));
 		}
-		catch(NumberFormatException e)
+
+		return stageData;
+	}
+
+	protected NotezPagedData loadPagedData(Element root)
+	{
+		Element pages = getSingleElement(root, NOTEZ_XML_PAGES_ELEMENT);
+		NotezPagedData pageData = new BaseNotezPagedData();
+
+		if (Objects.nonNull(pages))
 		{
-			ret = 0d;
+			List<Element> pageList = getElements(pages, NOTEZ_XML_PAGE_ELEMENT);
+
+			if (!pageList.isEmpty())
+			{
+				pageData.setPages(pageList.stream()
+						.map(page -> new BaseNotezTextData(page.getTextContent()))
+						.collect(Collectors.toList()));
+			}
+
+			int curIndex = getIntAttributeValue(pages, NOTEZ_XML_CURINDEX_ATTRIBUTE);
+
+			pageData.setCurPageIndex(curIndex);
 		}
-		return ret;
+
+		return pageData;
 	}
 }

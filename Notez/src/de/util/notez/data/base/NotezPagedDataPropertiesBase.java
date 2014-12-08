@@ -73,7 +73,7 @@ public abstract class NotezPagedDataPropertiesBase extends BaseNotezTextDataProp
 	{
 		getPagesModifiable().setAll(
 			pages.stream().map(NotezPagedDataPropertiesBase::toTextDataProperties)
-					.collect(Collectors.toCollection(HashSet::new)));
+					.collect(Collectors.toList()));
 	}
 
 	@Override
