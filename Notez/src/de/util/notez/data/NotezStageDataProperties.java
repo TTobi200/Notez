@@ -86,9 +86,44 @@ public interface NotezStageDataProperties extends NotezStageData
 	 */
 	public default void bind(Stage stage)
 	{
-		stageXProperty().bind(stage.xProperty());
-		stageYProperty().bind(stage.yProperty());
-		stageWidthProperty().bind(stage.widthProperty());
-		stageHeightProperty().bind(stage.heightProperty());
+		stageXProperty().addListener((p, o, n) ->
+		{
+			stage.setX(n.doubleValue());
+			setStageX(stage.getX());
+		});
+		stage.xProperty().addListener((p, o, n) ->
+		{
+			setStageX(n.doubleValue());
+		});
+
+		stageYProperty().addListener((p, o, n) ->
+		{
+			stage.setY(n.doubleValue());
+			setStageY(stage.getY());
+		});
+		stage.yProperty().addListener((p, o, n) ->
+		{
+			setStageY(n.doubleValue());
+		});
+
+		stageWidthProperty().addListener((p, o, n) ->
+		{
+			stage.setWidth(n.doubleValue());
+			setStageWidth(stage.getWidth());
+		});
+		stage.widthProperty().addListener((p, o, n) ->
+		{
+			setStageWidth(n.doubleValue());
+		});
+
+		stageHeightProperty().addListener((p, o, n) ->
+		{
+			stage.setHeight(n.doubleValue());
+			setStageHeight(stage.getHeight());
+		});
+		stage.heightProperty().addListener((p, o, n) ->
+		{
+			setStageHeight(n.doubleValue());
+		});
 	}
 }

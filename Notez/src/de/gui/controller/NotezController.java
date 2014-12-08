@@ -1,6 +1,6 @@
 /*
  * $Header$
- * 
+ *
  * $Log$ Copyright © 2014 T.Ohm . All Rights Reserved.
  */
 package de.gui.controller;
@@ -35,6 +35,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import de.gui.NotezDialog;
+import de.util.NotezDataUtil;
 import de.util.NotezProperties;
 import de.util.NotezRemoteSync;
 import de.util.NotezRemoteSync.NotezRemoteUser;
@@ -346,14 +347,6 @@ public class NotezController extends
         }
     }
 
-    @Override
-    protected void getNewTextData()
-    {
-        super.getNewTextData();
-        lblPage.setText((data.getPageData().getCurPageIndex() + 1) + " / "
-                        + data.getPageData().getPages().size());
-    }
-
     @FXML
     protected void deleteUser() throws IOException, InterruptedException
     {
@@ -413,19 +406,19 @@ public class NotezController extends
      *             See: {@link Files#readAllBytes(java.nio.file.Path)}
      */
     @Override
-    public boolean loadNote(NotezData data) throws IOException
+    public boolean loadNote(NotezData newData) throws IOException
     {
         // TODO just do if initialized
         // c.addFileLink(fileLink, note);
 
-        c.initialized.addListener((old, curr, n) ->
-        {
-            if(data != null)
+//        c.doOnInitialized(() ->
+//        {
+            if(newData != null)
             {
                 getStage().titleProperty().bind(txtTitle.textProperty());
-                txtTitle.setText(data.getTitle());
+                txtTitle.setText(newData.getTitle());
 
-                NotezStageData stageData = data.getStageData();
+                NotezStageData stageData = newData.getStageData();
                 stage.setWidth(stageData.getStageWidth());
                 stage.setHeight(stageData.getStageHeight());
 
@@ -460,14 +453,14 @@ public class NotezController extends
                                         - stageData.getStageHeight());
                 }
 
-                txtNote.setText(data.getPageData().getText());
+                txtNote.setText(newData.getPageData().getText());
                 c.doOnShowing(() -> c.moveStageAnimatedTo(
                     stageData.getStageX(),
                     stageData.getStageY()));
 
-                this.data = data;
+                NotezDataUtil.equalize(newData, this.data);
             }
-        });
+//        });
 
         return true;
     }

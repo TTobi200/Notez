@@ -47,7 +47,7 @@ public class BaseNotezDataProperties extends NotezDataPropertiesBase
 	{
 		if(Objects.isNull(pageData))
 		{
-			pageData = new ReadOnlyObjectWrapper<>();
+			pageData = new ReadOnlyObjectWrapper<>(new BaseNotezPagedDataProperties());
 		}
 
 		return pageData;
@@ -58,7 +58,7 @@ public class BaseNotezDataProperties extends NotezDataPropertiesBase
 	{
 		if(Objects.isNull(stageData))
 		{
-			stageData = new ReadOnlyObjectWrapper<>();
+			stageData = new ReadOnlyObjectWrapper<>(new BaseNotezStageDataProperties());
 		}
 
 		return stageData;

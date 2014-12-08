@@ -1,6 +1,9 @@
 package de.util.notez.data.base;
 
+import java.util.Objects;
+
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.stage.Stage;
 import de.util.notez.data.NotezStageData;
 import de.util.notez.data.NotezStageDataProperties;
@@ -48,24 +51,40 @@ public class BaseNotezStageDataProperties implements NotezStageDataProperties
 	@Override
 	public DoubleProperty stageXProperty()
 	{
+		if(Objects.isNull(stageX))
+		{
+			stageX = new SimpleDoubleProperty(0d);
+		}
 		return stageX;
 	}
 
 	@Override
 	public DoubleProperty stageYProperty()
 	{
+		if(Objects.isNull(stageY))
+		{
+			stageY = new SimpleDoubleProperty(0d);
+		}
 		return stageY;
 	}
 
 	@Override
 	public DoubleProperty stageWidthProperty()
 	{
+		if(Objects.isNull(stageWidth))
+		{
+			stageWidth = new SimpleDoubleProperty(0d);
+		}
 		return stageWidth;
 	}
 
 	@Override
 	public DoubleProperty stageHeightProperty()
 	{
+		if(Objects.isNull(stageHeight))
+		{
+			stageHeight = new SimpleDoubleProperty(0d);
+		}
 		return stageHeight;
 	}
 

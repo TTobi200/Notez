@@ -11,6 +11,7 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import de.util.NotezObservablesUtil;
 import de.util.notez.data.NotezPagedData;
 import de.util.notez.data.NotezPagedDataProperties;
 import de.util.notez.data.NotezTextData;
@@ -27,6 +28,10 @@ public abstract class NotezPagedDataPropertiesBase extends BaseNotezTextDataProp
 	protected NotezPagedDataPropertiesBase()
 	{
 		super();
+
+		addPages(new BaseNotezTextDataProperties());
+		setCurPageIndex(0);
+		curPagePropertyModifiable().set(getPagesObservable().get(0));
 
 		initListeners();
 	}
@@ -156,4 +161,10 @@ public abstract class NotezPagedDataPropertiesBase extends BaseNotezTextDataProp
 	 * @return the modifiable version of the pages
 	 */
 	protected abstract ObservableList<NotezTextDataProperties> getPagesModifiable();
+
+	@Override
+	public ReadOnlyIntegerProperty sizeProperty()
+	{
+		return NotezObservablesUtil.sizePropertyForList(getPagesModifiable());
+	}
 }

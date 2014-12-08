@@ -57,4 +57,9 @@ public interface NotezPagedDataProperties extends NotezPagedData, NotezTextDataP
 	{
 		NotezTextDataProperties.super.setText(text);
 	}
+
+	/**
+	 * @return A property holding the size of this pages.
+	 */
+	public ReadOnlyIntegerProperty sizeProperty();
 }

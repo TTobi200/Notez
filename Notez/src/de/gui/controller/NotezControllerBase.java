@@ -18,9 +18,8 @@ import de.util.NotezFileUtil;
 import de.util.NotezProperties;
 import de.util.NotezRemoteSync;
 import de.util.notez.data.NotezData;
-import de.util.notez.data.base.BaseNotezData;
-import de.util.notez.data.base.BaseNotezPagedData;
-import de.util.notez.data.base.BaseNotezStageData;
+import de.util.notez.data.NotezDataProperties;
+import de.util.notez.data.base.BaseNotezDataProperties;
 import de.util.notez.parser.NotezParsers;
 
 public abstract class NotezControllerBase<L extends NotezControllerListenerBase<?>>
@@ -60,7 +59,7 @@ public abstract class NotezControllerBase<L extends NotezControllerListenerBase<
     /** the child of this node */
     protected ObjectProperty<NotezControllerBase<?>> noteChild;
 
-    protected NotezData data;
+    protected NotezDataProperties data;
 
     protected double initialX;
     protected double initialY;
@@ -80,18 +79,8 @@ public abstract class NotezControllerBase<L extends NotezControllerListenerBase<
         noteChild = new SimpleObjectProperty<>(null);
 
         c = creNotezControllerListener();
-        data = new BaseNotezData(note.getName(), new BaseNotezStageData(),
-            new BaseNotezPagedData());
-
-        // XXX should be done at another place
-        stage.xProperty().addListener(
-            (p, o, n) -> data.getStageData().setStageX(n.doubleValue()));
-        stage.yProperty().addListener(
-            (p, o, n) -> data.getStageData().setStageY(n.doubleValue()));
-        stage.widthProperty().addListener(
-            (p, o, n) -> data.getStageData().setStageWidth(n.doubleValue()));
-        stage.heightProperty().addListener(
-            (p, o, n) -> data.getStageData().setStageHeight(n.doubleValue()));
+        data = new BaseNotezDataProperties(note.getName());
+        data.getStageData().bind(stage);
     }
 
     protected abstract L creNotezControllerListener();
@@ -337,27 +326,12 @@ public abstract class NotezControllerBase<L extends NotezControllerListenerBase<
     @FXML
     protected void prevPage()
     {
-        saveOldTextData();
         data.getPageData().prevPage();
-        getNewTextData();
     }
 
     @FXML
     protected void nextPage()
     {
-        saveOldTextData();
         data.getPageData().nextPage();
-        getNewTextData();
-    }
-
-    // XXX should be done by something like binding or so
-    protected void saveOldTextData()
-    {
-        data.getPageData().setText(getNoteText());
-    }
-
-    protected void getNewTextData()
-    {
-        setNoteText(data.getPageData().getText());
     }
 }

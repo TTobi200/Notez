@@ -55,7 +55,6 @@ public class BaseNotezPagedDataProperties extends NotezPagedDataPropertiesBase
 		if(Objects.isNull(curPage))
 		{
 			curPage = new ReadOnlyObjectWrapper<>(null);
-			setCurPageIndex(0);
 		}
 		return curPage;
 	}
@@ -66,10 +65,8 @@ public class BaseNotezPagedDataProperties extends NotezPagedDataPropertiesBase
 		if(Objects.isNull(pages))
 		{
 			pages = FXCollections.observableArrayList();
-			setCurPageIndex(0);
 		}
 
 		return pages;
 	}
-
 }
