@@ -1,5 +1,9 @@
 package de.util.notez.data;
 
+import java.util.Objects;
+
+import de.util.notez.data.base.SerializableNotezData;
+
 /**
  * An object representing all the data of a note:
  * <ul>
@@ -29,4 +33,23 @@ public interface NotezData
 	 * @return The pageddata of the note.
 	 */
 	public NotezPagedData getPageData();
+
+	/**
+     * @return a serializable version of this data
+     */
+	public default NotezData asSerializableData()
+    {
+        return asSerializableData(this);
+    }
+
+	/**
+     * @param data
+     *            The data to be serialized
+     * @return a serializable version of the given data
+     * @throws NullPointerException
+     */
+    public static NotezData asSerializableData(NotezData data) throws NullPointerException
+    {
+        return new SerializableNotezData(Objects.requireNonNull(data));
+    }
 }
