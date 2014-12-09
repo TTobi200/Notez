@@ -124,7 +124,7 @@ public abstract class NotezXmlParserBase extends NotezParserBase
         // write the content into xml file
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
-        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+//        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
         transformer.setOutputProperty(OutputKeys.METHOD, "xml");
         transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -134,9 +134,10 @@ public abstract class NotezXmlParserBase extends NotezParserBase
         StreamResult result = new StreamResult(file);
 
         // Output to console for testing
-        // StreamResult result = new StreamResult(System.out);
+//         StreamResult res = new StreamResult(System.out);
 
         transformer.transform(source, result);
+//        transformer.transform(source, res);
     }
 
     public abstract String getVersionString();

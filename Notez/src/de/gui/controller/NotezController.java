@@ -173,6 +173,9 @@ public class NotezController extends
     public void initialize()
     {
         c.initialize();
+        
+        txtTitle.setText(data.getTitle());
+        txtTitle.textProperty().bindBidirectional(data.titleProperty());
     }
 
     /**
