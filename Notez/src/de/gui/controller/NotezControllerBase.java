@@ -120,7 +120,8 @@ public abstract class NotezControllerBase<L extends NotezControllerListenerBase<
     {
         if(noteChanged.get() && askToSave)
         {
-            if(Boolean.valueOf(NotezProperties.get(NotezProperties.PROP_ALWAYS_SAVE_ON_EXIT)))
+            if(NotezProperties.getBoolean(
+                NotezProperties.NOTEZ_ALWAYS_SAVE_ON_EXIT))
             {
                 saveNote();
             }
@@ -129,7 +130,7 @@ public abstract class NotezControllerBase<L extends NotezControllerListenerBase<
                 switch(NotezDialog.showRememberQuestionDialog(stage,
                     "Save Changes",
                     "Do you like to save the changes?",
-                    NotezProperties.PROP_ALWAYS_SAVE_ON_EXIT,
+                    NotezProperties.NOTEZ_ALWAYS_SAVE_ON_EXIT,
                     true))
                 {
                     case CANCEL:
@@ -154,7 +155,7 @@ public abstract class NotezControllerBase<L extends NotezControllerListenerBase<
             switch(NotezDialog.showRememberQuestionDialog(stage,
                 "Exit Notez Receiver",
                 "Keep Notez-Receiver running in background?",
-                NotezProperties.PROP_LET_RECEIVER_RUNNING))
+                NotezProperties.NOTEZ_LET_RECEIVER_RUNNING))
             {
                 default:
                 case CANCEL:
@@ -178,7 +179,7 @@ public abstract class NotezControllerBase<L extends NotezControllerListenerBase<
     {
         return NotezFileUtil.canBeUsedAsFilename(notezName) ? new File(
             NotezProperties.get(
-                NotezProperties.PROP_NOTEZ_WORK_FOLDER,
+                NotezProperties.NOTEZ_WORK_FOLDER,
                 NotezFrame.DEF_LOCAL_NOTEZ_FOLDER)
                             + notezName
                             + NotezFrame.NOTEZ_FILE_POSFIX) : note;

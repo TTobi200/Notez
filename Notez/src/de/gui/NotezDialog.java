@@ -170,14 +170,12 @@ public class NotezDialog
                     break;
 
                 case NO:
-                    NotezProperties.set(propKey,
-                        String.valueOf(false));
+                    NotezProperties.setBoolean(propKey, false);
                     break;
 
                 case OK:
                 case YES:
-                    NotezProperties.set(propKey,
-                        String.valueOf(true));
+                    NotezProperties.setBoolean(propKey, true);
                     break;
             }
         }

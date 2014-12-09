@@ -1,6 +1,6 @@
 /*
  * $Header$
- *
+ * 
  * $Log$ Copyright © 2014 T.Ohm . All Rights Reserved.
  */
 package de.gui.controller;
@@ -187,33 +187,37 @@ public class NotezController extends
     @FXML
     public void saveSettings() throws IOException
     {
-        NotezProperties.set(NotezProperties.PROP_NOTEZ_WORK_FOLDER,
+        NotezProperties.set(
+            NotezProperties.NOTEZ_WORK_FOLDER,
             txtPropNotezWorkFold.getText());
 
-        NotezProperties.set(NotezProperties.PROP_NOTEZ_REMOTE_FOLDER,
+        NotezProperties.set(
+            NotezProperties.NOTEZ_REMOTE_FOLDER,
             txtPropNotezRemoteFold.getText());
 
-        NotezProperties.set(NotezProperties.PROP_START_RECEIVER,
+        NotezProperties.set(NotezProperties.NOTEZ_RECEIVER_ON_STARTUP,
             String.valueOf(cbStartRecOnStartup.isSelected()));
-        NotezProperties.set(NotezProperties.PROP_LET_RECEIVER_RUNNING,
+        NotezProperties.set(
+            NotezProperties.NOTEZ_LET_RECEIVER_RUNNING,
             String.valueOf(cbStartRecKeepRun.isSelected()));
 
-        NotezProperties.set(NotezProperties.PROP_ALWAYS_SAVE_ON_EXIT,
+        NotezProperties.set(
+            NotezProperties.NOTEZ_ALWAYS_SAVE_ON_EXIT,
             String.valueOf(cbAlwaysAskToSave.isSelected()));
 
-        NotezProperties.set(NotezProperties.PROP_BTN_PIN_VISIBLE,
+        NotezProperties.set(NotezProperties.NOTEZ_XML_Pin_ATTRIBUTE,
             String.valueOf(cbPinNotez.isSelected()));
-        NotezProperties.set(NotezProperties.PROP_BTN_GROUP_VISIBLE,
+        NotezProperties.set(NotezProperties.NOTEZ_XML_Group_ATTRIBUTE,
             String.valueOf(cbGroupNotez.isSelected()));
-        NotezProperties.set(NotezProperties.PROP_BTN_SHARE_VISIBLE,
+        NotezProperties.set(NotezProperties.NOTEZ_XML_Share_ATTRIBUTE,
             String.valueOf(cbShareNotez.isSelected()));
-        NotezProperties.set(NotezProperties.PROP_BTN_ADD_VISIBLE,
+        NotezProperties.set(NotezProperties.NOTEZ_XML_Add_ATTRIBUTE,
             String.valueOf(cbAddNotez.isSelected()));
-        NotezProperties.set(NotezProperties.PROP_BTN_SAVE_VISIBLE,
+        NotezProperties.set(NotezProperties.NOTEZ_XML_Save_ATTRIBUTE,
             String.valueOf(cbSaveNotez.isSelected()));
-        NotezProperties.set(NotezProperties.PROP_BTN_REMOVE_VISIBLE,
+        NotezProperties.set(NotezProperties.NOTEZ_XML_Remove_ATTRIBUTE,
             String.valueOf(cbRemoveNotez.isSelected()));
-        NotezProperties.set(NotezProperties.PROP_BTN_PRINT_VISIBLE,
+        NotezProperties.set(NotezProperties.NOTEZ_XML_Print_ATTRIBUTE,
             String.valueOf(cbPrintNotez.isSelected()));
 
         // TODO only switch if valid?
@@ -411,56 +415,56 @@ public class NotezController extends
         // TODO just do if initialized
         // c.addFileLink(fileLink, note);
 
-//        c.doOnInitialized(() ->
-//        {
-            if(newData != null)
+        // c.doOnInitialized(() ->
+        // {
+        if(newData != null)
+        {
+            getStage().titleProperty().bind(txtTitle.textProperty());
+            txtTitle.setText(newData.getTitle());
+
+            NotezStageData stageData = newData.getStageData();
+            stage.setWidth(stageData.getStageWidth());
+            stage.setHeight(stageData.getStageHeight());
+
+            final Dimension D = Toolkit.getDefaultToolkit().getScreenSize();
+            if(stageData.getStageWidth() > D.getWidth())
             {
-                getStage().titleProperty().bind(txtTitle.textProperty());
-                txtTitle.setText(newData.getTitle());
-
-                NotezStageData stageData = newData.getStageData();
-                stage.setWidth(stageData.getStageWidth());
-                stage.setHeight(stageData.getStageHeight());
-
-                final Dimension D = Toolkit.getDefaultToolkit().getScreenSize();
-                if(stageData.getStageWidth() > D.getWidth())
-                {
-                    stageData.setStageX(0d);
-                    stageData.setStageWidth(D.getWidth());
-                }
-                else if(stageData.getStageX() < 0d)
-                {
-                    stageData.setStageX(0d);
-                }
-                else if(stageData.getStageX() + stageData.getStageWidth() > D.getWidth())
-                {
-                    stageData.setStageX(D.getWidth()
-                                        - stageData.getStageWidth());
-                }
-
-                if(stageData.getStageHeight() > D.getHeight())
-                {
-                    stageData.setStageY(0d);
-                    stageData.setStageHeight(D.getHeight());
-                }
-                else if(stageData.getStageY() < 0d)
-                {
-                    stageData.setStageY(0d);
-                }
-                else if(stageData.getStageY() + stageData.getStageHeight() > D.getHeight())
-                {
-                    stageData.setStageY(D.getHeight()
-                                        - stageData.getStageHeight());
-                }
-
-                txtNote.setText(newData.getPageData().getText());
-                c.doOnShowing(() -> c.moveStageAnimatedTo(
-                    stageData.getStageX(),
-                    stageData.getStageY()));
-
-                NotezDataUtil.equalize(newData, this.data);
+                stageData.setStageX(0d);
+                stageData.setStageWidth(D.getWidth());
             }
-//        });
+            else if(stageData.getStageX() < 0d)
+            {
+                stageData.setStageX(0d);
+            }
+            else if(stageData.getStageX() + stageData.getStageWidth() > D.getWidth())
+            {
+                stageData.setStageX(D.getWidth()
+                                    - stageData.getStageWidth());
+            }
+
+            if(stageData.getStageHeight() > D.getHeight())
+            {
+                stageData.setStageY(0d);
+                stageData.setStageHeight(D.getHeight());
+            }
+            else if(stageData.getStageY() < 0d)
+            {
+                stageData.setStageY(0d);
+            }
+            else if(stageData.getStageY() + stageData.getStageHeight() > D.getHeight())
+            {
+                stageData.setStageY(D.getHeight()
+                                    - stageData.getStageHeight());
+            }
+
+            txtNote.setText(newData.getPageData().getText());
+            c.doOnShowing(() -> c.moveStageAnimatedTo(
+                stageData.getStageX(),
+                stageData.getStageY()));
+
+            NotezDataUtil.equalize(newData, this.data);
+        }
+        // });
 
         return true;
     }

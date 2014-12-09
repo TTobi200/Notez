@@ -1,5 +1,10 @@
 package de.gui;
 
+import static de.util.NotezProperties.NOTEZ_OPEN_RECEIVED_NOTEZ_DIRECTLY;
+import static de.util.NotezProperties.NOTEZ_SHOW_MESSAGE_ON_NEW_NOTEZ;
+import static de.util.NotezProperties.get;
+import static de.util.NotezProperties.setBoolean;
+
 import java.awt.CheckboxMenuItem;
 import java.awt.Image;
 import java.awt.Menu;
@@ -16,7 +21,6 @@ import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
 
-import de.util.NotezProperties;
 import de.util.NotezRemoteSync;
 
 public class NotezTray
@@ -44,10 +48,8 @@ public class NotezTray
     {
         Platform.runLater(() ->
         {
-            init(NotezProperties.get(
-                NotezProperties.PROP_RECEIVE_OPEN_DIRECT),
-                NotezProperties.get(
-                    NotezProperties.PROP_RECEIVE_SHOW_MESSAGE));
+            init(get(NOTEZ_OPEN_RECEIVED_NOTEZ_DIRECTLY),
+                get(NOTEZ_SHOW_MESSAGE_ON_NEW_NOTEZ));
         });
     }
 
@@ -88,13 +90,13 @@ public class NotezTray
 
             rIOpenDirect.addItemListener(e ->
             {
-                saveSetting(NotezProperties.PROP_RECEIVE_OPEN_DIRECT,
+                setBoolean(NOTEZ_OPEN_RECEIVED_NOTEZ_DIRECTLY,
                     rIOpenDirect.getState());
             });
 
             rIShowMessage.addItemListener(e ->
             {
-                saveSetting(NotezProperties.PROP_RECEIVE_SHOW_MESSAGE,
+                setBoolean(NOTEZ_SHOW_MESSAGE_ON_NEW_NOTEZ,
                     rIShowMessage.getState());
             });
 
@@ -120,11 +122,6 @@ public class NotezTray
         {
             e.printStackTrace();
         }
-    }
-
-    private void saveSetting(String propKey, boolean state)
-    {
-        NotezProperties.set(propKey, String.valueOf(state));
     }
 
     private void showNotez()
