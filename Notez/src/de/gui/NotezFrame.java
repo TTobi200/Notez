@@ -6,9 +6,9 @@
  */
 package de.gui;
 
+import static de.util.NotezProperties.NOTEZ_RECEIVER_ON_STARTUP;
 import static de.util.NotezProperties.NOTEZ_REMOTE_FOLDER;
 import static de.util.NotezProperties.NOTEZ_WORK_FOLDER;
-import static de.util.NotezProperties.NOTEZ_RECEIVER_ON_STARTUP;
 import static de.util.NotezProperties.get;
 
 import java.io.File;
@@ -21,13 +21,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import de.gui.controller.NotezController;
 import de.util.NotezFileUtil;
 import de.util.NotezRemoteSync;
-import de.util.NotezRemoteSync.NotezRemoteUser;
 import de.util.notez.data.NotezData;
 
 public class NotezFrame extends Application
@@ -36,6 +36,7 @@ public class NotezFrame extends Application
     public static final double DEF_HEIGTH = 300d;
 
     public static final String FXML_PATH = "include/fxml/NotezGui.fxml";
+    public static final String NOTEZ_LOGO = "include/icons/logo.png";
     public static final String NOTEZ_FILE_POSFIX = ".notez";
 
     public static final String DEF_LOCAL_NOTEZ_FOLDER = ".";
@@ -63,8 +64,6 @@ public class NotezFrame extends Application
                 NotezRemoteSync.initialize(new File(get(
                     NOTEZ_REMOTE_FOLDER,
                     DEF_LOCAL_NOTEZ_FOLDER)));
-                NotezRemoteSync.addUser(new NotezRemoteUser(
-                    "localhost", "127.0.0.1"));
                 break;
         }
 
@@ -186,6 +185,8 @@ public class NotezFrame extends Application
         stage.setHeight(DEF_HEIGTH);
         stage.setWidth(DEF_WIDTH);
         stage.initStyle(StageStyle.TRANSPARENT);
+        stage.getIcons().add(
+            new Image(NotezFileUtil.getResourceStream(NOTEZ_LOGO)));
         // stage.show();
 
         // XXX Add this to gain drop shadow (2/2)
