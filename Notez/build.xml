@@ -1,0 +1,84 @@
+<project name="install Notez" basedir="." default="fillRegistry">
+	<description>
+		Install and link notez on the system
+	</description>
+
+	<property name="prj.name" value="Notez" />
+
+	<property name="prj.jar" value="${prj.name}.jar" />
+	<property name="prj.icon.name" value="${prj.name}.ico" />
+
+	<property name="main" value="de.Startup" />
+	<property name="notezDirName" value="${prj.name}" />
+
+	<property name="applicationdir" value="${eclipse.home}${file.separator}..${file.separator}${notezDirName}${file.separator}" />
+	<property name="reg" value="regedit.reg" />
+
+	<target name="install" depends="jar">
+		<description>
+			Creates the jar and moves everything needed to the path of this program
+		</description>
+		
+		<echo>moving files</echo>
+		<move file="${prj.jar}" todir="${applicationdir}" overwrite="true" />
+		<copy file="bin${file.separator}include${file.separator}icons${file.separator}logo.ico" todir="${applicationdir}${prj.icon.name}" failonerror="false" />
+		<echo>installation finished</echo>
+	</target>
+
+	<target name="fillRegistry" depends="install">
+		<description>
+			fills the registry after installing the program, so that the icon will be displayed for files of that program
+		</description>
+		
+		<echo>creating .reg file</echo>
+		<echo file="${reg}">Windows Registry Editor Version 5.00
+
+		[HKEY_CLASSES_ROOT\.notez]
+		@="notez_auto_file"
+					
+		[HKEY_CLASSES_ROOT\notez_auto_file]
+		@=""
+
+		[HKEY_CLASSES_ROOT\notez_auto_file\DefaultIcon]
+		@="${applicationdir}${prj.icon.name}"
+
+		[HKEY_CLASSES_ROOT\notez_auto_file\shell]
+
+		[HKEY_CLASSES_ROOT\notez_auto_file\shell\open]
+
+		[HKEY_CLASSES_ROOT\notez_auto_file\shell\open\command]
+		@="\"${applicationdir}${prj.jar}\" %1"</echo>
+
+		<echo>executing .reg file</echo>
+		<exec executable="cmd">
+			<arg value="${reg}" />
+		</exec>
+		<delete file="${reg}" />
+	</target>
+
+	<target name="jar">
+		<echo>Starting creation of jar</echo>
+		<echo>deleting old jar</echo>
+
+		<delete failonerror="false">
+			<filelist>
+				<file name="${prj.jar}" />
+			</filelist>
+		</delete>
+
+		<echo>creating new jar</echo>
+		<jar destfile="${prj.jar}">
+
+			<manifest>
+				<attribute name="Built-By" value="${user.name}" />
+				<attribute name="Main-Class" value="${main}" />
+				<attribute name="Class-Path" value="." />
+			</manifest>
+
+			<fileset dir="bin" includes="**/*.class" />
+			<fileset dir="bin" includes="include/**" />
+		</jar>
+		<echo>jar successfully created</echo>
+	</target>
+
+</project>
