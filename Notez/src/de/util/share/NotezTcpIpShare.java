@@ -14,47 +14,40 @@ import java.net.Socket;
 import de.gui.controller.NotezController;
 import de.util.NotezRemoteSync;
 import de.util.notez.data.NotezData;
-import de.util.notez.data.base.BaseNotezData;
 
 public class NotezTcpIpShare extends NotezShareBase
 {
-    protected String ip;
+	protected String ip;
 
-    public NotezTcpIpShare(String ip)
-    {
-        this.ip = ip;
-    }
+	public NotezTcpIpShare(String ip)
+	{
+		this.ip = ip;
+	}
 
-    @Override
-    public NotezShareResult shareNotez(NotezController ctrl, File notez)
-        throws IOException
-    {
-        try (Socket socket = new Socket(ip, NotezRemoteSync.SERVER_PORT))
-        {
-            ObjectOutputStream out = new ObjectOutputStream(
-                socket.getOutputStream());
+	@Override
+	public NotezShareResult shareNotez(NotezController ctrl, File notez)
+		throws IOException
+	{
+		try (Socket socket = new Socket(ip, NotezRemoteSync.SERVER_PORT))
+		{
+			ObjectOutputStream out = new ObjectOutputStream(
+				socket.getOutputStream());
 
-            NotezData data = ctrl.getData();
+			NotezData data = ctrl.getData();
 
-            if(!socket.isConnected())
-            {
-                return NotezShareResult.OFFLINE
-                    .setDetailMsg("Can't connect to " + ip);
-            }
-            else if(!(data instanceof BaseNotezData))
-            {
-                return NotezShareResult.NOT_SUPPORTED
-                    .setDetailMsg("The data used is not sharable. Please update!");
-            }
+			if(!socket.isConnected())
+			{
+				return NotezShareResult.OFFLINE.setDetailMsg("Can't connect to "
+															 + ip);
+			}
 
-            out.writeObject(((BaseNotezData)data)
-                .asSerializableData());
-            out.flush();
+			out.writeObject(data.asSerializableData());
+			out.flush();
 
-            socket.close();
+			socket.close();
 
-            return NotezShareResult.SHARED
-                .setDetailMsg("Notez sucsessfull shared with " + ip);
-        }
-    }
+			return NotezShareResult.SHARED.setDetailMsg("Notez sucsessfull shared with "
+														+ ip);
+		}
+	}
 }
