@@ -254,7 +254,7 @@ public class NotezController extends
         TextArea toPrint = null;
 
         switch(NotezDialog.showQuestionDialog(stage, "Print the Notez",
-            "Print the Notez as TODO-List?"))
+            "Format Notez into TODO-List?"))
         {
             default:
             case CANCEL:
