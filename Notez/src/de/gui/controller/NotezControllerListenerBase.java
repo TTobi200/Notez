@@ -379,27 +379,28 @@ public abstract class NotezControllerListenerBase<C extends NotezControllerBase<
 
     public void doOnInitialized(Runnable run)
     {
-    	if(initialized.get())
-    	{
-    		run.run();
-    	}
-    	else
-    	{
-    		initialized.addListener(new ChangeListener<Boolean>()
-			{
-    			@Override
-    			public void changed(ObservableValue<? extends Boolean> observable,
-    				Boolean oldValue, Boolean newValue)
-    			{
-    				if(newValue.booleanValue())
-    				{
-    					run.run();
+        if(initialized.get())
+        {
+            run.run();
+        }
+        else
+        {
+            initialized.addListener(new ChangeListener<Boolean>()
+            {
+                @Override
+                public void changed(
+                                ObservableValue<? extends Boolean> observable,
+                                Boolean oldValue, Boolean newValue)
+                {
+                    if(newValue.booleanValue())
+                    {
+                        run.run();
 
-    					initialized.removeListener(this);
-    				}
-    			}
-			});
-    	}
+                        initialized.removeListener(this);
+                    }
+                }
+            });
+        }
     }
 
     protected abstract void initSettings();

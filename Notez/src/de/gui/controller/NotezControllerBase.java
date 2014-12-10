@@ -42,7 +42,8 @@ public abstract class NotezControllerBase<L extends NotezControllerListenerBase<
     @FXML
     protected Region toolBar;
 
-    protected File note;
+    protected SimpleObjectProperty<File> note;
+    // protected File note;
     protected Stage stage;
     protected Integer idx;
 
@@ -72,7 +73,7 @@ public abstract class NotezControllerBase<L extends NotezControllerListenerBase<
     public NotezControllerBase(Stage stage, File note, int idx)
     {
         this.stage = stage;
-        this.note = note;
+        this.note = new SimpleObjectProperty<>(note);
         this.idx = new Integer(idx);
 
         noteParent = new SimpleObjectProperty<>(null);
@@ -183,7 +184,7 @@ public abstract class NotezControllerBase<L extends NotezControllerListenerBase<
                 NotezProperties.NOTEZ_WORK_FOLDER,
                 NotezFrame.DEF_LOCAL_NOTEZ_FOLDER)
                             + notezName
-                            + NotezFrame.NOTEZ_FILE_POSFIX) : note;
+                            + NotezFrame.NOTEZ_FILE_POSFIX) : note.get();
     }
 
     @FXML
@@ -200,9 +201,9 @@ public abstract class NotezControllerBase<L extends NotezControllerListenerBase<
                 return;
 
             case YES:
-                if(note != null && note.exists())
+                if(note != null && note.get().exists())
                 {
-                    note.delete();
+                    note.get().delete();
                 }
                 closeNote(false); // don't ask to save
                 break;
@@ -229,9 +230,9 @@ public abstract class NotezControllerBase<L extends NotezControllerListenerBase<
     protected void saveNote(File note) throws Exception
     {
         // If opened notez differes from to saving note
-        if(note != this.note)
+        if(note != this.note.get())
         {
-            this.note.delete();
+            this.note.get().delete();
         }
 
         File parent = note.getParentFile();
@@ -252,6 +253,7 @@ public abstract class NotezControllerBase<L extends NotezControllerListenerBase<
         }
 
         NotezParsers.save(this, note);
+        this.note.set(note);
         // TODO transform into the new format
         // data.saveText();
         c.stageSize.setX(stage.getX());
@@ -283,7 +285,7 @@ public abstract class NotezControllerBase<L extends NotezControllerListenerBase<
 
     public File getNoteFile()
     {
-        return note;
+        return note.get();
     }
 
     public NotezData getData()

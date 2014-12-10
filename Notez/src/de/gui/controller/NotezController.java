@@ -191,6 +191,7 @@ public class NotezController extends
         c.initialize();
 
         txtTitle.setText(data.getTitle());
+        fileLink.setText(note.get().getAbsolutePath());
         txtTitle.textProperty().bindBidirectional(data.titleProperty());
     }
 
@@ -366,7 +367,7 @@ public class NotezController extends
         if(user != null)
         {
             String msg = "";
-            switch(NotezShareBase.shareNotez(this, note, user.getShare()))
+            switch(NotezShareBase.shareNotez(this, note.get(), user.getShare()))
             {
                 default:
                 case NOT_SUPPORTED:

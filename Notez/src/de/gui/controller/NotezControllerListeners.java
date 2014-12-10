@@ -26,8 +26,10 @@ import static de.util.NotezProperties.get;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Objects;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Hyperlink;
@@ -76,6 +78,7 @@ public class NotezControllerListeners extends
         addVisibleNodeHider(c.hBoxButtom, c.fileLink);
         setAsDndSource(c.pickNote);
         setAsDndTarget(c.toolBar);
+        addFileLink(c.fileLink, c.note);
 
         switchTo(c.borderPaneNotez);
 
@@ -92,10 +95,11 @@ public class NotezControllerListeners extends
 
         try
         {
-            c.loadNote(c.note);
+            c.loadNote(c.note.get());
         }
         catch(IOException e)
         {
+            e.printStackTrace();
         }
     }
 
@@ -303,13 +307,23 @@ public class NotezControllerListeners extends
             new KeyCodeCombination(key, KeyCombination.SHORTCUT_DOWN), run);
     }
 
-    protected void addFileLink(final Hyperlink link, File note)
+    protected void addFileLink(final Hyperlink link,
+                    SimpleObjectProperty<File> note)
     {
-        link.setText(note.getAbsolutePath());
+        note.addListener((o, c, n) ->
+        {
+            if(Objects.nonNull(note.get()))
+            {
+                link.setText(note.get().getAbsolutePath());
+            }
+        });
+
         link.setOnAction(e -> {
             try
             {
-                NotezFileUtil.openParentFolderInBrowser(new File(link.getText()));
+                // FIXME: the given path is invalid
+                // NotezFileUtil.openParentFolderInBrowser(
+                // note.get().getParentFile());
             }
             catch(Exception e1)
             {
