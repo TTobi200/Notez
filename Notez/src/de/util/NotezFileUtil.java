@@ -113,4 +113,9 @@ public class NotezFileUtil
         return f.getName().endsWith(
             NotezFrame.NOTEZ_FILE_POSFIX);
     }
+
+    public static String removeEnding(String fileName)
+    {
+        return fileName.replace(NotezFrame.NOTEZ_FILE_POSFIX, "");
+    }
 }

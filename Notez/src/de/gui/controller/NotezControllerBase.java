@@ -79,7 +79,8 @@ public abstract class NotezControllerBase<L extends NotezControllerListenerBase<
         noteChild = new SimpleObjectProperty<>(null);
 
         c = creNotezControllerListener();
-        data = new BaseNotezDataProperties(note.getName());
+        data = new BaseNotezDataProperties(
+            NotezFileUtil.removeEnding(note.getName()));
         data.getStageData().bind(stage);
     }
 

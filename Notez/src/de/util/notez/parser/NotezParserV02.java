@@ -1,6 +1,6 @@
 /*
  * $Header$
- *
+ * 
  * $Log$
  * Copyright © 2014 T.Ohm . All Rights Reserved.
  */
@@ -16,6 +16,7 @@ import java.io.Writer;
 import java.util.Arrays;
 
 import de.gui.controller.NotezControllerBase;
+import de.util.NotezFileUtil;
 import de.util.notez.data.NotezData;
 import de.util.notez.data.base.BaseNotezData;
 import de.util.notez.data.base.BaseNotezPagedData;
@@ -97,9 +98,10 @@ public class NotezParserV02 extends NotezParserBase
             }
 
             return new BaseNotezData(
-            	file.getName(),
-            	new BaseNotezStageData(x, y, w, h),
-            	new BaseNotezPagedData(Arrays.asList(new BaseNotezTextData(sb.toString()))));
+                NotezFileUtil.removeEnding(file.getName()),
+                new BaseNotezStageData(x, y, w, h),
+                new BaseNotezPagedData(Arrays.asList(new BaseNotezTextData(
+                    sb.toString()))));
         }
     }
 }

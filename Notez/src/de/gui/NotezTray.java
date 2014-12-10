@@ -20,6 +20,7 @@ import javafx.application.Platform;
 import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
+import javax.swing.SwingUtilities;
 
 import de.util.NotezRemoteSync;
 
@@ -80,6 +81,7 @@ public class NotezTray
 
             popup = new PopupMenu();
             MenuItem itmExit = new MenuItem("Exit");
+            MenuItem itmNewNotez = new MenuItem("New Notez");
             Menu itmNotezRec = new Menu("New Notez...");
             itmNotOpened = new Menu("Not opened yet");
 
@@ -100,6 +102,11 @@ public class NotezTray
                     rIShowMessage.getState());
             });
 
+            itmNewNotez.addActionListener(e ->
+            {
+                creNewNotez();
+            });
+
             itmExit.addActionListener(e ->
             {
                 NotezRemoteSync.stopAll();
@@ -111,6 +118,7 @@ public class NotezTray
             popup.add(itmNotOpened);
             popup.add(itmNotezRec);
             popup.addSeparator();
+            popup.add(itmNewNotez);
             popup.add(itmExit);
 
             itmNotOpened.setEnabled(false);
@@ -124,6 +132,24 @@ public class NotezTray
         }
     }
 
+    private void creNewNotez()
+    {
+        // FIXME $DDD: If all stages closed,
+        // runnable never executed by Platform
+        Platform.runLater(() ->
+        {
+            try
+            {
+                NotezFrame.createNotezFrame()
+                    .getStage().show();
+            }
+            catch(Exception e1)
+            {
+                e1.printStackTrace();
+            }
+        });
+    }
+
     private void showNotez()
     {
         showNotez(lastAdded);
@@ -133,6 +159,8 @@ public class NotezTray
     {
         if(stage != null && !stage.isShowing())
         {
+            // FIXME $DDD: If all stages closed,
+            // runnable never executed by Platform
             Platform.runLater(() ->
             {
                 stage.show();
@@ -143,7 +171,7 @@ public class NotezTray
     public void showMsgNewNotez(Stage notezStage, String
                     name)
     {
-        Platform.runLater(() ->
+        SwingUtilities.invokeLater(() ->
         {
             boolean openDirect = rIOpenDirect.getState();
             boolean dshowMsg = rIShowMessage.getState();
@@ -189,7 +217,7 @@ public class NotezTray
 
     public void remove()
     {
-        Platform.runLater(() ->
+        SwingUtilities.invokeLater(() ->
         {
             tray.remove(trayIcon);
         });
