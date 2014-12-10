@@ -125,7 +125,7 @@ public class NotezDialog
         ComboBox<NotezRemoteUser> cbUser = new ComboBox<>(user);
 
         ctrl.hBoxMsg.getChildren().
-            add(cbUser);
+            addAll(cbUser);
 
         return ctrl.showAndWait() == NotezOption.YES ?
                         cbUser.getSelectionModel().getSelectedItem() : null;

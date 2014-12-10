@@ -201,7 +201,7 @@
                                           </ScrollPane>
                                        </content>
                                     </TitledPane>
-                                    <TitledPane layoutX="10.0" layoutY="10.0" text="E-Mail">
+                                    <TitledPane fx:id="tPaneEMail" layoutX="10.0" layoutY="10.0" text="E-Mail">
                                        <content>
                                           <ScrollPane fitToHeight="true" fitToWidth="true" prefViewportWidth="251.0">
                                              <content>
@@ -228,7 +228,7 @@
                                           </ScrollPane>
                                        </content>
                                     </TitledPane>
-                                  <TitledPane text="Share User">
+                                  <TitledPane fx:id="tPaneShareUser" text="Share User">
                                        <content>
             										<BorderPane prefHeight="200.0" prefWidth="200.0" styleClass="background" stylesheets="@../../../bin/include/fxml/Stylesheets.css">
             											<center>

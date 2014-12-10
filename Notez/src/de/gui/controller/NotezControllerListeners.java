@@ -6,6 +6,13 @@
 package de.gui.controller;
 
 import static de.util.NotezProperties.NOTEZ_ALWAYS_SAVE_ON_EXIT;
+import static de.util.NotezProperties.NOTEZ_BTN_ADD;
+import static de.util.NotezProperties.NOTEZ_BTN_GROUP;
+import static de.util.NotezProperties.NOTEZ_BTN_PIN;
+import static de.util.NotezProperties.NOTEZ_BTN_PRINT;
+import static de.util.NotezProperties.NOTEZ_BTN_REMOVE;
+import static de.util.NotezProperties.NOTEZ_BTN_SAVE;
+import static de.util.NotezProperties.NOTEZ_BTN_SHARE;
 import static de.util.NotezProperties.NOTEZ_LET_RECEIVER_RUNNING;
 import static de.util.NotezProperties.NOTEZ_MAIL_HOST;
 import static de.util.NotezProperties.NOTEZ_MAIL_PORT;
@@ -14,13 +21,6 @@ import static de.util.NotezProperties.NOTEZ_MAIL_USE_SSL;
 import static de.util.NotezProperties.NOTEZ_RECEIVER_ON_STARTUP;
 import static de.util.NotezProperties.NOTEZ_REMOTE_FOLDER;
 import static de.util.NotezProperties.NOTEZ_WORK_FOLDER;
-import static de.util.NotezProperties.NOTEZ_BTN_ADD;
-import static de.util.NotezProperties.NOTEZ_BTN_GROUP;
-import static de.util.NotezProperties.NOTEZ_BTN_PIN;
-import static de.util.NotezProperties.NOTEZ_BTN_PRINT;
-import static de.util.NotezProperties.NOTEZ_BTN_REMOVE;
-import static de.util.NotezProperties.NOTEZ_BTN_SAVE;
-import static de.util.NotezProperties.NOTEZ_BTN_SHARE;
 import static de.util.NotezProperties.get;
 
 import java.io.File;

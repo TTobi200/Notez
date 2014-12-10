@@ -26,6 +26,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -91,9 +92,15 @@ public class NotezController extends
     @FXML
     protected Tab tabLocal;
     @FXML
+    protected Tab tabRemote;
+    @FXML
     protected StackPane stack;
     @FXML
     protected BorderPane borderPaneSettings;
+    @FXML
+    protected TitledPane tPaneShareUser;
+    @FXML
+    protected TitledPane tPaneEMail;
     @FXML
     protected VBox vBoxLocalSet;
     @FXML
@@ -220,6 +227,14 @@ public class NotezController extends
         c.switchTo(borderPaneNotez);
     }
 
+    public void switchToEMail()
+    {
+        c.switchTo(borderPaneSettings);
+        tabSettings.getSelectionModel()
+            .select(tabRemote);
+        tPaneEMail.setExpanded(true);
+    }
+
     /**
      * Method to cancel editing settings.
      */
@@ -318,6 +333,32 @@ public class NotezController extends
     @FXML
     protected void shareNote() throws IOException, InterruptedException
     {
+        if(NotezRemoteSync.getAllUsers().isEmpty())
+        {
+            switch(NotezDialog.showQuestionDialog(stage,
+                "No user to share with",
+                "You have no user registered to share with.\r\n"
+                                + "Like to add one?"))
+            {
+                case CANCEL:
+                case CLOSE:
+                case NO:
+                    // Stop action
+                    return;
+
+                case OK:
+                case YES:
+                    // Switch to share user settings and open add dialog
+                    c.switchTo(borderPaneSettings);
+                    tabSettings.getSelectionModel()
+                        .select(tabRemote);
+                    tPaneShareUser.setExpanded(true);
+                    addNewUser();
+                    break;
+            }
+            return;
+        }
+
         NotezRemoteUser user = NotezDialog.showShareWithDialog(stage,
             "Share Notez",
             "Share this Notez with ", NotezRemoteSync.getAllUsers());

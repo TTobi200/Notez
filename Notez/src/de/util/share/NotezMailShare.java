@@ -16,6 +16,7 @@ import static de.util.NotezProperties.getBoolean;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -43,6 +44,28 @@ public class NotezMailShare extends NotezShareBase
     {
         try
         {
+            String host = get(NOTEZ_MAIL_HOST);
+            String port = get(NOTEZ_MAIL_PORT);
+            boolean useSSL = getBoolean(NOTEZ_MAIL_USE_SSL);
+            if(isNullOrEmpty(host) || isNullOrEmpty(port))
+            {
+                switch(NotezDialog.showQuestionDialog(ctrl.getStage(),
+                    "E-Mail settings missing",
+                    "Some E-Mail-Settings are missing.\r\n"
+                                    + "Do you like to edit them now?"))
+                {
+                    case OK:
+                    case YES:
+                        // TODO do this better
+                        ctrl.switchToEMail();
+                    default:
+                    case CANCEL:
+                    case CLOSE:
+                    case NO:
+                        return NotezShareResult.CANCELD_BY_USER;
+                }
+            }
+
             String[] loginData = NotezDialog.showMailLoginDialog(
                 ctrl.getStage(),
                 "Send Notez to " + receipAdress);
@@ -59,14 +82,14 @@ public class NotezMailShare extends NotezShareBase
 
             props.put("mail.smtp.user", userName);
             props.put("mail.smtp.password", password);
-            props.put("mail.smtp.host", get(NOTEZ_MAIL_HOST));
-            props.put("mail.smtp.port", get(NOTEZ_MAIL_PORT));
+            props.put("mail.smtp.host", host);
+            props.put("mail.smtp.port", port);
             // props.put("mail.debug", "true");
             props.put("mail.smtp.auth", "true");
             props.put("mail.smtp.starttls.enable",
-                getBoolean(NOTEZ_MAIL_USE_SSL));
+                useSSL);
             props.put("mail.smtp.EnableSSL.enable",
-                getBoolean(NOTEZ_MAIL_USE_SSL));
+                useSSL);
 
             Session session = Session.getInstance(props, null);
             // session.setDebug(true);
@@ -85,8 +108,8 @@ public class NotezMailShare extends NotezShareBase
 
             Transport transport = session.getTransport("smtp");
 
-            transport.connect(get(NOTEZ_MAIL_HOST), userName,
-                "");
+            transport.connect(host, userName,
+                password);
             transport.sendMessage(message, message.getAllRecipients());
 
             return NotezShareResult.SHARED;
@@ -96,6 +119,16 @@ public class NotezMailShare extends NotezShareBase
             e.printStackTrace();
             return NotezShareResult.NOT_SUPPORTED;
         }
+    }
+
+    private boolean isNullOrEmpty(String string)
+    {
+        if(Objects.nonNull(string))
+        {
+            return string.isEmpty();
+        }
+
+        return true;
     }
 
     public class NotezMailData
