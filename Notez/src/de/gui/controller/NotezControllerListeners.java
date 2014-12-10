@@ -5,20 +5,23 @@
  */
 package de.gui.controller;
 
-import static de.util.NotezProperties.NOTEZ_XML_Add_ATTRIBUTE;
 import static de.util.NotezProperties.NOTEZ_ALWAYS_SAVE_ON_EXIT;
-import static de.util.NotezProperties.NOTEZ_XML_Group_ATTRIBUTE;
 import static de.util.NotezProperties.NOTEZ_LET_RECEIVER_RUNNING;
+import static de.util.NotezProperties.NOTEZ_MAIL_HOST;
+import static de.util.NotezProperties.NOTEZ_MAIL_PORT;
+import static de.util.NotezProperties.NOTEZ_MAIL_USER;
+import static de.util.NotezProperties.NOTEZ_MAIL_USE_SSL;
+import static de.util.NotezProperties.NOTEZ_RECEIVER_ON_STARTUP;
 import static de.util.NotezProperties.NOTEZ_REMOTE_FOLDER;
 import static de.util.NotezProperties.NOTEZ_WORK_FOLDER;
-import static de.util.NotezProperties.NOTEZ_XML_Pin_ATTRIBUTE;
-import static de.util.NotezProperties.NOTEZ_XML_Print_ATTRIBUTE;
-import static de.util.NotezProperties.NOTEZ_XML_Remove_ATTRIBUTE;
-import static de.util.NotezProperties.NOTEZ_XML_Save_ATTRIBUTE;
-import static de.util.NotezProperties.NOTEZ_XML_Share_ATTRIBUTE;
-import static de.util.NotezProperties.NOTEZ_RECEIVER_ON_STARTUP;
+import static de.util.NotezProperties.NOTEZ_BTN_ADD;
+import static de.util.NotezProperties.NOTEZ_BTN_GROUP;
+import static de.util.NotezProperties.NOTEZ_BTN_PIN;
+import static de.util.NotezProperties.NOTEZ_BTN_PRINT;
+import static de.util.NotezProperties.NOTEZ_BTN_REMOVE;
+import static de.util.NotezProperties.NOTEZ_BTN_SAVE;
+import static de.util.NotezProperties.NOTEZ_BTN_SHARE;
 import static de.util.NotezProperties.get;
-import static de.util.NotezProperties.getBoolean;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,6 +43,7 @@ import com.sun.xml.internal.ws.api.config.management.policy.ManagementAssertion.
 
 import de.gui.NotezDialog;
 import de.util.NotezFileUtil;
+import de.util.NotezProperties;
 import de.util.NotezRemoteSync;
 import de.util.NotezRemoteSync.NotezRemoteUser;
 
@@ -129,14 +133,14 @@ public class NotezControllerListeners extends
         c.txtPropNotezRemoteFold.setText(
             get(NOTEZ_REMOTE_FOLDER));
 
-        c.cbStartRecOnStartup.setSelected(
-            getBoolean(NOTEZ_RECEIVER_ON_STARTUP));
-        c.cbStartRecKeepRun.setSelected(
-            getBoolean(NOTEZ_LET_RECEIVER_RUNNING));
+        c.txtEmail.setText(
+            get(NOTEZ_MAIL_USER));
+        c.txtHost.setText(
+            get(NOTEZ_MAIL_HOST));
+        c.txtPort.setText(
+            get(NOTEZ_MAIL_PORT));
 
-        c.cbAlwaysAskToSave.setSelected(
-            getBoolean(NOTEZ_ALWAYS_SAVE_ON_EXIT));
-
+        // Button invisibility
         c.cbAddNotez.selectedProperty().bindBidirectional(
             c.btnAdd.visibleProperty());
         c.cbPinNotez.selectedProperty().bindBidirectional(
@@ -152,13 +156,43 @@ public class NotezControllerListeners extends
         c.cbPrintNotez.selectedProperty().bindBidirectional(
             c.btnPrint.visibleProperty());
 
-        c.cbPinNotez.setSelected(getBoolean(NOTEZ_XML_Pin_ATTRIBUTE));
-        c.cbGroupNotez.setSelected(getBoolean(NOTEZ_XML_Group_ATTRIBUTE));
-        c.cbShareNotez.setSelected(getBoolean(NOTEZ_XML_Share_ATTRIBUTE));
-        c.cbAddNotez.setSelected(getBoolean(NOTEZ_XML_Add_ATTRIBUTE));
-        c.cbSaveNotez.setSelected(getBoolean(NOTEZ_XML_Save_ATTRIBUTE));
-        c.cbRemoveNotez.setSelected(getBoolean(NOTEZ_XML_Remove_ATTRIBUTE));
-        c.cbPrintNotez.setSelected(getBoolean(NOTEZ_XML_Print_ATTRIBUTE));
+        // Bin check boxes <-> settings
+        NotezProperties.bindBoolean(NOTEZ_RECEIVER_ON_STARTUP,
+            c.cbStartRecOnStartup.selectedProperty());
+        NotezProperties.bindBoolean(NOTEZ_LET_RECEIVER_RUNNING,
+            c.cbStartRecKeepRun.selectedProperty());
+        NotezProperties.bindBoolean(NOTEZ_ALWAYS_SAVE_ON_EXIT,
+            c.cbAlwaysAskToSave.selectedProperty());
+        NotezProperties.bindBoolean(NOTEZ_BTN_PIN,
+            c.cbPinNotez.selectedProperty());
+        NotezProperties.bindBoolean(NOTEZ_BTN_GROUP,
+            c.cbGroupNotez.selectedProperty());
+        NotezProperties.bindBoolean(NOTEZ_BTN_SHARE,
+            c.cbShareNotez.selectedProperty());
+        NotezProperties.bindBoolean(NOTEZ_BTN_ADD,
+            c.cbAddNotez.selectedProperty());
+        NotezProperties.bindBoolean(NOTEZ_BTN_SAVE,
+            c.cbSaveNotez.selectedProperty());
+        NotezProperties.bindBoolean(NOTEZ_BTN_REMOVE,
+            c.cbRemoveNotez.selectedProperty());
+        NotezProperties.bindBoolean(NOTEZ_BTN_PRINT,
+            c.cbPrintNotez.selectedProperty());
+        NotezProperties.bindBoolean(NOTEZ_MAIL_USE_SSL,
+            c.cbUseSSL.selectedProperty());
+        NotezProperties.bindBoolean(NOTEZ_BTN_PIN,
+            c.cbPinNotez.selectedProperty());
+        NotezProperties.bindBoolean(NOTEZ_BTN_GROUP,
+            c.cbGroupNotez.selectedProperty());
+        NotezProperties.bindBoolean(NOTEZ_BTN_SHARE,
+            c.cbShareNotez.selectedProperty());
+        NotezProperties.bindBoolean(NOTEZ_BTN_ADD,
+            c.cbAddNotez.selectedProperty());
+        NotezProperties.bindBoolean(NOTEZ_BTN_SAVE,
+            c.cbSaveNotez.selectedProperty());
+        NotezProperties.bindBoolean(NOTEZ_BTN_REMOVE,
+            c.cbRemoveNotez.selectedProperty());
+        NotezProperties.bindBoolean(NOTEZ_BTN_PRINT,
+            c.cbPrintNotez.selectedProperty());
     }
 
     @Override

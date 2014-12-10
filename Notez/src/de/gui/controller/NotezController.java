@@ -118,6 +118,15 @@ public class NotezController extends
     protected CheckBox cbAlwaysAskToSave;
 
     @FXML
+    protected TextField txtEmail;
+    @FXML
+    protected TextField txtHost;
+    @FXML
+    protected TextField txtPort;
+    @FXML
+    protected CheckBox cbUseSSL;
+
+    @FXML
     protected CheckBox cbPinNotez;
     @FXML
     protected CheckBox cbRemoveNotez;
@@ -173,7 +182,7 @@ public class NotezController extends
     public void initialize()
     {
         c.initialize();
-        
+
         txtTitle.setText(data.getTitle());
         txtTitle.textProperty().bindBidirectional(data.titleProperty());
     }
@@ -193,35 +202,19 @@ public class NotezController extends
         NotezProperties.set(
             NotezProperties.NOTEZ_WORK_FOLDER,
             txtPropNotezWorkFold.getText());
-
         NotezProperties.set(
             NotezProperties.NOTEZ_REMOTE_FOLDER,
             txtPropNotezRemoteFold.getText());
 
-        NotezProperties.set(NotezProperties.NOTEZ_RECEIVER_ON_STARTUP,
-            String.valueOf(cbStartRecOnStartup.isSelected()));
         NotezProperties.set(
-            NotezProperties.NOTEZ_LET_RECEIVER_RUNNING,
-            String.valueOf(cbStartRecKeepRun.isSelected()));
-
+            NotezProperties.NOTEZ_MAIL_USER,
+            txtEmail.getText());
         NotezProperties.set(
-            NotezProperties.NOTEZ_ALWAYS_SAVE_ON_EXIT,
-            String.valueOf(cbAlwaysAskToSave.isSelected()));
-
-        NotezProperties.set(NotezProperties.NOTEZ_XML_Pin_ATTRIBUTE,
-            String.valueOf(cbPinNotez.isSelected()));
-        NotezProperties.set(NotezProperties.NOTEZ_XML_Group_ATTRIBUTE,
-            String.valueOf(cbGroupNotez.isSelected()));
-        NotezProperties.set(NotezProperties.NOTEZ_XML_Share_ATTRIBUTE,
-            String.valueOf(cbShareNotez.isSelected()));
-        NotezProperties.set(NotezProperties.NOTEZ_XML_Add_ATTRIBUTE,
-            String.valueOf(cbAddNotez.isSelected()));
-        NotezProperties.set(NotezProperties.NOTEZ_XML_Save_ATTRIBUTE,
-            String.valueOf(cbSaveNotez.isSelected()));
-        NotezProperties.set(NotezProperties.NOTEZ_XML_Remove_ATTRIBUTE,
-            String.valueOf(cbRemoveNotez.isSelected()));
-        NotezProperties.set(NotezProperties.NOTEZ_XML_Print_ATTRIBUTE,
-            String.valueOf(cbPrintNotez.isSelected()));
+            NotezProperties.NOTEZ_MAIL_HOST,
+            txtHost.getText());
+        NotezProperties.set(
+            NotezProperties.NOTEZ_MAIL_PORT,
+            txtPort.getText());
 
         // TODO only switch if valid?
         c.switchTo(borderPaneNotez);
@@ -347,6 +340,9 @@ public class NotezController extends
                 case SHARED:
                     msg = "Notez shared successfull!";
                     break;
+                case CANCELD_BY_USER:
+                    // Cancel it
+                    return;
             }
 
             NotezDialog.showInfoDialog(stage,

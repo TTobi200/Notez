@@ -16,7 +16,8 @@ public abstract class NotezShareBase implements NotezShare
 {
     public enum NotezShareResult
     {
-        SHARED(null), OFFLINE(null), BLOCKED(null), NOT_SUPPORTED(null);
+        SHARED(null), OFFLINE(null), BLOCKED(null), NOT_SUPPORTED(null), CANCELD_BY_USER(
+                        null);
 
         private String detailMsg;
 

@@ -113,6 +113,7 @@ public class NotezXmlDomUtil
     public static String getStringAttributeValue(Element element,
                     String attribute)
     {
-        return element.getAttributeNode(attribute).getValue();
+        Attr a = element.getAttributeNode(attribute);
+        return a != null ? a.getValue() : null;
     }
 }

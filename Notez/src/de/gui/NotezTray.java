@@ -65,9 +65,9 @@ public class NotezTray
                 return;
             }
 
-            boolean openEnabled = openDirectly == "null" ? true
+            boolean openEnabled = openDirectly == null ? true
                             : Boolean.valueOf(openDirectly);
-            boolean messageEnabled = showMessage == "null" ? true
+            boolean messageEnabled = showMessage == null ? true
                             : Boolean.valueOf(showMessage);
 
             tray = SystemTray.getSystemTray();

@@ -6,6 +6,11 @@
  */
 package de.gui;
 
+import static de.util.NotezProperties.NOTEZ_MAIL_USER;
+import static de.util.NotezProperties.contains;
+import static de.util.NotezProperties.get;
+import static de.util.NotezProperties.setBoolean;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,6 +27,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
@@ -42,7 +48,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import de.gui.controller.NotezController;
 import de.util.NotezFileUtil;
-import de.util.NotezProperties;
 import de.util.NotezRemoteSync.NotezRemoteUser;
 
 public class NotezDialog
@@ -146,9 +151,9 @@ public class NotezDialog
             ICON_QUESTION,
             NotezOption.YES, NotezOption.NO, NotezOption.CANCEL);
 
-        if(NotezProperties.contains(propKey) && !evenShowDialog)
+        if(contains(propKey) && !evenShowDialog)
         {
-            return Boolean.valueOf(NotezProperties.get(propKey)) ?
+            return Boolean.valueOf(get(propKey)) ?
                             NotezOption.YES : NotezOption.NO;
         }
 
@@ -170,12 +175,12 @@ public class NotezDialog
                     break;
 
                 case NO:
-                    NotezProperties.setBoolean(propKey, false);
+                    setBoolean(propKey, false);
                     break;
 
                 case OK:
                 case YES:
-                    NotezProperties.setBoolean(propKey, true);
+                    setBoolean(propKey, true);
                     break;
             }
         }
@@ -239,6 +244,36 @@ public class NotezDialog
         relativeToOwner(ctrl.stage, parent);
 
         return ctrl.showAndWait();
+    }
+
+    public static String[] showMailLoginDialog(Stage parent, String title)
+        throws IOException, InterruptedException
+    {
+        NotezDialogController ctrl = showDialog(parent,
+            title,
+            "",
+            ICON_INFO,
+            NotezOption.YES, NotezOption.NO, NotezOption.CANCEL);
+
+        String userName = get(NOTEZ_MAIL_USER);
+
+        TextField txtName = new TextField(userName);
+        PasswordField txtPass = new PasswordField();
+        VBox hBox = new VBox();
+
+        hBox.getChildren().addAll(new Label(
+            "Please enter your mail login data."),
+            new VBox(new Label("E-Mail:  "), txtName),
+            new VBox(new Label("Password: "), txtPass));
+        ctrl.hBoxMsg.getChildren().add(hBox);
+
+        ctrl.stage.setHeight(HEIGHT + 60);
+        relativeToOwner(ctrl.stage, parent);
+
+        NotezOption o = ctrl.showAndWait();
+
+        return o == NotezOption.YES ? new String[] { txtName.getText(),
+            txtPass.getText() } : null;
     }
 
     public static NotezOption showErrorDialog(Stage parent, String title,

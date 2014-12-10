@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import javafx.beans.property.BooleanProperty;
+
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -23,7 +25,7 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import de.util.NotezRemoteSync.NotezRemoteUser;
 
@@ -39,6 +41,9 @@ public class NotezProperties
     public static final String NOTEZ_XML_BUTTONS_ELEMENT = "Button";
     public static final String NOTEZ_XML_SYNC_ELEMENT = "Synchronisation";
     public static final String NOTEZ_XML_SHARE_USER_ELEMENT = "ShareUser";
+    public static final String NOTEZ_XML_EMAIL_SETTINGS_ELEMENT = "EMailSettings";
+
+    public static final String NOTEZ_XML_USER_ELEMENT = "User";
 
     public static final String NOTEZ_REMOTE_FOLDER = "NotezRemoteFolder";
     public static final String NOTEZ_WORK_FOLDER = "NotezWorkFolder";
@@ -49,13 +54,21 @@ public class NotezProperties
     public static final String NOTEZ_LET_RECEIVER_RUNNING = "LetReceiverRunning";
     public static final String NOTEZ_RECEIVER_ON_STARTUP = "ReceiverOnStartup";
 
-    public static final String NOTEZ_XML_Group_ATTRIBUTE = "Group";
-    public static final String NOTEZ_XML_Save_ATTRIBUTE = "Save";
-    public static final String NOTEZ_XML_Remove_ATTRIBUTE = "Remove";
-    public static final String NOTEZ_XML_Share_ATTRIBUTE = "Share";
-    public static final String NOTEZ_XML_Add_ATTRIBUTE = "Add";
-    public static final String NOTEZ_XML_Print_ATTRIBUTE = "Print";
-    public static final String NOTEZ_XML_Pin_ATTRIBUTE = "Pin";
+    public static final String NOTEZ_BTN_GROUP = "Group";
+    public static final String NOTEZ_BTN_SAVE = "Save";
+    public static final String NOTEZ_BTN_REMOVE = "Remove";
+    public static final String NOTEZ_BTN_SHARE = "Share";
+    public static final String NOTEZ_BTN_ADD = "Add";
+    public static final String NOTEZ_BTN_PRINT = "Print";
+    public static final String NOTEZ_BTN_PIN = "Pin";
+
+    public static final String NOTEZ_REMOTE_USERNAME = "Username";
+    public static final String NOTEZ_REMOTE_SHARE_ATTRIBUTE = "Share";
+
+    public static final String NOTEZ_MAIL_HOST = "Hostname";
+    public static final String NOTEZ_MAIL_USER = "Username";
+    public static final String NOTEZ_MAIL_PORT = "Port";
+    public static final String NOTEZ_MAIL_USE_SSL = "UseSSL";
 
     private static Map<String, String> properties;
 
@@ -88,6 +101,7 @@ public class NotezProperties
             saveButtonSettings(doc, root);
             saveSyncSettings(doc, root);
             saveShareUserSettings(doc, root);
+            saveEMailSettings(doc, root);
 
             saveFile(doc, new File(PROP_FILE));
             System.out.println("Properties saved!");
@@ -111,13 +125,13 @@ public class NotezProperties
     {
         Element button = addElement(doc, root, NOTEZ_XML_BUTTONS_ELEMENT);
 
-        addAttr(doc, button, NOTEZ_XML_Group_ATTRIBUTE);
-        addAttr(doc, button, NOTEZ_XML_Save_ATTRIBUTE);
-        addAttr(doc, button, NOTEZ_XML_Remove_ATTRIBUTE);
-        addAttr(doc, button, NOTEZ_XML_Share_ATTRIBUTE);
-        addAttr(doc, button, NOTEZ_XML_Add_ATTRIBUTE);
-        addAttr(doc, button, NOTEZ_XML_Print_ATTRIBUTE);
-        addAttr(doc, button, NOTEZ_XML_Pin_ATTRIBUTE);
+        addAttr(doc, button, NOTEZ_BTN_GROUP);
+        addAttr(doc, button, NOTEZ_BTN_SAVE);
+        addAttr(doc, button, NOTEZ_BTN_REMOVE);
+        addAttr(doc, button, NOTEZ_BTN_SHARE);
+        addAttr(doc, button, NOTEZ_BTN_ADD);
+        addAttr(doc, button, NOTEZ_BTN_PRINT);
+        addAttr(doc, button, NOTEZ_BTN_PIN);
     }
 
     protected static void saveSyncSettings(Document doc, Element root)
@@ -125,6 +139,7 @@ public class NotezProperties
         Element sync = addElement(doc, root, NOTEZ_XML_SYNC_ELEMENT);
 
         addAttr(doc, sync, NOTEZ_OPEN_RECEIVED_NOTEZ_DIRECTLY);
+        addAttr(doc, sync, NOTEZ_SHOW_MESSAGE_ON_NEW_NOTEZ);
         addAttr(doc, sync, NOTEZ_LET_RECEIVER_RUNNING);
         addAttr(doc, sync, NOTEZ_RECEIVER_ON_STARTUP);
     }
@@ -135,9 +150,22 @@ public class NotezProperties
 
         for(NotezRemoteUser user : NotezRemoteSync.getAllUsers())
         {
-            Attr uAttr = addAttr(doc, shareUser, user.getUsername());
-            uAttr.setNodeValue(String.valueOf(user.getShare()));
+            Element u = addElement(doc, shareUser, NOTEZ_XML_USER_ELEMENT);
+            u.setAttribute(NOTEZ_REMOTE_SHARE_ATTRIBUTE,
+                String.valueOf(user.getShare()));
+            u.setAttribute(NOTEZ_REMOTE_USERNAME,
+                user.getUsername());
         }
+    }
+
+    protected static void saveEMailSettings(Document doc, Element root)
+    {
+        Element email = addElement(doc, root, NOTEZ_XML_EMAIL_SETTINGS_ELEMENT);
+
+        addAttr(doc, email, NOTEZ_MAIL_HOST);
+        addAttr(doc, email, NOTEZ_MAIL_USER);
+        addAttr(doc, email, NOTEZ_MAIL_PORT);
+        addAttr(doc, email, NOTEZ_MAIL_USE_SSL);
     }
 
     protected static void saveFile(Document doc, File file)
@@ -145,7 +173,6 @@ public class NotezProperties
     {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
-        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
         transformer.setOutputProperty(OutputKeys.METHOD, "xml");
         transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -177,6 +204,7 @@ public class NotezProperties
             loadButtonSettings(root);
             loadSyncSettings(root);
             loadUserSettings(root);
+            loadEMailSettings(root);
         }
         catch(Exception e)
         {
@@ -208,19 +236,19 @@ public class NotezProperties
         if(Objects.nonNull(buttons))
         {
             storeProp(buttons,
-                NOTEZ_XML_Group_ATTRIBUTE);
+                NOTEZ_BTN_GROUP);
             storeProp(buttons,
-                NOTEZ_XML_Save_ATTRIBUTE);
+                NOTEZ_BTN_SAVE);
             storeProp(buttons,
-                NOTEZ_XML_Remove_ATTRIBUTE);
+                NOTEZ_BTN_REMOVE);
             storeProp(buttons,
-                NOTEZ_XML_Share_ATTRIBUTE);
+                NOTEZ_BTN_SHARE);
             storeProp(buttons,
-                NOTEZ_XML_Add_ATTRIBUTE);
+                NOTEZ_BTN_ADD);
             storeProp(buttons,
-                NOTEZ_XML_Print_ATTRIBUTE);
+                NOTEZ_BTN_PRINT);
             storeProp(buttons,
-                NOTEZ_XML_Pin_ATTRIBUTE);
+                NOTEZ_BTN_PIN);
         }
     }
 
@@ -234,6 +262,8 @@ public class NotezProperties
             storeProp(sync,
                 NOTEZ_OPEN_RECEIVED_NOTEZ_DIRECTLY);
             storeProp(sync,
+                NOTEZ_SHOW_MESSAGE_ON_NEW_NOTEZ);
+            storeProp(sync,
                 NOTEZ_LET_RECEIVER_RUNNING);
             storeProp(sync,
                 NOTEZ_RECEIVER_ON_STARTUP);
@@ -242,31 +272,77 @@ public class NotezProperties
 
     protected static void loadUserSettings(Element root)
     {
-        Element shareUser = getSingleElement(root,
+        Element shareUserElement = getSingleElement(root,
             NOTEZ_XML_SHARE_USER_ELEMENT);
 
-        if(Objects.nonNull(shareUser))
+        if(Objects.nonNull(shareUserElement))
         {
-            NamedNodeMap user = shareUser.getAttributes();
-            for(int i = 0; i < user.getLength(); i++)
+            NodeList shareUsers = shareUserElement.getElementsByTagName(
+                NOTEZ_XML_USER_ELEMENT);
+
+            if(Objects.nonNull(shareUsers))
             {
-                Node usrNode = user.item(i);
-                NotezRemoteSync.addUser(new NotezRemoteUser(
-                    usrNode.getNodeName(), usrNode.getNodeValue()));
+                for(int i = 0; i < shareUsers.getLength(); i++)
+                {
+                    NamedNodeMap attrs = shareUsers.item(i).getAttributes();
+
+                    NotezRemoteSync.addUser(new NotezRemoteUser(
+                        String.valueOf(attrs.getNamedItem(
+                            NOTEZ_REMOTE_USERNAME).getNodeValue()),
+                        String.valueOf(attrs.getNamedItem(
+                            NOTEZ_REMOTE_SHARE_ATTRIBUTE).getNodeValue())));
+                }
             }
+        }
+    }
+
+    protected static void loadEMailSettings(Element root)
+    {
+        Element email = getSingleElement(root,
+            NOTEZ_XML_EMAIL_SETTINGS_ELEMENT);
+
+        if(Objects.nonNull(email))
+        {
+            storeProp(email,
+                NOTEZ_MAIL_HOST);
+            storeProp(email,
+                NOTEZ_MAIL_USER);
+            storeProp(email,
+                NOTEZ_MAIL_PORT);
+            storeProp(email,
+                NOTEZ_MAIL_USE_SSL);
         }
     }
 
     protected static void storeProp(Element parent, String attribute)
     {
-        properties.put(attribute, getStringAttributeValue(parent,
-            attribute));
+        String value = getStringAttributeValue(parent,
+            attribute);
+
+        if(value != null)
+        {
+            properties.put(attribute, value);
+        }
+        else
+        {
+            System.out.println("No value for: " + attribute);
+        }
     }
 
     protected static Attr addAttr(Document doc, Element parent, String attribute)
     {
-        return addAttribute(doc, parent, attribute,
-            properties.get(attribute));
+        String attr = properties.get(attribute);
+
+        if(attr != null)
+        {
+            return addAttribute(doc, parent, attribute,
+                attr);
+        }
+        else
+        {
+            System.out.println("Not saved attribute for: " + attribute);
+            return null;
+        }
     }
 
     public static boolean contains(String key)
@@ -281,7 +357,7 @@ public class NotezProperties
 
     public static String get(String key)
     {
-        return String.valueOf(properties.get(key));
+        return properties.get(key);
     }
 
     public static void setBoolean(String key, boolean bool)
@@ -307,5 +383,22 @@ public class NotezProperties
     public static Map<String, String> getAll()
     {
         return properties;
+    }
+
+    public static void bindBoolean(String attribute,
+                    BooleanProperty property)
+    {
+        // If set before refresh the property
+        if(contains(attribute))
+        {
+            property.set(getBoolean(attribute));
+        }
+
+        property.addListener((o, a, n) ->
+        {
+            // Change setting if property changed
+            set(attribute,
+                String.valueOf(property.get()));
+        });
     }
 }

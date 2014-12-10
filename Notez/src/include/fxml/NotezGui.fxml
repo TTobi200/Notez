@@ -10,12 +10,12 @@
 
 <BorderPane fx:id="root" prefHeight="310.0" prefWidth="253.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
 	<bottom>
-		<HBox fx:id="hBoxButtom" alignment="TOP_RIGHT" styleClass="background" stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
+		<HBox fx:id="hBoxButtom" alignment="TOP_RIGHT" styleClass="background" stylesheets="@../../../bin/include/fxml/Stylesheets.css" BorderPane.alignment="CENTER">
 			<children>
 				<Hyperlink fx:id="fileLink" opacity="1d" text="" visible="true" />
 				<ImageView fx:id="resize" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../icons/resize.png" />
+                  <Image url="@../../../bin/include/icons/resize.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="SE_RESIZE" />
@@ -31,25 +31,25 @@
 			<children>
             <BorderPane fx:id="borderPaneNotez" prefHeight="200.0" prefWidth="200.0">
                <center>
-      				<TextArea fx:id="txtNote" styleClass="background" stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER" />
+      				<TextArea fx:id="txtNote" styleClass="background" stylesheets="@../../../bin/include/fxml/Stylesheets.css" BorderPane.alignment="CENTER" />
                </center>
                <bottom>
-                  <BorderPane fx:id="borderPanePage" styleClass="background" stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
+                  <BorderPane fx:id="borderPanePage" styleClass="background" stylesheets="@../../../bin/include/fxml/Stylesheets.css" BorderPane.alignment="CENTER">
                      <left>
-                        <Button fx:id="btnPrevPage" mnemonicParsing="false" onAction="#prevPage" styleClass="background" stylesheets="@Stylesheets.css" text="&lt;" BorderPane.alignment="CENTER" />
+                        <Button fx:id="btnPrevPage" mnemonicParsing="false" onAction="#prevPage" styleClass="background" stylesheets="@../../../bin/include/fxml/Stylesheets.css" text="&lt;" BorderPane.alignment="CENTER" />
                      </left>
                      <right>
-                        <Button fx:id="btnNextPage" mnemonicParsing="false" onAction="#nextPage" styleClass="background" stylesheets="@Stylesheets.css" text="&gt;" BorderPane.alignment="CENTER" />
+                        <Button fx:id="btnNextPage" mnemonicParsing="false" onAction="#nextPage" styleClass="background" stylesheets="@../../../bin/include/fxml/Stylesheets.css" text="&gt;" BorderPane.alignment="CENTER" />
                      </right>
                      <center>
-                        <Label fx:id="lblPage" styleClass="background" stylesheets="@Stylesheets.css" text="1/1" BorderPane.alignment="CENTER" />
+                        <Label fx:id="lblPage" styleClass="background" stylesheets="@../../../bin/include/fxml/Stylesheets.css" text="1/1" BorderPane.alignment="CENTER" />
                      </center>
                   </BorderPane>
                </bottom>
             </BorderPane>
 				<BorderPane fx:id="borderPaneSettings">
 					<center>
-						<TabPane fx:id="tabSettings" styleClass="background" stylesheets="@Stylesheets.css" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+						<TabPane fx:id="tabSettings" styleClass="background" stylesheets="@../../../bin/include/fxml/Stylesheets.css" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
 							<tabs>
 								<Tab fx:id="tabLocal" text="Local">
                            <content>
@@ -59,25 +59,25 @@
                                        <content>
                                           <ScrollPane fitToHeight="true" fitToWidth="true" prefViewportHeight="100.0" prefViewportWidth="251.0">
                                              <content>
-                                                <AnchorPane styleClass="background" stylesheets="@Stylesheets.css">
+                                                <AnchorPane styleClass="background" stylesheets="@../../../bin/include/fxml/Stylesheets.css">
                                                    <children>
                                                       <Label alignment="BOTTOM_LEFT" layoutY="4.0" text="Work-Folder" />
-                                                      <TextField fx:id="txtPropNotezRemoteFold" layoutX="81.0" layoutY="28.0" nodeOrientation="LEFT_TO_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                      <TextField fx:id="txtPropNotezRemoteFold" layoutX="81.0" layoutY="28.0" nodeOrientation="LEFT_TO_RIGHT" promptText="./remote/" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                                       	<tooltip>
 															<Tooltip text="Folder to search for remote Notez" />
 														</tooltip>
                                                       </TextField>
                                                       <Label alignment="BOTTOM_LEFT" layoutY="32.0" text="Remote-Folder" GridPane.rowIndex="1" />
-                                                      <TextField fx:id="txtPropNotezWorkFold" layoutX="81.0" nodeOrientation="LEFT_TO_RIGHT" GridPane.columnIndex="1">
+                                                      <TextField fx:id="txtPropNotezWorkFold" layoutX="81.0" nodeOrientation="LEFT_TO_RIGHT" promptText="./" GridPane.columnIndex="1">
                                                       	<tooltip>
 															<Tooltip text="Folder to store and load Notez from" />
 														</tooltip>
                                                       </TextField>
-                                                      <CheckBox fx:id="cbAlwaysAskToSave" layoutY="53.0" mnemonicParsing="false" stylesheets="@Stylesheets.css" text="Always save on close">
+                                                      <CheckBox fx:id="cbAlwaysAskToSave" layoutY="53.0" mnemonicParsing="false" stylesheets="@../../../bin/include/fxml/Stylesheets.css" text="Always save on close">
                                                          <graphic>
                                                             <ImageView pickOnBounds="true" preserveRatio="true">
                                                                <image>
-                                                                  <Image url="@../icons/save.png" />
+                                                                  <Image url="@../../../bin/include/icons/save.png" />
                                                                </image>
                                                             </ImageView>
                                                          </graphic>
@@ -92,13 +92,13 @@
                                        <content>
                                           <ScrollPane fitToHeight="true" fitToWidth="true" prefViewportHeight="103.0" prefViewportWidth="141.0">
                                              <content>
-                                                <AnchorPane prefHeight="126.0" prefWidth="251.0" styleClass="background" stylesheets="@Stylesheets.css">
+                                                <AnchorPane prefHeight="126.0" prefWidth="251.0" styleClass="background" stylesheets="@../../../bin/include/fxml/Stylesheets.css">
                                                    <children>
-                                                      <CheckBox fx:id="cbPinNotez" mnemonicParsing="false" stylesheets="@Stylesheets.css" text="Pin the Notez">
+                                                      <CheckBox fx:id="cbPinNotez" mnemonicParsing="false" stylesheets="@../../../bin/include/fxml/Stylesheets.css" text="Pin the Notez">
                                                          <graphic>
                                                             <ImageView pickOnBounds="true" preserveRatio="true">
                                                                <image>
-                                                                  <Image url="@../icons/pin.png" />
+                                                                  <Image url="@../../../bin/include/icons/pin.png" />
                                                                </image>
                                                             </ImageView>
                                                          </graphic>
@@ -107,7 +107,7 @@
                                                          <graphic>
                                                             <ImageView pickOnBounds="true" preserveRatio="true">
                                                                <image>
-                                                                  <Image url="@../icons/delete.png" />
+                                                                  <Image url="@../../../bin/include/icons/delete.png" />
                                                                </image>
                                                             </ImageView>
                                                          </graphic>
@@ -116,7 +116,7 @@
                                                          <graphic>
                                                             <ImageView pickOnBounds="true" preserveRatio="true">
                                                                <image>
-                                                                  <Image url="@../icons/new_icon.png" />
+                                                                  <Image url="@../../../bin/include/icons/new_icon.png" />
                                                                </image>
                                                             </ImageView>
                                                          </graphic>
@@ -125,7 +125,7 @@
                                                          <graphic>
                                                             <ImageView pickOnBounds="true" preserveRatio="true">
                                                                <image>
-                                                                  <Image url="@../icons/save.png" />
+                                                                  <Image url="@../../../bin/include/icons/save.png" />
                                                                </image>
                                                             </ImageView>
                                                          </graphic>
@@ -134,7 +134,7 @@
                                                          <graphic>
                                                             <ImageView pickOnBounds="true" preserveRatio="true">
                                                                <image>
-                                                                  <Image url="@../icons/share.png" />
+                                                                  <Image url="@../../../bin/include/icons/share.png" />
                                                                </image>
                                                             </ImageView>
                                                          </graphic>
@@ -143,7 +143,7 @@
                                                          <graphic>
                                                             <ImageView pickOnBounds="true" preserveRatio="true">
                                                                <image>
-                                                                  <Image url="@../icons/pinToNote.png" />
+                                                                  <Image url="@../../../bin/include/icons/pinToNote.png" />
                                                                </image>
                                                             </ImageView>
                                                          </graphic>
@@ -152,7 +152,7 @@
                                                          <graphic>
                                                             <ImageView pickOnBounds="true" preserveRatio="true">
                                                                <image>
-                                                                  <Image url="@../icons/print.png" />
+                                                                  <Image url="@../../../bin/include/icons/print.png" />
                                                                </image>
                                                             </ImageView>
                                                          </graphic>
@@ -175,22 +175,49 @@
                                        <content>
                                           <ScrollPane fitToHeight="true" fitToWidth="true" prefViewportWidth="251.0">
                                              <content>
-                                                <AnchorPane styleClass="background" stylesheets="@Stylesheets.css">
+                                                <AnchorPane styleClass="background" stylesheets="@../../../bin/include/fxml/Stylesheets.css">
                                                    <children>
-                                                      <CheckBox fx:id="cbStartRecOnStartup" mnemonicParsing="false" stylesheets="@Stylesheets.css" text="Start Receiver on Startup">
+                                                      <CheckBox fx:id="cbStartRecOnStartup" mnemonicParsing="false" stylesheets="@../../../bin/include/fxml/Stylesheets.css" text="Start Receiver on Startup">
                                                          <graphic>
                                                             <ImageView pickOnBounds="true" preserveRatio="true">
                                                                <image>
-                                                                  <Image url="@../icons/tray.png" />
+                                                                  <Image url="@../../../bin/include/icons/tray.png" />
                                                                </image>
                                                             </ImageView>
                                                          </graphic>
                                                       </CheckBox>
-                                                      <CheckBox fx:id="cbStartRecKeepRun" layoutY="17.0" mnemonicParsing="false" stylesheets="@Stylesheets.css" text="Keep Receiver running">
+                                                      <CheckBox fx:id="cbStartRecKeepRun" layoutY="17.0" mnemonicParsing="false" stylesheets="@../../../bin/include/fxml/Stylesheets.css" text="Keep Receiver running">
                                                          <graphic>
                                                             <ImageView pickOnBounds="true" preserveRatio="true">
                                                                <image>
-                                                                  <Image url="@../icons/tray.png" />
+                                                                  <Image url="@../../../bin/include/icons/tray.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </CheckBox>
+                                                   </children>
+                                                </AnchorPane>
+                                             </content>
+                                          </ScrollPane>
+                                       </content>
+                                    </TitledPane>
+                                    <TitledPane layoutX="10.0" layoutY="10.0" text="E-Mail">
+                                       <content>
+                                          <ScrollPane fitToHeight="true" fitToWidth="true" prefViewportWidth="251.0">
+                                             <content>
+                                                <AnchorPane styleClass="background" stylesheets="@../../../bin/include/fxml/Stylesheets.css">
+                                                   <children>
+                                                      <Label layoutX="8.0" layoutY="6.0" text="E-Mail" />
+                                                      <TextField fx:id="txtEmail" layoutX="45.0" layoutY="2.0" prefHeight="25.0" prefWidth="166.0" promptText="max@example.com" />
+                                                      <TextField fx:id="txtHost" layoutX="45.0" layoutY="28.0" prefHeight="25.0" prefWidth="166.0" promptText="smtp-mail.example.com" />
+                                                      <Label layoutX="10.0" layoutY="32.0" text="Host" />
+                                                      <Label layoutX="11.0" layoutY="58.0" text="Port" />
+                                                      <TextField fx:id="txtPort" layoutX="45.0" layoutY="54.0" prefHeight="25.0" prefWidth="166.0" promptText="25" />
+                                                      <CheckBox fx:id="cbUseSSL" layoutX="45.0" layoutY="79.0" mnemonicParsing="false" text="Use SSL-Connection">
+                                                         <graphic>
+                                                            <ImageView pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../icons/secure.png" />
                                                                </image>
                                                             </ImageView>
                                                          </graphic>
@@ -203,9 +230,9 @@
                                     </TitledPane>
                                   <TitledPane text="Share User">
                                        <content>
-            										<BorderPane prefHeight="200.0" prefWidth="200.0" styleClass="background" stylesheets="@Stylesheets.css">
+            										<BorderPane prefHeight="200.0" prefWidth="200.0" styleClass="background" stylesheets="@../../../bin/include/fxml/Stylesheets.css">
             											<center>
-            												<TableView fx:id="tableRemoteuser" styleClass="background-darker" stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
+            												<TableView fx:id="tableRemoteuser" styleClass="background-darker" stylesheets="@../../../bin/include/fxml/Stylesheets.css" BorderPane.alignment="CENTER">
             													<columns>
             														<TableColumn fx:id="colUsername" prefWidth="100.0" text="User-Name" />
             														<TableColumn fx:id="colShare" minWidth="0.0" prefWidth="158.0" text="Share" />
@@ -213,22 +240,22 @@
             												</TableView>
             											</center>
             											<top>
-            												<ToolBar nodeOrientation="RIGHT_TO_LEFT" styleClass="background" stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
+            												<ToolBar nodeOrientation="RIGHT_TO_LEFT" styleClass="background" stylesheets="@../../../bin/include/fxml/Stylesheets.css" BorderPane.alignment="CENTER">
             													<items>
-            														<Button fx:id="btnDeleteUser" mnemonicParsing="false" onAction="#deleteUser" styleClass="background" stylesheets="@Stylesheets.css">
+            														<Button fx:id="btnDeleteUser" mnemonicParsing="false" onAction="#deleteUser" styleClass="background" stylesheets="@../../../bin/include/fxml/Stylesheets.css">
                                                          <graphic>
                                                             <ImageView pickOnBounds="true" preserveRatio="true">
                                                                <image>
-                                                                  <Image url="@../icons/delete.png" />
+                                                                  <Image url="@../../../bin/include/icons/delete.png" />
                                                                </image>
                                                             </ImageView>
                                                          </graphic>
                                                       </Button>
-            														<Button fx:id="btnAddUser" mnemonicParsing="false" onAction="#addNewUser" styleClass="background" stylesheets="@Stylesheets.css">
+            														<Button fx:id="btnAddUser" mnemonicParsing="false" onAction="#addNewUser" styleClass="background" stylesheets="@../../../bin/include/fxml/Stylesheets.css">
                                                          <graphic>
                                                             <ImageView pickOnBounds="true" preserveRatio="true">
                                                                <image>
-                                                                  <Image url="@../icons/new_icon.png" />
+                                                                  <Image url="@../../../bin/include/icons/new_icon.png" />
                                                                </image>
                                                             </ImageView>
                                                          </graphic>
@@ -247,10 +274,10 @@
 						</TabPane>
 					</center>
 					<bottom>
-						<HBox alignment="TOP_RIGHT" styleClass="background" stylesheets="@Stylesheets.css" BorderPane.alignment="CENTER">
+						<HBox alignment="TOP_RIGHT" styleClass="background" stylesheets="@../../../bin/include/fxml/Stylesheets.css" BorderPane.alignment="CENTER">
 							<children>
-								<Button fx:id="btnSaveSettings" mnemonicParsing="false" onAction="#saveSettings" styleClass="background" stylesheets="@Stylesheets.css" text="Save" />
-								<Button fx:id="btnCancelSettings" mnemonicParsing="false" onAction="#cancelSettings" styleClass="background" stylesheets="@Stylesheets.css" text="Cancel" />
+								<Button fx:id="btnSaveSettings" mnemonicParsing="false" onAction="#saveSettings" styleClass="background" stylesheets="@../../../bin/include/fxml/Stylesheets.css" text="Save" />
+								<Button fx:id="btnCancelSettings" mnemonicParsing="false" onAction="#cancelSettings" styleClass="background" stylesheets="@../../../bin/include/fxml/Stylesheets.css" text="Cancel" />
 							</children>
 						</HBox>
 					</bottom>
@@ -259,23 +286,23 @@
 		</StackPane>
 	</center>
 	<top>
-		<AnchorPane fx:id="toolBar" styleClass="background-darker" stylesheets="@Stylesheets.css" BorderPane.alignment="TOP_CENTER">
+		<AnchorPane fx:id="toolBar" styleClass="background-darker" stylesheets="@../../../bin/include/fxml/Stylesheets.css" BorderPane.alignment="TOP_CENTER">
 			<children>
 				<HBox AnchorPane.leftAnchor="0.0">
 					<children>
-						<ToggleButton fx:id="btnPin" mnemonicParsing="false" opacity="1d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
+						<ToggleButton fx:id="btnPin" mnemonicParsing="false" opacity="1d" styleClass="background-darker" stylesheets="@../../../bin/include/fxml/Stylesheets.css" text="" visible="true">
 							<tooltip>
 								<Tooltip text="Pin Notez on top" />
 							</tooltip>
                      <graphic>
                         <ImageView pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../icons/pin.png" />
+                              <Image url="@../../../bin/include/icons/pin.png" />
                            </image>
                         </ImageView>
                      </graphic>
 						</ToggleButton>
-						<TextField fx:id="txtTitle" nodeOrientation="LEFT_TO_RIGHT" styleClass="background-darker" stylesheets="@Stylesheets.css">
+						<TextField fx:id="txtTitle" nodeOrientation="LEFT_TO_RIGHT" styleClass="background-darker" stylesheets="@../../../bin/include/fxml/Stylesheets.css">
                      <cursor>
                         <Cursor fx:constant="MOVE" />
                      </cursor></TextField>
@@ -283,71 +310,71 @@
 				</HBox>
 				<HBox nodeOrientation="RIGHT_TO_LEFT" AnchorPane.rightAnchor="0.0">
 					<children>
-						<Button fx:id="btnClose" mnemonicParsing="false" onAction="#closeNote" opacity="1d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
+						<Button fx:id="btnClose" mnemonicParsing="false" onAction="#closeNote" opacity="1d" styleClass="background-darker" stylesheets="@../../../bin/include/fxml/Stylesheets.css" text="" visible="true">
 							<tooltip>
 								<Tooltip fx:id="tTipClose" text="Close the Notez" />
 							</tooltip>
                      <graphic>
                         <ImageView pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../icons/icon_close.png" />
+                              <Image url="@../../../bin/include/icons/icon_close.png" />
                            </image>
                         </ImageView>
                      </graphic>
 						</Button>
-						<Button fx:id="btnSettings" mnemonicParsing="false" onAction="#openSettings" opacity="1d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
+						<Button fx:id="btnSettings" mnemonicParsing="false" onAction="#openSettings" opacity="1d" styleClass="background-darker" stylesheets="@../../../bin/include/fxml/Stylesheets.css" text="" visible="true">
 							<tooltip>
 								<Tooltip text="Open Notez Settings" />
 							</tooltip>
                      <graphic>
                         <ImageView pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../icons/icon_local_settings.png" />
+                              <Image url="@../../../bin/include/icons/icon_local_settings.png" />
                            </image>
                         </ImageView>
                      </graphic>
 						</Button>
-						<Button fx:id="btnDelete" mnemonicParsing="false" onAction="#deleteNote" opacity="1d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
+						<Button fx:id="btnDelete" mnemonicParsing="false" onAction="#deleteNote" opacity="1d" styleClass="background-darker" stylesheets="@../../../bin/include/fxml/Stylesheets.css" text="" visible="true">
 							<tooltip>
 								<Tooltip text="Delete Notez" />
 							</tooltip>
                      <graphic>
                         <ImageView pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../icons/delete.png" />
+                              <Image url="@../../../bin/include/icons/delete.png" />
                            </image>
                         </ImageView>
                      </graphic>
 						</Button>
-						<Button fx:id="btnSave" mnemonicParsing="false" onAction="#saveNote" opacity="1d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
+						<Button fx:id="btnSave" mnemonicParsing="false" onAction="#saveNote" opacity="1d" styleClass="background-darker" stylesheets="@../../../bin/include/fxml/Stylesheets.css" text="" visible="true">
 							<tooltip>
 								<Tooltip text="Save Notez" />
 							</tooltip>
                      <graphic>
                         <ImageView pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../icons/save.png" />
+                              <Image url="@../../../bin/include/icons/save.png" />
                            </image>
                         </ImageView>
                      </graphic>
 						</Button>
-						<Button fx:id="btnAdd" mnemonicParsing="false" onAction="#addNewNote" opacity="1d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
+						<Button fx:id="btnAdd" mnemonicParsing="false" onAction="#addNewNote" opacity="1d" styleClass="background-darker" stylesheets="@../../../bin/include/fxml/Stylesheets.css" text="" visible="true">
 							<tooltip>
 								<Tooltip text="Add new Notez" />
 							</tooltip>
                      <graphic>
                         <ImageView pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../icons/new_icon.png" />
+                              <Image url="@../../../bin/include/icons/new_icon.png" />
                            </image>
                         </ImageView>
                      </graphic>
 						</Button>
-                  <Button fx:id="btnPrint" mnemonicParsing="false" onAction="#printNote" opacity="1d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
+                  <Button fx:id="btnPrint" mnemonicParsing="false" onAction="#printNote" opacity="1d" styleClass="background-darker" stylesheets="@../../../bin/include/fxml/Stylesheets.css" text="" visible="true">
                      <graphic>
                         <ImageView pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../icons/print.png" />
+                              <Image url="@../../../bin/include/icons/print.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -355,21 +382,21 @@
                         <Tooltip text="Print Notez" />
                      </tooltip>
                   </Button>
-						<Button fx:id="btnShare" mnemonicParsing="false" onAction="#shareNote" opacity="1d" styleClass="background-darker" stylesheets="@Stylesheets.css" text="" visible="true">
+						<Button fx:id="btnShare" mnemonicParsing="false" onAction="#shareNote" opacity="1d" styleClass="background-darker" stylesheets="@../../../bin/include/fxml/Stylesheets.css" text="" visible="true">
 							<tooltip>
 								<Tooltip text="Share Notez" />
 							</tooltip>
                      <graphic>
                         <ImageView pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../icons/share.png" />
+                              <Image url="@../../../bin/include/icons/share.png" />
                            </image>
                         </ImageView>
                      </graphic>
 						</Button>
 						<ImageView fx:id="pickNote" opacity="1d" pickOnBounds="true" preserveRatio="true" visible="true">
                      <image>
-                        <Image url="@../icons/pinToNote.png" />
+                        <Image url="@../../../bin/include/icons/pinToNote.png" />
                      </image>
                      <cursor>
                         <Cursor fx:constant="OPEN_HAND" />
