@@ -21,6 +21,7 @@ import javafx.collections.ObservableList;
 import javax.swing.Timer;
 
 import de.gui.NotezFrame;
+import de.gui.NotezLoadSplash;
 import de.gui.NotezTray;
 import de.util.notez.data.NotezData;
 
@@ -128,7 +129,8 @@ public class NotezRemoteSync
                             if(NotezFileUtil.isNotez(f)
                                && !notezFiles.contains(f))
                             {
-                                NotezFrame.loadAllNotez(folder);
+
+                                NotezLoadSplash.loadAllNotez(folder, true);
                                 notezFiles.add(f);
                             }
                         }

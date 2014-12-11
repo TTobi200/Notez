@@ -1,7 +1,14 @@
 package de.gui;
 
+import static de.util.NotezProperties.NOTEZ_WORK_FOLDER;
+import static de.util.NotezProperties.get;
+
+import java.io.File;
+import java.io.IOException;
+
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -34,7 +41,9 @@ public class NotezLoadSplash extends Application
     private static final int SPLASH_WIDTH = 300;
     protected static final long SLEEP_TIME = 500;
 
-    public static ObservableList<String> availableNotez =
+    public static final String DEF_LOCAL_NOTEZ_FOLDER = ".";
+
+    public static ObservableList<NotezController> availableNotez =
                     FXCollections.observableArrayList();
 
     @Override
@@ -56,8 +65,37 @@ public class NotezLoadSplash extends Application
     {
         // TODO show splash before creating notez frame
         // For that splash has to be modal and always on top!
-        new NotezFrame().start(initStage);
+
+        NotezFrame.notezOpened = FXCollections.observableArrayList();
+        File localNotezFolder = new File(get(
+            NOTEZ_WORK_FOLDER,
+            DEF_LOCAL_NOTEZ_FOLDER));
+
+        int foundNotes = 0;
+        if(localNotezFolder.exists())
+        {
+            foundNotes = loadAllNotez(localNotezFolder, false);
+        }
+        else
+        {
+            NotezDialog.showWarningDialog(
+                initStage,
+                "Warning - Notez-Folder",
+                "Cannot find Notez-Folder! "
+                                + "(" + localNotezFolder + ")");
+
+            localNotezFolder = new File(DEF_LOCAL_NOTEZ_FOLDER);
+        }
+
+        // No notes found? create default new one
+        if(foundNotes == 0)
+        {
+            // switch to settings (init)
+            NotezFrame.createNotezFrame().getStage().show();
+        }
+
         showSplash(initStage, new NotezLoadingTask());
+        new NotezFrame().start(initStage);
     }
 
     private void showSplash(final Stage initStage,
@@ -68,6 +106,7 @@ public class NotezLoadSplash extends Application
         task.stateProperty().addListener(new NotezDissapear(initStage));
         initStage.initStyle(StageStyle.UNDECORATED);
         initStage.setScene(new Scene(splashLayout));
+        initStage.setAlwaysOnTop(true);
         initStage.show();
 
         new Thread(task).start();
@@ -86,9 +125,14 @@ public class NotezLoadSplash extends Application
             {
                 Thread.sleep(SLEEP_TIME);
                 updateProgress(i + 1, availableNotez.size());
-                String nextNote = availableNotez.get(i);
-                foundNotez.add(nextNote);
-                updateMessage("Notez " + nextNote + " loaded.");
+                NotezController nextNote = availableNotez.get(i);
+                foundNotez.add(nextNote.toString());
+                updateMessage("Notez " + nextNote.getNoteFile().getName()
+                              + " loaded.");
+
+                Platform.runLater(() -> {
+                    nextNote.getStage().show();
+                });
             }
             Thread.sleep(SLEEP_TIME);
 
@@ -134,8 +178,39 @@ public class NotezLoadSplash extends Application
         }
     }
 
-    public static void add(String name)
+    public static int loadAllNotez(File notezFolder, boolean show)
+        throws IOException
     {
-        availableNotez.add(name);
+        int foundNotes = 0;
+        File[] notez = notezFolder.listFiles();
+        if(notez != null)
+        {
+            for(File f : notez)
+            {
+                if(NotezFileUtil.isNotez(f))
+                {
+                    NotezController ctrl = NotezFrame.createNotezFrame(f);
+                    if(ctrl != null)
+                    {
+                        if(show)
+                        {
+                            ctrl.getStage().show();
+                        }
+                        else
+                        {
+                            NotezLoadSplash.add(ctrl);
+                            foundNotes++;
+                        }
+                    }
+                }
+            }
+        }
+
+        return foundNotes;
+    }
+
+    public static void add(NotezController ctrl)
+    {
+        availableNotez.add(ctrl);
     }
 }

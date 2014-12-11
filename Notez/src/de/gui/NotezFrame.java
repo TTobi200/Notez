@@ -17,7 +17,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javafx.application.Application;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -66,63 +65,6 @@ public class NotezFrame extends Application
                     DEF_LOCAL_NOTEZ_FOLDER)));
                 break;
         }
-
-        notezOpened = FXCollections.observableArrayList();
-        File localNotezFolder = new File(get(
-            NOTEZ_WORK_FOLDER,
-            DEF_LOCAL_NOTEZ_FOLDER));
-
-        int foundNotes = 0;
-        if(localNotezFolder.exists())
-        {
-            foundNotes = loadAllNotez(localNotezFolder);
-        }
-        else
-        {
-            NotezDialog.showWarningDialog(
-                primaryStage,
-                "Warning - Notez-Folder",
-                "Cannot find Notez-Folder! "
-                                + "(" + localNotezFolder + ")");
-
-            localNotezFolder = new File(DEF_LOCAL_NOTEZ_FOLDER);
-        }
-
-        // No notes found? create default new one
-        if(foundNotes == 0)
-        {
-            // switch to settings (init)
-            createNotezFrame().getStage().show();
-        }
-    }
-
-    public static int loadAllNotez(File notezFolder) throws IOException
-    {
-        int foundNotes = 0;
-        File[] notez = notezFolder.listFiles();
-        if(notez != null)
-        {
-            for(File f : notez)
-            {
-                if(NotezFileUtil.isNotez(f))
-                {
-                    NotezLoadSplash.add(f.getName());
-                    NotezController ctrl;
-                    if((ctrl = createNotezFrame(f)) == null)
-                    {
-                        NotezLoadSplash.add(f.getName() + " failed");
-                        continue;
-                    }
-                    else
-                    {
-                        ctrl.getStage().show();
-                        foundNotes++;
-                    }
-                }
-            }
-        }
-
-        return foundNotes;
     }
 
     public static NotezController createNotezFrame() throws IOException
