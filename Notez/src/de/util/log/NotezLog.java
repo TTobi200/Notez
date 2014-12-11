@@ -2,8 +2,14 @@ package de.util.log;
 
 import de.util.NotezLoggerUtil;
 
+/**
+ * Basic class for simple loggin within Notez.
+ *
+ * @author ddd
+ */
 public class NotezLog
 {
+	/** A logger using {@link System#out} and {@link System#err} for logging */
 	public static final NotezLogger systemLogger = (level, message, cause) -> {
 		switch(level)
 		{
@@ -24,13 +30,21 @@ public class NotezLog
 			}
 		}
 	};
+
+	/** The default logger for this application */
 	private static NotezLogger defaultLogger;
 
+	/**
+	 * @return The current default-logger for this application
+	 */
 	public static NotezLogger getDefaultLogger()
 	{
 		return defaultLogger;
 	}
 
+	/**
+	 * @param defaultLogger The new default-logger for this application
+	 */
 	public static void setDefaultLogger(NotezLogger defaultLogger)
 	{
 		NotezLog.defaultLogger = defaultLogger;

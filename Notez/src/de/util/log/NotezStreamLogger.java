@@ -6,16 +6,31 @@ import java.util.Objects;
 
 import de.util.NotezLoggerUtil;
 
+/**
+ * A logger using a underlying stream for logging.
+ *
+ * @author ddd
+ */
 public class NotezStreamLogger implements NotezLogger
 {
-	private OutputStream out;
+	/** the stream used for outputting the logs. */
+	protected OutputStream out;
+	/** whether to add a lineseparator after each log-call */
 	protected boolean addLineSeparator;
 
+	/**
+	 * @param stream the underlying stream to use
+	 */
 	public NotezStreamLogger(OutputStream stream)
 	{
 		this(stream, false);
 	}
 
+	/**
+	 *
+	 * @param stream the underlying stream to use
+	 * @param addLineSeparator whether to add a lineseparator after each log-call
+	 */
 	public NotezStreamLogger(OutputStream stream, boolean addLineSeparator)
 	{
 		out = Objects.requireNonNull(stream);
@@ -41,6 +56,9 @@ public class NotezStreamLogger implements NotezLogger
 		}
 	}
 
+	/**
+	 * @return the stream used for logging by this logger
+	 */
 	public OutputStream getOutputStream()
 	{
 		return out;
