@@ -10,6 +10,7 @@ import java.io.IOException;
 import javafx.application.Application;
 import de.gui.NotezLoadSplash;
 import de.util.NotezLoggerUtil;
+import de.util.NotezSystemUtil;
 import de.util.pref.NotezPreferences;
 
 public class Startup
@@ -31,7 +32,7 @@ public class Startup
 		{
 			System.err.println("Could not initialize logging to basic outputstreams.");
 			e.printStackTrace();
-			System.exit(1);
+			NotezSystemUtil.exit(NotezSystemUtil.FATAL);
 		}
 
 		if (!DEBUG)
@@ -39,7 +40,7 @@ public class Startup
 			if (NotezPreferences.isNotezAlreadyRunning())
 			{
 				System.err.println("ERROR: Notez already running");
-				System.exit(1);
+				NotezSystemUtil.exit(NotezSystemUtil.FATAL);
 			}
 
 			NotezPreferences.setNotezRunning(true);

@@ -1,3 +1,9 @@
+/*
+ * $Header$
+ * 
+ * $Log$
+ * Copyright © 2014 T.Ohm . All Rights Reserved.
+ */
 package de.util.log;
 
 import de.util.NotezLoggerUtil;

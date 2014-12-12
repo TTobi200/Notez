@@ -1,3 +1,9 @@
+/*
+ * $Header$
+ * 
+ * $Log$
+ * Copyright © 2014 T.Ohm . All Rights Reserved.
+ */
 package de.notez;
 
 import static de.util.NotezXmlDomUtil.addAttribute;
