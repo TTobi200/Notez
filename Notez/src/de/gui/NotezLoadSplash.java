@@ -1,7 +1,7 @@
 package de.gui;
 
-import static de.util.NotezProperties.NOTEZ_WORK_FOLDER;
-import static de.util.NotezProperties.get;
+import static de.notez.NotezProperties.NOTEZ_WORK_FOLDER;
+import static de.notez.NotezProperties.get;
 
 import java.io.File;
 import java.io.IOException;

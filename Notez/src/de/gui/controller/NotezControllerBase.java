@@ -13,14 +13,14 @@ import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import de.gui.NotezDialog;
 import de.gui.NotezFrame;
+import de.notez.NotezProperties;
+import de.notez.NotezRemoteSync;
+import de.notez.data.NotezData;
+import de.notez.data.NotezDataProperties;
+import de.notez.data.base.BaseNotezDataProperties;
+import de.notez.parser.NotezParsers;
 import de.util.NotezFXMLInitializable;
 import de.util.NotezFileUtil;
-import de.util.NotezProperties;
-import de.util.NotezRemoteSync;
-import de.util.notez.data.NotezData;
-import de.util.notez.data.NotezDataProperties;
-import de.util.notez.data.base.BaseNotezDataProperties;
-import de.util.notez.parser.NotezParsers;
 
 public abstract class NotezControllerBase<L extends NotezControllerListenerBase<?>>
                 implements

@@ -5,23 +5,23 @@
  */
 package de.gui.controller;
 
-import static de.util.NotezProperties.NOTEZ_ALWAYS_SAVE_ON_EXIT;
-import static de.util.NotezProperties.NOTEZ_BTN_ADD;
-import static de.util.NotezProperties.NOTEZ_BTN_GROUP;
-import static de.util.NotezProperties.NOTEZ_BTN_PIN;
-import static de.util.NotezProperties.NOTEZ_BTN_PRINT;
-import static de.util.NotezProperties.NOTEZ_BTN_REMOVE;
-import static de.util.NotezProperties.NOTEZ_BTN_SAVE;
-import static de.util.NotezProperties.NOTEZ_BTN_SHARE;
-import static de.util.NotezProperties.NOTEZ_LET_RECEIVER_RUNNING;
-import static de.util.NotezProperties.NOTEZ_MAIL_HOST;
-import static de.util.NotezProperties.NOTEZ_MAIL_PORT;
-import static de.util.NotezProperties.NOTEZ_MAIL_USER;
-import static de.util.NotezProperties.NOTEZ_MAIL_USE_SSL;
-import static de.util.NotezProperties.NOTEZ_RECEIVER_ON_STARTUP;
-import static de.util.NotezProperties.NOTEZ_REMOTE_FOLDER;
-import static de.util.NotezProperties.NOTEZ_WORK_FOLDER;
-import static de.util.NotezProperties.get;
+import static de.notez.NotezProperties.NOTEZ_ALWAYS_SAVE_ON_EXIT;
+import static de.notez.NotezProperties.NOTEZ_BTN_ADD;
+import static de.notez.NotezProperties.NOTEZ_BTN_GROUP;
+import static de.notez.NotezProperties.NOTEZ_BTN_PIN;
+import static de.notez.NotezProperties.NOTEZ_BTN_PRINT;
+import static de.notez.NotezProperties.NOTEZ_BTN_REMOVE;
+import static de.notez.NotezProperties.NOTEZ_BTN_SAVE;
+import static de.notez.NotezProperties.NOTEZ_BTN_SHARE;
+import static de.notez.NotezProperties.NOTEZ_LET_RECEIVER_RUNNING;
+import static de.notez.NotezProperties.NOTEZ_MAIL_HOST;
+import static de.notez.NotezProperties.NOTEZ_MAIL_PORT;
+import static de.notez.NotezProperties.NOTEZ_MAIL_USER;
+import static de.notez.NotezProperties.NOTEZ_MAIL_USE_SSL;
+import static de.notez.NotezProperties.NOTEZ_RECEIVER_ON_STARTUP;
+import static de.notez.NotezProperties.NOTEZ_REMOTE_FOLDER;
+import static de.notez.NotezProperties.NOTEZ_WORK_FOLDER;
+import static de.notez.NotezProperties.get;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,10 +44,10 @@ import javafx.scene.layout.StackPane;
 import com.sun.xml.internal.ws.api.config.management.policy.ManagementAssertion.Setting;
 
 import de.gui.NotezDialog;
+import de.notez.NotezProperties;
+import de.notez.NotezRemoteSync;
+import de.notez.NotezRemoteSync.NotezRemoteUser;
 import de.util.NotezFileUtil;
-import de.util.NotezProperties;
-import de.util.NotezRemoteSync;
-import de.util.NotezRemoteSync.NotezRemoteUser;
 import de.util.log.NotezLog;
 
 public class NotezControllerListeners extends

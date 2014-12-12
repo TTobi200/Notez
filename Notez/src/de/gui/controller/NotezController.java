@@ -36,13 +36,13 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import de.gui.NotezDialog;
+import de.notez.NotezProperties;
+import de.notez.NotezRemoteSync;
+import de.notez.NotezRemoteSync.NotezRemoteUser;
+import de.notez.data.NotezData;
+import de.notez.data.NotezStageData;
+import de.notez.share.NotezShareBase;
 import de.util.NotezDataUtil;
-import de.util.NotezProperties;
-import de.util.NotezRemoteSync;
-import de.util.NotezRemoteSync.NotezRemoteUser;
-import de.util.notez.data.NotezData;
-import de.util.notez.data.NotezStageData;
-import de.util.share.NotezShareBase;
 
 public class NotezController extends
                 NotezControllerBase<NotezControllerListeners>

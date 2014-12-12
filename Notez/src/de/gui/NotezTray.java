@@ -1,9 +1,9 @@
 package de.gui;
 
-import static de.util.NotezProperties.NOTEZ_OPEN_RECEIVED_NOTEZ_DIRECTLY;
-import static de.util.NotezProperties.NOTEZ_SHOW_MESSAGE_ON_NEW_NOTEZ;
-import static de.util.NotezProperties.get;
-import static de.util.NotezProperties.setBoolean;
+import static de.notez.NotezProperties.NOTEZ_OPEN_RECEIVED_NOTEZ_DIRECTLY;
+import static de.notez.NotezProperties.NOTEZ_SHOW_MESSAGE_ON_NEW_NOTEZ;
+import static de.notez.NotezProperties.get;
+import static de.notez.NotezProperties.setBoolean;
 
 import java.awt.CheckboxMenuItem;
 import java.awt.Image;
@@ -22,7 +22,7 @@ import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
 
-import de.util.NotezRemoteSync;
+import de.notez.NotezRemoteSync;
 
 public class NotezTray
 {

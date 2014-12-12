@@ -6,10 +6,10 @@
  */
 package de.gui;
 
-import static de.util.NotezProperties.NOTEZ_RECEIVER_ON_STARTUP;
-import static de.util.NotezProperties.NOTEZ_REMOTE_FOLDER;
-import static de.util.NotezProperties.NOTEZ_WORK_FOLDER;
-import static de.util.NotezProperties.get;
+import static de.notez.NotezProperties.NOTEZ_RECEIVER_ON_STARTUP;
+import static de.notez.NotezProperties.NOTEZ_REMOTE_FOLDER;
+import static de.notez.NotezProperties.NOTEZ_WORK_FOLDER;
+import static de.notez.NotezProperties.get;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,10 +24,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import de.gui.controller.NotezController;
+import de.notez.NotezRemoteSync;
+import de.notez.data.NotezData;
 import de.util.NotezFileUtil;
-import de.util.NotezRemoteSync;
 import de.util.log.NotezLog;
-import de.util.notez.data.NotezData;
 
 public class NotezFrame
 {

@@ -6,10 +6,10 @@
  */
 package de.gui;
 
-import static de.util.NotezProperties.NOTEZ_MAIL_USER;
-import static de.util.NotezProperties.contains;
-import static de.util.NotezProperties.get;
-import static de.util.NotezProperties.setBoolean;
+import static de.notez.NotezProperties.NOTEZ_MAIL_USER;
+import static de.notez.NotezProperties.contains;
+import static de.notez.NotezProperties.get;
+import static de.notez.NotezProperties.setBoolean;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -47,8 +47,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import de.gui.controller.NotezController;
+import de.notez.NotezRemoteSync.NotezRemoteUser;
 import de.util.NotezFileUtil;
-import de.util.NotezRemoteSync.NotezRemoteUser;
 
 public class NotezDialog
 {

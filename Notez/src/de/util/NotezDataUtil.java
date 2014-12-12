@@ -2,11 +2,11 @@ package de.util;
 
 import java.util.stream.Collectors;
 
-import de.util.notez.data.NotezData;
-import de.util.notez.data.NotezPagedData;
-import de.util.notez.data.NotezStageData;
-import de.util.notez.data.NotezTextData;
-import de.util.notez.data.base.BaseNotezTextData;
+import de.notez.data.NotezData;
+import de.notez.data.NotezPagedData;
+import de.notez.data.NotezStageData;
+import de.notez.data.NotezTextData;
+import de.notez.data.base.BaseNotezTextData;
 
 public class NotezDataUtil
 {
