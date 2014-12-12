@@ -25,7 +25,7 @@ public class Startup
 	{
 		try
 		{
-			NotezLoggerUtil.logSystemOut(LOGGING_FOLDER,
+			NotezLoggerUtil.initLogging(LOGGING_FOLDER,
 				DAYS_TO_SAVE_LOGS, REORG_LOGS);
 		}
 		catch(IOException e)
@@ -44,10 +44,6 @@ public class Startup
 			}
 
 			NotezPreferences.setNotezRunning(true);
-
-			Runtime.getRuntime().addShutdownHook(
-				new Thread(() -> NotezPreferences.setNotezRunning(false)));
-
 		}
 
 		Application.launch(NotezLoadSplash.class, args);

@@ -11,7 +11,6 @@ import static de.util.NotezTimeUtil.DEFAULT_FORMATTER;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.lang.Thread.UncaughtExceptionHandler;
 import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
@@ -19,7 +18,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-import de.util.log.NotezLog;
 import de.util.log.NotezLogLevel;
 import de.util.log.NotezLogger;
 import de.util.log.NotezLoggerCollection;
@@ -36,6 +34,8 @@ public class NotezLoggerUtil
 	public static final String ERR_FILE_EXT = ".error";
 	/** extions of files containing debug logs */
 	public static final String DEBUG_FILE_EXT = ".debug";
+	
+	private static boolean logInitialized = false;
 
 	/**
 	 * create the logging-message for the given message in the given level using
@@ -77,8 +77,12 @@ public class NotezLoggerUtil
 							.format(now)).append(": ").append(message).toString();
 	}
 
-	public static void logSystemOut(String folder, int daysToLog, boolean reorg) throws IOException
+	public static void initLogging(String folder, int daysToLog, boolean reorg) throws IOException
 	{
+		if(isLoggingInitialized())
+		{
+			return;
+		}
 		File logFolder = new File(folder);
 		logFolder.mkdir();
 
@@ -154,12 +158,15 @@ public class NotezLoggerUtil
 						+ DEBUG_FILE_EXT).delete();
 			}
 		}
-
-		// XXX set default logger in NotezLog
-		UncaughtExceptionHandler def = Thread.getDefaultUncaughtExceptionHandler();
-		Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
-			NotezLog.fatal("Uncaught throwable", e);
-			def.uncaughtException(t, e);
-		});
+		
+		logInitialized = true;
+	}
+	
+	/**
+	 * @return whether logging has been initialized
+	 */
+	public static boolean isLoggingInitialized()
+	{
+		return logInitialized;
 	}
 }
