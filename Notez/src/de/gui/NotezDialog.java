@@ -228,9 +228,9 @@ public class NotezDialog
         stack.append("\n");
 
         StackTraceElement[] trace = t.getStackTrace();
-        for(int i = 0; i < trace.length; i++)
-        {
-            stack.append(trace[i])
+        for(StackTraceElement element : trace)
+		{
+            stack.append(element)
                 .append("\n");
         }
 
@@ -322,7 +322,7 @@ public class NotezDialog
 
     private static void grayOutParent(Stage stage, Stage parent)
     {
-        // FORTEST
+        // FORTEST Gray out satck pane of gui
         StackPane stack = (StackPane)parent.getScene().lookup(
             "#stack");
         if(stack != null)

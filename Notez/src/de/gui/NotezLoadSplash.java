@@ -15,8 +15,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -63,9 +61,6 @@ public class NotezLoadSplash extends Application
     @Override
     public void start(final Stage initStage) throws Exception
     {
-        // TODO show splash before creating notez frame
-        // For that splash has to be modal and always on top!
-
         NotezFrame.notezOpened = FXCollections.observableArrayList();
         File localNotezFolder = new File(get(
             NOTEZ_WORK_FOLDER,
@@ -95,7 +90,6 @@ public class NotezLoadSplash extends Application
         }
 
         showSplash(initStage, new NotezLoadingTask());
-        new NotezFrame().start(initStage);
     }
 
     private void showSplash(final Stage initStage,
@@ -165,14 +159,7 @@ public class NotezLoadSplash extends Application
                     Duration.seconds(1.2), splashLayout);
                 fadeSplash.setFromValue(1.0);
                 fadeSplash.setToValue(0.0);
-                fadeSplash.setOnFinished(new EventHandler<ActionEvent>()
-                {
-                    @Override
-                    public void handle(ActionEvent arg0)
-                    {
-                        initStage.hide();
-                    }
-                });
+                fadeSplash.setOnFinished(arg0 -> initStage.hide());
                 fadeSplash.play();
             }
         }

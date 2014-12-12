@@ -24,12 +24,12 @@ public class Startup
 	{
 		try
 		{
-			// FORTEST when running executable jar
-			NotezLoggerUtil.logSystemOut(LOGGING_FOLDER, DAYS_TO_SAVE_LOGS, REORG_LOGS);
+			NotezLoggerUtil.logSystemOut(LOGGING_FOLDER,
+				DAYS_TO_SAVE_LOGS, REORG_LOGS);
 		}
 		catch(IOException e)
 		{
-			System.err.println("could not initialize logging to basic outputstreams.");
+			System.err.println("Could not initialize logging to basic outputstreams.");
 			e.printStackTrace();
 			System.exit(1);
 		}

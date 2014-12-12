@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -27,9 +26,10 @@ import javafx.stage.StageStyle;
 import de.gui.controller.NotezController;
 import de.util.NotezFileUtil;
 import de.util.NotezRemoteSync;
+import de.util.log.NotezLog;
 import de.util.notez.data.NotezData;
 
-public class NotezFrame extends Application
+public class NotezFrame
 {
     public static final double DEF_WIDTH = 400d;
     public static final double DEF_HEIGTH = 300d;
@@ -39,13 +39,12 @@ public class NotezFrame extends Application
     public static final String NOTEZ_FILE_POSFIX = ".notez";
 
     public static final String DEF_LOCAL_NOTEZ_FOLDER = ".";
+    public static final String DEF_REMOTE_NOTEZ_FOLDER = "./remote";
 
     public static ObservableList<NotezController> notezOpened;
 
-    @Override
-    public void start(Stage primaryStage) throws Exception
+    public static void startReceiver() throws Exception
     {
-        // FORTEST added remote sync
         switch(NotezDialog.showRememberQuestionDialog(null,
             "Receiving service",
             "Do you like to start the receiving notez service?",
@@ -62,11 +61,11 @@ public class NotezFrame extends Application
             case YES:
                 NotezRemoteSync.initialize(new File(get(
                     NOTEZ_REMOTE_FOLDER,
-                    DEF_LOCAL_NOTEZ_FOLDER)));
+                    DEF_REMOTE_NOTEZ_FOLDER)));
                 break;
         }
     }
-
+    
     public static NotezController createNotezFrame() throws IOException
     {
         return createNotezFrame(new File(
@@ -96,8 +95,7 @@ public class NotezFrame extends Application
         }
         catch(IOException e)
         {
-            // TODO Exception handling here
-            e.printStackTrace();
+        	NotezLog.error("Could not load NotezData!", e);
         }
 
         return ctrl;

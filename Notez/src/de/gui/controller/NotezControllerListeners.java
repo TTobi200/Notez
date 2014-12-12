@@ -48,6 +48,7 @@ import de.util.NotezFileUtil;
 import de.util.NotezProperties;
 import de.util.NotezRemoteSync;
 import de.util.NotezRemoteSync.NotezRemoteUser;
+import de.util.log.NotezLog;
 
 public class NotezControllerListeners extends
                 NotezControllerListenerBase<NotezController>
@@ -69,7 +70,6 @@ public class NotezControllerListeners extends
 
         loadIcons();
 
-        // TODO Remove scrollbars on startup
         setNodeForDragging(c.toolBar);
         setNodeForDragging(c.txtTitle); // TODO now text selection by mouse is
                                         // impossible :-(
@@ -85,7 +85,6 @@ public class NotezControllerListeners extends
         initPagination();
 
         doOnShowing(() -> setAccelerators());
-        // FORTEST
 
         c.pickNote.setImage(IMAGE_PICK_NOTE);
         grouped.addListener((g, o, n) -> {
@@ -99,7 +98,7 @@ public class NotezControllerListeners extends
         }
         catch(IOException e)
         {
-            e.printStackTrace();
+        	NotezLog.error("Could not load NotezFile!", e);
         }
     }
 

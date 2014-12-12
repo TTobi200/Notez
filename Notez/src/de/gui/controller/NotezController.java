@@ -193,6 +193,10 @@ public class NotezController extends
         txtTitle.setText(data.getTitle());
         fileLink.setText(note.get().getAbsolutePath());
         txtTitle.textProperty().bindBidirectional(data.titleProperty());
+        
+        // TODO $DDD: Add a Bidirectional Binding:
+        // No Title on new note (@see loadNote)
+        stage.setTitle(data.getTitle());
     }
 
     /**
@@ -461,6 +465,7 @@ public class NotezController extends
         if(newData != null)
         {
             getStage().titleProperty().bind(txtTitle.textProperty());
+            // TODO $DDD: Add a Bidirectional Binding: No Title on new note
             txtTitle.setText(newData.getTitle());
 
             NotezStageData stageData = newData.getStageData();
