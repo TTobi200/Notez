@@ -23,6 +23,8 @@ import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
 
 import de.notez.NotezRemoteSync;
+import de.notez.data.NotezData;
+import de.notez.network.NotezServer;
 
 public class NotezTray
 {
@@ -45,12 +47,33 @@ public class NotezTray
 
     private Menu itmNotOpened;
 
+    // FIXME $TTobi won't be called ???
     public NotezTray()
     {
         Platform.runLater(() ->
         {
             init(get(NOTEZ_OPEN_RECEIVED_NOTEZ_DIRECTLY),
                 get(NOTEZ_SHOW_MESSAGE_ON_NEW_NOTEZ));
+        });
+        
+        NotezServer.addRemoteListener(e ->
+        {
+        	if(e.getRemoteObject() instanceof NotezData)
+			{
+				Platform.runLater(() ->
+				{
+					// TODO add sender username
+					try
+					{
+						showMsgNewNotez(NotezFrame.createNotezFrame((NotezData)e.getRemoteObject())
+							.getStage(), "Username");
+					}
+					catch(Exception ex)
+					{
+						ex.printStackTrace();
+					}
+				});
+			}
         });
     }
 

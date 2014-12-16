@@ -37,7 +37,7 @@ public interface NotezData
 	/**
      * @return a serializable version of this data
      */
-	public default NotezData asSerializableData()
+	public default SerializableNotezData asSerializableData()
     {
         return asSerializableData(this);
     }
@@ -48,7 +48,7 @@ public interface NotezData
      * @return a serializable version of the given data
      * @throws NullPointerException
      */
-    public static NotezData asSerializableData(NotezData data) throws NullPointerException
+    public static SerializableNotezData asSerializableData(NotezData data) throws NullPointerException
     {
         return new SerializableNotezData(Objects.requireNonNull(data));
     }

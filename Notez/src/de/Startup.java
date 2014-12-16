@@ -9,8 +9,10 @@ import java.io.IOException;
 
 import javafx.application.Application;
 import de.gui.NotezLoadSplash;
+import de.notez.network.NotezServer;
 import de.util.NotezLoggerUtil;
 import de.util.NotezSystemUtil;
+import de.util.log.NotezLog;
 import de.util.pref.NotezPreferences;
 
 public class Startup
@@ -44,6 +46,16 @@ public class Startup
 			}
 
 			NotezPreferences.setNotezRunning(true);
+		}
+		
+		// FIXME $TTobi where to put this call?
+		try
+		{
+			NotezServer.initialize();
+		}
+		catch(IOException e)
+		{
+			NotezLog.error("error while initializing the server", e);
 		}
 
 		Application.launch(NotezLoadSplash.class, args);

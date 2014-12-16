@@ -8,9 +8,6 @@ package de.notez;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
 
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
@@ -20,10 +17,8 @@ import javafx.collections.ObservableList;
 
 import javax.swing.Timer;
 
-import de.gui.NotezFrame;
 import de.gui.NotezLoadSplash;
 import de.gui.NotezTray;
-import de.notez.data.NotezData;
 import de.util.NotezFileUtil;
 
 public class NotezRemoteSync
@@ -32,11 +27,8 @@ public class NotezRemoteSync
 
     final static ObservableList<NotezRemoteUser> availableRemoteUser = FXCollections.observableArrayList();
 
-    public static final int SERVER_PORT = 55555;
-
     public static ObservableList<File> notezFiles = FXCollections.observableArrayList();
 
-    private static ServerSocket receive;
     private static File localRemFold;
     private static Timer foldSync;
     private static Thread tcpThread;
@@ -60,59 +52,8 @@ public class NotezRemoteSync
             foldSync = creFoldSync(localRemFold);
         }
         foldSync.start();
-
-        if(tcpThread == null)
-        {
-            tcpThread = creTcpThread();
-        }
-        tcpThread.setDaemon(true);
-        tcpThread.start();
-    }
-
-    private static Thread creTcpThread()
-    {
-        return new Thread(() ->
-        {
-            try
-            {
-                receive = new ServerSocket(SERVER_PORT);
-            }
-            catch(IOException e2)
-            {
-                e2.printStackTrace();
-            }
-            try
-            {
-                // TODO commit loaded params
-            tray = new NotezTray();
-            Socket socket;
-            while((socket = receive.accept()) != null)
-            {
-                ObjectInputStream in = new ObjectInputStream(
-                    socket.getInputStream());
-
-                NotezData data = (NotezData)in.readObject();
-
-                Platform.runLater(() ->
-                {
-                    // TODO add sender username
-                    try
-                    {
-                        tray.showMsgNewNotez(NotezFrame.createNotezFrame(data)
-                            .getStage(), "Username");
-                    }
-                    catch(Exception e)
-                    {
-                        e.printStackTrace();
-                    }
-                });
-            }
-        }
-        catch(Exception e1)
-        {
-            e1.printStackTrace();
-        }
-    }   );
+        
+        tray = new NotezTray();
     }
 
     private static Timer creFoldSync(File folder)

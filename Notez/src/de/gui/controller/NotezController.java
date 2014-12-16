@@ -196,7 +196,7 @@ public class NotezController extends
         
         // TODO $DDD: Add a Bidirectional Binding:
         // No Title on new note (@see loadNote)
-        stage.setTitle(data.getTitle());
+//        stage.setTitle(data.getTitle());
     }
 
     /**

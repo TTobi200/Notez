@@ -12,13 +12,14 @@ import de.notez.data.NotezData;
 import de.notez.data.NotezPagedData;
 import de.notez.data.NotezStageData;
 import de.notez.data.NotezTextData;
+import de.notez.network.NotezRemoteObject;
 
 /**
  * A serializable Version of the {@link NotezData}-interface
  *
  * @author ddd
  */
-public class SerializableNotezData extends BaseNotezData implements Externalizable
+public class SerializableNotezData extends BaseNotezData implements Externalizable, NotezRemoteObject
 {
 	private static final long serialVersionUID = 1L;
 	
