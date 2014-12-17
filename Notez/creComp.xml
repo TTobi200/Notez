@@ -1,0 +1,17 @@
+<project name="create components" basedir="." default="addJarToSceneBuilder">
+
+	<property name="compJar" value="NotezComponents.jar" />
+	<property environment="env" />
+
+	<target name="addJarToSceneBuilder" depends="makeJar">
+		<move file="${compJar}" todir="${env.APPDATA}/Scene Builder/Library" overwrite="true" />
+	</target>
+
+	<target name="makeJar">
+		<jar destfile="${compJar}">
+			<!--fileset dir="bin" includes="de/gui/comp/**" />
+			<fileset dir="src" includes="include/fxml/**" / -->
+			<fileset dir="bin" includes="**" />
+		</jar>
+	</target>
+</project>

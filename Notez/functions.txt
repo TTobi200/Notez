@@ -1,0 +1,15 @@
+pin on top - unpin
+add - dissolve
+share
+print
+cre New
+save
+delete
+open settings
+close
+
+textfield -- text
+	-next page
+	-prev page
+
+hyperlink -- open parent folder

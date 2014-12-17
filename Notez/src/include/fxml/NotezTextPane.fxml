@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.effect.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<fx:root prefHeight="310.0" prefWidth="253.0" type="BorderPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <bottom>
+      <BorderPane styleClass="background" stylesheets="@/include/fxml/Stylesheets.css" BorderPane.alignment="CENTER">
+         <left>
+            <Button fx:id="btnPrevPage" mnemonicParsing="false" onAction="#prevPage" styleClass="background" stylesheets="@/include/fxml/Stylesheets.css" text="&lt;" BorderPane.alignment="CENTER" />
+         </left>
+         <right>
+            <Button fx:id="btnNextPage" mnemonicParsing="false" onAction="#nextPage" styleClass="background" stylesheets="@/include/fxml/Stylesheets.css" text="&gt;" BorderPane.alignment="CENTER" />
+         </right>
+         <center>
+            <Label fx:id="lblPage" styleClass="background" stylesheets="@/include/fxml/Stylesheets.css" text="1/1" BorderPane.alignment="CENTER" />
+         </center>
+      </BorderPane>
+   </bottom>
+   <center>
+				<TextArea fx:id="txt" styleClass="background" stylesheets="@/include/fxml/Stylesheets.css" BorderPane.alignment="CENTER" />
+   </center>
+</fx:root>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.effect.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+
+<ToolBar xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <items>
+				<HBox AnchorPane.leftAnchor="0.0">
+					<children>
+						<ToggleButton fx:id="btnPin" mnemonicParsing="false" opacity="1d" styleClass="background-darker" stylesheets="@/include/fxml/Stylesheets.css" text="" visible="true">
+							<tooltip>
+								<Tooltip text="Pin Notez on top" />
+							</tooltip>
+               <graphic>
+                  <ImageView pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@/include/icons/pin.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+						</ToggleButton>
+						<TextField fx:id="txtTitle" nodeOrientation="LEFT_TO_RIGHT" styleClass="background-darker" stylesheets="@/include/fxml/Stylesheets.css">
+               <cursor>
+                  <Cursor fx:constant="MOVE" />
+               </cursor>
+            </TextField>
+					</children>
+				</HBox>
+				<HBox nodeOrientation="RIGHT_TO_LEFT" AnchorPane.rightAnchor="0.0">
+					<children>
+						<Button fx:id="btnClose" mnemonicParsing="false" onAction="#closeNote" opacity="1d" styleClass="background-darker" stylesheets="@/include/fxml/Stylesheets.css" text="" visible="true">
+							<tooltip>
+								<Tooltip fx:id="tTipClose" text="Close the Notez" />
+							</tooltip>
+               <graphic>
+                  <ImageView pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@/include/icons/icon_close.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+						</Button>
+						<Button fx:id="btnSettings" mnemonicParsing="false" onAction="#openSettings" opacity="1d" styleClass="background-darker" stylesheets="@/include/fxml/Stylesheets.css" text="" visible="true">
+							<tooltip>
+								<Tooltip text="Open Notez Settings" />
+							</tooltip>
+               <graphic>
+                  <ImageView pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@/include/icons/icon_local_settings.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+						</Button>
+						<Button fx:id="btnDelete" mnemonicParsing="false" onAction="#deleteNote" opacity="1d" styleClass="background-darker" stylesheets="@/include/fxml/Stylesheets.css" text="" visible="true">
+							<tooltip>
+								<Tooltip text="Delete Notez" />
+							</tooltip>
+               <graphic>
+                  <ImageView pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@/include/icons/delete.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+						</Button>
+						<Button fx:id="btnSave" mnemonicParsing="false" onAction="#saveNote" opacity="1d" styleClass="background-darker" stylesheets="@/include/fxml/Stylesheets.css" text="" visible="true">
+							<tooltip>
+								<Tooltip text="Save Notez" />
+							</tooltip>
+               <graphic>
+                  <ImageView pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@/include/icons/save.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+						</Button>
+						<Button fx:id="btnAdd" mnemonicParsing="false" onAction="#addNewNote" opacity="1d" styleClass="background-darker" stylesheets="@/include/fxml/Stylesheets.css" text="" visible="true">
+							<tooltip>
+								<Tooltip text="Add new Notez" />
+							</tooltip>
+               <graphic>
+                  <ImageView pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@/include/icons/new_icon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+						</Button>
+            <Button fx:id="btnPrint" mnemonicParsing="false" onAction="#printNote" opacity="1d" styleClass="background-darker" stylesheets="@/include/fxml/Stylesheets.css" text="" visible="true">
+               <graphic>
+                  <ImageView pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@/include/icons/print.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="Print Notez" />
+               </tooltip>
+            </Button>
+						<Button fx:id="btnShare" mnemonicParsing="false" onAction="#shareNote" opacity="1d" styleClass="background-darker" stylesheets="@/include/fxml/Stylesheets.css" text="" visible="true">
+							<tooltip>
+								<Tooltip text="Share Notez" />
+							</tooltip>
+               <graphic>
+                  <ImageView pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@/include/icons/share.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+						</Button>
+						<ImageView fx:id="pickNote" opacity="1d" pickOnBounds="true" preserveRatio="true" visible="true">
+               <image>
+                  <Image url="@/include/icons/pinToNote.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="OPEN_HAND" />
+               </cursor>
+               <HBox.margin>
+                  <Insets top="5.0" />
+               </HBox.margin>
+            </ImageView>
+					</children>
+				</HBox>
+   </items>
+</ToolBar>
