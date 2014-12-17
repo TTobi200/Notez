@@ -45,7 +45,12 @@ public class BaseNotezStageDataProperties implements NotezStageDataProperties
 	public BaseNotezStageDataProperties(double stageX, double stageY, double stageWidth,
 			double stageHeight)
 	{
-		// TODO Auto-generated constructor stub
+		super();
+		
+		setStageX(stageX);
+		setStageY(stageY);
+		setStageWidth(stageWidth);
+		setStageHeight(stageHeight);
 	}
 
 	@Override

@@ -254,7 +254,6 @@ public abstract class NotezControllerBase<L extends NotezControllerListenerBase<
 
         NotezParsers.save(this, note);
         this.note.set(note);
-        // TODO transform into the new format
         // data.saveText();
         c.stageSize.setX(stage.getX());
         c.stageSize.setY(stage.getY());
@@ -326,7 +325,6 @@ public abstract class NotezControllerBase<L extends NotezControllerListenerBase<
 
     public abstract boolean loadNote(NotezData data) throws IOException;
 
-    // TODO just for tests
     @FXML
     protected void prevPage()
     {

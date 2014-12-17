@@ -247,20 +247,6 @@ public class NotezControllerListeners extends
                     c.data.getPageData().sizeProperty()));
         c.btnPrevPage.disableProperty().bind(
             c.data.getPageData().curPageIndexProperty().isEqualTo(0));
-        // XXX $DDD enable pagination
-        // c.data.curTextProperty().bind(c.txtNote.textProperty());
-        // c.data.saveText();
-        // c.lblPage.textProperty().bind(
-        // Bindings.concat(c.data.curIndexProperty().add(1), " / ",
-        // NotezObservablesUtil.sizePropertyForList(c.data.getPages())));
-        // c.btnPrevPage.disableProperty().bind(
-        // c.data.curIndexProperty().isEqualTo(0));
-        //
-        // c.data.curDataProperty().addListener((c, o, n) -> {
-        // o.curTextProperty().unbind();
-        // this.c.txtNote.setText(n.curTextProperty().get());
-        // n.curTextProperty().bind(this.c.txtNote.textProperty());
-        // });
     }
 
     protected void switchTo(Node node)

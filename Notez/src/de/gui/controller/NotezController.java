@@ -190,13 +190,9 @@ public class NotezController extends
     {
         c.initialize();
 
-        txtTitle.setText(data.getTitle());
         fileLink.setText(note.get().getAbsolutePath());
         txtTitle.textProperty().bindBidirectional(data.titleProperty());
-        
-        // TODO $DDD: Add a Bidirectional Binding:
-        // No Title on new note (@see loadNote)
-//        stage.setTitle(data.getTitle());
+        getStage().titleProperty().bind(data.titleProperty());
     }
 
     /**
@@ -457,20 +453,16 @@ public class NotezController extends
     @Override
     public boolean loadNote(NotezData newData) throws IOException
     {
-        // TODO just do if initialized
-        // c.addFileLink(fileLink, note);
-
-        // c.doOnInitialized(() ->
-        // {
         if(newData != null)
         {
-            getStage().titleProperty().bind(txtTitle.textProperty());
-            // TODO $DDD: Add a Bidirectional Binding: No Title on new note
-            txtTitle.setText(newData.getTitle());
-
+        	c.doOnInitialized(() ->
+        	{
+        		
+				c.addFileLink(fileLink, note);
+        		
             NotezStageData stageData = newData.getStageData();
-            stage.setWidth(stageData.getStageWidth());
-            stage.setHeight(stageData.getStageHeight());
+            getStage().setWidth(stageData.getStageWidth());
+            getStage().setHeight(stageData.getStageHeight());
 
             final Dimension D = Toolkit.getDefaultToolkit().getScreenSize();
             if(stageData.getStageWidth() > D.getWidth())
@@ -509,6 +501,7 @@ public class NotezController extends
                 stageData.getStageY()));
 
             NotezDataUtil.equalize(newData, this.data);
+        	});
         }
         // });
 

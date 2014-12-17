@@ -59,7 +59,6 @@ public class NotezServer extends Thread implements NotezRemoteObjectListener
 			Socket socket;
 			while(true)
 			{
-				// TODO commit loaded params
 				if(Objects.nonNull(socket = serverSocket.accept()))
 				{
 					new NotezClientConnection(socket);

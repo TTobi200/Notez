@@ -157,8 +157,6 @@ public class NotezTray
 
     private void creNewNotez()
     {
-        // FIXME $DDD: If all stages closed,
-        // runnable never executed by Platform
         Platform.runLater(() ->
         {
             try
@@ -182,8 +180,6 @@ public class NotezTray
     {
         if(stage != null && !stage.isShowing())
         {
-            // FIXME $DDD: If all stages closed,
-            // runnable never executed by Platform
             Platform.runLater(() ->
             {
                 stage.show();

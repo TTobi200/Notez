@@ -1,5 +1,6 @@
 package de.util;
 
+import javafx.application.Platform;
 import de.util.pref.NotezPreferences;
 
 public class NotezSystemUtil
@@ -25,6 +26,7 @@ public class NotezSystemUtil
 	public static void exit(int status)
 	{
 		NotezPreferences.setNotezRunning(false);
+		Platform.exit();
 		System.exit(status);
 	}
 }
