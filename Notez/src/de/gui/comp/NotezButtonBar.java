@@ -69,43 +69,43 @@ public class NotezButtonBar extends AnchorPane implements NotezComponent
 	}
 
 	@FXML
-	void closeNote()
+	private void closeNote()
 	{
-		getNote().hide();
+		getNote().close(true);
 	}
 
 	@FXML
-	void openSettings()
+	private void openSettings()
 	{
 
 	}
 
 	@FXML
-	void deleteNote()
+	private void deleteNote()
 	{
 		getNote().delete();
 	}
 
 	@FXML
-	void saveNote()
+	private void saveNote()
 	{
 
 	}
 
 	@FXML
-	void addNewNote()
+	private void addNewNote()
 	{
 		NotezNotes.creNote().show();
 	}
 
 	@FXML
-	void printNote()
+	private void printNote()
 	{
 
 	}
 
 	@FXML
-	void shareNote()
+	private void shareNote()
 	{
 
 	}
@@ -127,7 +127,7 @@ public class NotezButtonBar extends AnchorPane implements NotezComponent
 	@Override
 	public void setListener()
 	{
-		// TODO Auto-generated method stub
-		
+		txtTitle.setText(getNote().getData().getTitle());
+		txtTitle.textProperty().bindBidirectional(getNote().getData().titleProperty());
 	}
 }
