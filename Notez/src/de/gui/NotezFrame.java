@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -31,17 +30,7 @@ import de.util.log.NotezLog;
 
 public class NotezFrame
 {
-    public static final double DEF_WIDTH = 400d;
-    public static final double DEF_HEIGTH = 300d;
-
-    public static final String FXML_PATH = "include/fxml/NotezGui.fxml";
-    public static final String NOTEZ_LOGO = "include/icons/logo.png";
     public static final String NOTEZ_FILE_POSFIX = ".notez";
-
-    public static final String DEF_LOCAL_NOTEZ_FOLDER = ".";
-    public static final String DEF_REMOTE_NOTEZ_FOLDER = "./remote";
-
-    public static ObservableList<NotezController> notezOpened;
 
     public static void startReceiver() throws Exception
     {
@@ -135,10 +124,5 @@ public class NotezFrame
         notezOpened.add(ctrl);
 
         return ctrl;
-    }
-
-    public static NotezController getNotez(Integer idx)
-    {
-        return notezOpened.get(idx);
     }
 }

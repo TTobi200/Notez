@@ -6,6 +6,8 @@
  */
 package de.util.log;
 
+import java.util.Objects;
+
 import de.util.NotezLoggerUtil;
 
 /**
@@ -23,7 +25,10 @@ public class NotezLog
 			case DEBUG:
 			{
 				System.out.println(NotezLoggerUtil.creMessageString(level, message));
-				cause.printStackTrace(System.out);
+				if(Objects.nonNull(cause))
+				{
+					cause.printStackTrace(System.out);
+				}
 				break;
 			}
 			case ERROR:
@@ -31,14 +36,17 @@ public class NotezLog
 			case WARN:
 			{
 				System.err.println(NotezLoggerUtil.creMessageString(level, message));
-				cause.printStackTrace(System.err);
+				if(Objects.nonNull(cause))
+				{
+					cause.printStackTrace(System.err);
+				}
 				break;
 			}
 		}
 	};
 
 	/** The default logger for this application */
-	private static NotezLogger defaultLogger;
+	private static NotezLogger defaultLogger = systemLogger;
 
 	/**
 	 * @return The current default-logger for this application

@@ -29,4 +29,10 @@ public class NotezSystemUtil
 		Platform.exit();
 		System.exit(status);
 	}
+	
+	public static boolean isRunningInSceneBuilder()
+	{
+		return System.getProperty("app.preferences.id", "").contains(
+						"scenebuilder");
+	}
 }

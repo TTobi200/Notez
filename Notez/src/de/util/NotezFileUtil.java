@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Objects;
 
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
@@ -18,6 +19,9 @@ import de.gui.NotezFrame;
 
 public class NotezFileUtil
 {
+	public static final String INCLUDE_FOLDER = "include";
+	public static final String FXML_FOLDER = INCLUDE_FOLDER + File.separator + "fxml";
+	
     public static boolean fileCanBeLoad(String filePath)
     {
         return fileCanBeLoad(new File(filePath));
@@ -84,7 +88,7 @@ public class NotezFileUtil
         return NotezFileUtil.class.getClassLoader()
             .getResourceAsStream(icon);
     }
-
+    
     public static void openParentFolderInBrowser(File file) throws IOException
     {
         if(NotezFileUtil.directoryExists(file))

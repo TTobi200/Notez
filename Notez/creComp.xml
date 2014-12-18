@@ -1,17 +1,20 @@
 <project name="create components" basedir="." default="addJarToSceneBuilder">
 
 	<property name="compJar" value="NotezComponents.jar" />
+
 	<property environment="env" />
+	<property name="library" location="${env.APPDATA}${file.separator}Scene Builder${file.separator}Library"/>
 
 	<target name="addJarToSceneBuilder" depends="makeJar">
-		<move file="${compJar}" todir="${env.APPDATA}/Scene Builder/Library" overwrite="true" />
+		<move file="${compJar}" todir="${library}" overwrite="true" />
 	</target>
 
 	<target name="makeJar">
 		<jar destfile="${compJar}">
-			<!--fileset dir="bin" includes="de/gui/comp/**" />
-			<fileset dir="src" includes="include/fxml/**" / -->
-			<fileset dir="bin" includes="**" />
+			<fileset dir="bin" />
+				<include name="de/gui/comp/**" />
+				<include name="de/util/NotezSystemUtil" />
+			<fileset dir="src" includes="include/fxml/**" />
 		</jar>
 	</target>
 </project>

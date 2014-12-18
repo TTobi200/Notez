@@ -22,22 +22,25 @@ public class NotezNonNullStringProperty extends SimpleStringProperty
 
 	public NotezNonNullStringProperty()
 	{
-		super();
+		this(null);
 	}
 
 	public NotezNonNullStringProperty(Object bean, String name, String initialValue)
 	{
 		super(bean, name, initialValue);
+		set(initialValue);
 	}
 
 	public NotezNonNullStringProperty(Object bean, String name)
 	{
 		super(bean, name);
+		set(null);
 	}
 
 	public NotezNonNullStringProperty(String initialValue)
 	{
 		super(initialValue);
+		set(initialValue);
 	}
 
 	@Override

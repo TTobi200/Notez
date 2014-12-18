@@ -1,5 +1,6 @@
 package de.gui.comp;
 
+import java.io.File;
 import java.io.IOException;
 
 import javafx.fxml.FXML;
@@ -10,10 +11,15 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import de.gui.NotezComponent;
+import de.gui.NotezNote;
+import de.gui.NotezNotes;
+import de.util.NotezFileUtil;
+import de.util.NotezSystemUtil;
 
-public class NotezButtonBar extends AnchorPane
+public class NotezButtonBar extends AnchorPane implements NotezComponent
 {
-	public static final String FXML = "include/fxml/NotezButtonBar.fxml";
+	public static final String FXML = "NotezButtonBar.fxml";
 
 	@FXML
 	private Button btnClose;
@@ -50,17 +56,22 @@ public class NotezButtonBar extends AnchorPane
 
 	public NotezButtonBar() throws IOException
 	{
-		FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(FXML));
-		loader.setRoot(this);
-		loader.setController(this);
+		if(!NotezSystemUtil.isRunningInSceneBuilder())
+		{
+			FXMLLoader loader = new FXMLLoader(
+				NotezFileUtil.getResourceURL(NotezFileUtil.FXML_FOLDER
+											 + File.separator + FXML));
+			loader.setRoot(this);
+			loader.setController(this);
 
-		loader.load();
+			loader.load();
+		}
 	}
 
 	@FXML
 	void closeNote()
 	{
-
+		getNote().hide();
 	}
 
 	@FXML
@@ -72,7 +83,7 @@ public class NotezButtonBar extends AnchorPane
 	@FXML
 	void deleteNote()
 	{
-
+		getNote().delete();
 	}
 
 	@FXML
@@ -84,7 +95,7 @@ public class NotezButtonBar extends AnchorPane
 	@FXML
 	void addNewNote()
 	{
-
+		NotezNotes.creNote().show();
 	}
 
 	@FXML
@@ -97,5 +108,26 @@ public class NotezButtonBar extends AnchorPane
 	void shareNote()
 	{
 
+	}
+	
+	protected NotezNote note;
+
+	@Override
+	public void setNote(NotezNote note)
+	{
+		this.note = note;
+	}
+
+	@Override
+	public NotezNote getNote()
+	{
+		return note;
+	}
+	
+	@Override
+	public void setListener()
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }

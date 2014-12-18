@@ -8,10 +8,10 @@ package de;
 import java.io.IOException;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import de.gui.NotezLoadSplash;
 import de.notez.network.NotezServer;
 import de.util.NotezLoggerUtil;
+import de.util.NotezPlatformUtil;
 import de.util.NotezSystemUtil;
 import de.util.log.NotezLog;
 import de.util.pref.NotezPreferences;
@@ -49,7 +49,6 @@ public class Startup
 			NotezPreferences.setNotezRunning(true);
 		}
 		
-		// FIXME $TTobi where to put this call?
 		try
 		{
 			NotezServer.initialize();
@@ -58,9 +57,9 @@ public class Startup
 		{
 			NotezLog.error("error while initializing the server", e);
 		}
+		
+		NotezPlatformUtil.initialize();
 
-		Platform.setImplicitExit(false);
 		Application.launch(NotezLoadSplash.class, args);
-		// Application.launch(NotezFrame.class, args);
 	}
 }

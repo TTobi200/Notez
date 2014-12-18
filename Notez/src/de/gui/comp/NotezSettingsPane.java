@@ -1,5 +1,6 @@
 package de.gui.comp;
 
+import java.io.File;
 import java.io.IOException;
 
 import javafx.fxml.FXML;
@@ -13,10 +14,14 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.BorderPane;
+import de.gui.NotezComponent;
+import de.gui.NotezNote;
+import de.util.NotezFileUtil;
+import de.util.NotezSystemUtil;
 
-public class NotezSettingsPane extends BorderPane
+public class NotezSettingsPane extends BorderPane implements NotezComponent
 {
-	public static final String FXML = "include/fxml/NotezSettingsPane.fxml";
+	public static final String FXML = "NotezSettingsPane.fxml";
 
 	@FXML
 	private CheckBox cbUseSSL;
@@ -104,11 +109,16 @@ public class NotezSettingsPane extends BorderPane
 
 	public NotezSettingsPane() throws IOException
 	{
-		FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(FXML));
-		loader.setRoot(this);
-		loader.setController(this);
+		if(!NotezSystemUtil.isRunningInSceneBuilder())
+		{
+			FXMLLoader loader = new FXMLLoader(
+				NotezFileUtil.getResourceURL(NotezFileUtil.FXML_FOLDER
+											 + File.separator + FXML));
+			loader.setRoot(this);
+			loader.setController(this);
 
-		loader.load();
+			loader.load();
+		}
 	}
 
 	@FXML
@@ -133,5 +143,26 @@ public class NotezSettingsPane extends BorderPane
 	void addNewUser()
 	{
 
+	}
+	
+	protected NotezNote note;
+
+	@Override
+	public void setNote(NotezNote note)
+	{
+		this.note = note;
+	}
+
+	@Override
+	public NotezNote getNote()
+	{
+		return note;
+	}
+	
+	@Override
+	public void setListener()
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }

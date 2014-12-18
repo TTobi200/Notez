@@ -48,7 +48,6 @@ public class NotezController extends
                 NotezControllerBase<NotezControllerListeners>
 {
 
-    public static final String ICON_LOGO = "include/icons/logo.png";
     public static final String ICON_ADD = "include/icons/new_icon.png";
     public static final String ICON_SETTINGS = "include/icons/icon_local_settings.png";
     public static final String ICON_CLOSE = "include/icons/icon_close.png";
@@ -188,11 +187,12 @@ public class NotezController extends
     @Override
     public void initialize()
     {
-        c.initialize();
-
-        fileLink.setText(note.get().getAbsolutePath());
-        txtTitle.textProperty().bindBidirectional(data.titleProperty());
-        getStage().titleProperty().bind(data.titleProperty());
+    	// TODO
+//        c.initialize();
+//
+//        fileLink.setText(note.get().getAbsolutePath());
+//        txtTitle.textProperty().bindBidirectional(data.titleProperty());
+//        getStage().titleProperty().bind(data.titleProperty());
     }
 
     /**
