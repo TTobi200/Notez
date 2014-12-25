@@ -1,6 +1,6 @@
 /*
  * $Header$
- * 
+ *
  * $Log$
  * Copyright © 2014 T.Ohm . All Rights Reserved.
  */
@@ -9,7 +9,7 @@ package de.notez.share;
 import java.io.File;
 import java.io.IOException;
 
-import de.gui.controller.NotezController;
+import de.gui.NotezNote;
 import de.notez.parser.NotezParsers;
 
 public class NotezMailboxShare extends NotezShareBase
@@ -22,13 +22,13 @@ public class NotezMailboxShare extends NotezShareBase
     }
 
     @Override
-    public NotezShareResult shareNotez(NotezController ctrl, File notez)
+    public NotezShareResult shareNotez(NotezNote note, File notez)
         throws IOException
     {
         if(mailbox != null && mailbox.exists()
            && mailbox.canWrite())
         {
-            NotezParsers.save(ctrl,
+            NotezParsers.save(note,
                 new File(mailbox.getAbsolutePath() + File.separator
                          + notez.getName()));
             return NotezShareResult.SHARED;

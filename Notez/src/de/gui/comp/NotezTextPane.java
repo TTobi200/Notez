@@ -56,7 +56,12 @@ public class NotezTextPane extends BorderPane implements NotezComponent
 	{
 		getNote().getData().getPageData().nextPage();
 	}
-	
+
+	public TextArea getTxt()
+	{
+		return txt;
+	}
+
 	protected NotezNote note;
 
 	@Override
@@ -70,7 +75,7 @@ public class NotezTextPane extends BorderPane implements NotezComponent
 	{
 		return note;
 	}
-	
+
 	@Override
 	public void setListener()
 	{
@@ -79,7 +84,7 @@ public class NotezTextPane extends BorderPane implements NotezComponent
 				getNote().getData().getPageData().curPageIndexProperty().add(1),
 				" / ",
 				getNote().getData().getPageData().sizeProperty()));
-		
+
 		btnPrevPage.disableProperty().bind(getNote().getData().getPageData().curPageIndexProperty().isEqualTo(0));
 		btnNextPage.disableProperty().bind(
 			getNote().getData().getPageData().curPageIndexProperty().isEqualTo(

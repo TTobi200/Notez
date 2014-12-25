@@ -1,6 +1,6 @@
 /*
  * $Header$
- * 
+ *
  * $Log$
  * Copyright © 2014 T.Ohm . All Rights Reserved.
  */
@@ -13,7 +13,6 @@ import static de.util.NotezXmlDomUtil.getSingleElement;
 import static de.util.NotezXmlDomUtil.getStringAttributeValue;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -92,7 +91,7 @@ public class NotezProperties
 	{
 	}
 
-	public static void save() throws IOException
+	public static boolean save()
 	{
 		try
 		{
@@ -107,10 +106,14 @@ public class NotezProperties
 
 			saveFile(doc, new File(PROP_FILE));
 			System.out.println("Properties saved!");
+
+			return true;
 		}
 		catch(Exception e)
 		{
-			throw new IOException(e);
+			NotezLog.error("error while saving properties", e);
+
+			return false;
 		}
 	}
 

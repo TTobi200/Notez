@@ -1,6 +1,6 @@
 /*
  * $Header$
- * 
+ *
  * $Log$
  * Copyright © 2014 T.Ohm . All Rights Reserved.
  */
@@ -9,7 +9,7 @@ package de.notez.share;
 import java.io.File;
 import java.io.IOException;
 
-import de.gui.controller.NotezController;
+import de.gui.NotezNote;
 import de.util.NotezRegexUtil;
 
 public abstract class NotezShareBase implements NotezShare
@@ -43,21 +43,21 @@ public abstract class NotezShareBase implements NotezShare
         }
     }
 
-    public static NotezShareResult shareNotez(NotezController ctrl, File notez,
+    public static NotezShareResult shareNotez(NotezNote note, File notez,
                     Object obj) throws IOException
     {
         if(isMailbox(obj))
         {
-            return shareMailbox(ctrl, notez,
+            return shareMailbox(note, notez,
                 new File(String.valueOf(obj)));
         }
         else if(NotezRegexUtil.isIp(obj))
         {
-            return shareTcpIp(ctrl, notez, (String)obj);
+            return shareTcpIp(note, notez, (String)obj);
         }
         else if(NotezRegexUtil.isMailAdress(obj))
         {
-            return shareMail(ctrl, notez, (String)obj);
+            return shareMail(note, notez, (String)obj);
         }
 
         return NotezShareResult.NOT_SUPPORTED;
@@ -69,24 +69,24 @@ public abstract class NotezShareBase implements NotezShare
                && new File(String.valueOf(obj)).isDirectory();
     }
 
-    public static NotezShareResult shareMailbox(NotezController ctrl,
+    public static NotezShareResult shareMailbox(NotezNote note,
                     File notez, File mailBox) throws IOException
     {
         return new NotezMailboxShare(mailBox).
-            shareNotez(ctrl, notez);
+            shareNotez(note, notez);
     }
 
-    public static NotezShareResult shareTcpIp(NotezController ctrl,
+    public static NotezShareResult shareTcpIp(NotezNote note,
                     File notez, String ip) throws IOException
     {
         return new NotezTcpIpShare(ip).
-            shareNotez(ctrl, notez);
+            shareNotez(note, notez);
     }
 
-    public static NotezShareResult shareMail(NotezController ctrl,
+    public static NotezShareResult shareMail(NotezNote note,
                     File notez, String mailAdress) throws IOException
     {
         return new NotezMailShare(mailAdress).
-            shareNotez(ctrl, notez);
+            shareNotez(note, notez);
     }
 }

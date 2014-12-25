@@ -1,6 +1,6 @@
 /*
  * $Header$
- * 
+ *
  * $Log$ Copyright © 2014 T.Ohm . All Rights Reserved.
  */
 package de.gui.controller;
@@ -59,8 +59,6 @@ public class NotezController extends
     public static final String ICON_RESIZE = "include/icons/resize.gif";
     public static final String ICON_PICK_NOTE = "include/icons/pinToNote.png";
     public static final String ICON_DISSOLVE = "include/icons/link_break.png";
-
-    private static final String TODO_BOX = "[ ]";
 
     @FXML
     protected Button btnAdd;
@@ -457,9 +455,9 @@ public class NotezController extends
         {
         	c.doOnInitialized(() ->
         	{
-        		
+
 				c.addFileLink(fileLink, note);
-        		
+
             NotezStageData stageData = newData.getStageData();
             getStage().setWidth(stageData.getStageWidth());
             getStage().setHeight(stageData.getStageHeight());

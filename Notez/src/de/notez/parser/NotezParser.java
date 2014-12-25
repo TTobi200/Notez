@@ -9,7 +9,7 @@ package de.notez.parser;
 import java.io.File;
 import java.io.IOException;
 
-import de.gui.controller.NotezControllerBase;
+import de.gui.NotezNote;
 import de.notez.data.NotezData;
 
 public interface NotezParser
@@ -23,18 +23,18 @@ public interface NotezParser
 
     public NotezData parse(File file) throws IOException;
 
-    public default void save(NotezControllerBase<?> controller)
+    public default void save(NotezNote note)
         throws IOException
     {
-        save(controller, controller.getNoteFile());
+        save(note, note.getNoteFile());
     }
 
-    public default void save(NotezControllerBase<?> controller, String path)
+    public default void save(NotezNote note, String path)
         throws IOException
     {
-        save(controller, new File(path));
+        save(note, new File(path));
     }
 
-    public void save(NotezControllerBase<?> controller, File file)
+    public void save(NotezNote note, File file)
         throws IOException;
 }

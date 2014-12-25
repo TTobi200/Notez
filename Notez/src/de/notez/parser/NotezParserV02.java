@@ -1,6 +1,6 @@
 /*
  * $Header$
- * 
+ *
  * $Log$
  * Copyright © 2014 T.Ohm . All Rights Reserved.
  */
@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Arrays;
 
-import de.gui.controller.NotezControllerBase;
+import de.gui.NotezNote;
 import de.notez.data.NotezData;
 import de.notez.data.base.BaseNotezData;
 import de.notez.data.base.BaseNotezPagedData;
@@ -28,7 +28,7 @@ public class NotezParserV02 extends NotezParserBase
     public static final String VERSION = "0.2";
 
     @Override
-    public void save(NotezControllerBase<?> controller, File file)
+    public void save(NotezNote note, File file)
         throws IOException
     {
         try (Writer w = new BufferedWriter(new FileWriter(file)))
@@ -37,16 +37,16 @@ public class NotezParserV02 extends NotezParserBase
                 .append(VERSION)
                 .append(System.lineSeparator())
 
-                .append(controller.getStage().getX())
+                .append(note.getStage().getX())
                 .append(' ')
-                .append(controller.getStage().getY())
+                .append(note.getStage().getY())
                 .append(' ')
-                .append(controller.getStage().getWidth())
+                .append(note.getStage().getWidth())
                 .append(' ')
-                .append(controller.getStage().getHeight())
+                .append(note.getStage().getHeight())
                 .append(System.lineSeparator())
 
-                .append(controller.getNoteText())
+                .append(note.getData().getPageData().getText())
                 .toString());
         }
     }

@@ -1,6 +1,6 @@
 /*
  * $Header$
- * 
+ *
  * $Log$ Copyright © 2014 T.Ohm . All Rights Reserved.
  */
 package de.notez.parser;
@@ -13,7 +13,7 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.util.Arrays;
 
-import de.gui.controller.NotezControllerBase;
+import de.gui.NotezNote;
 import de.notez.data.NotezData;
 import de.notez.data.base.BaseNotezData;
 import de.notez.data.base.BaseNotezPagedData;
@@ -24,12 +24,12 @@ public class NotezParserV01 extends NotezParserBase
 {
 
     @Override
-    public void save(NotezControllerBase<?> controller, File file)
+    public void save(NotezNote note, File file)
         throws IOException
     {
         try (Writer w = new BufferedWriter(new FileWriter(file)))
         {
-            w.write(controller.getNoteText());
+            w.write(note.getData().getPageData().getText());
         }
     }
 

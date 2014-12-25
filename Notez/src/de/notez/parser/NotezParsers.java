@@ -20,7 +20,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import de.gui.controller.NotezControllerBase;
+import de.gui.NotezNote;
 import de.notez.data.NotezData;
 
 public class NotezParsers
@@ -112,25 +112,25 @@ public class NotezParsers
         }
     }
 
-    public static void save(NotezControllerBase<?> controller, String path)
+    public static void save(NotezNote note, String path)
         throws IOException
     {
-        save(controller, new File(path));
+        save(note, new File(path));
     }
 
-    public static void save(NotezControllerBase<?> controller, File file)
+    public static void save(NotezNote note, File file)
         throws IOException
     {
-        save(controller, file, null);
+        save(note, file, null);
     }
 
-    public static void save(NotezControllerBase<?> controller, String path,
+    public static void save(NotezNote note, String path,
                     String version) throws IOException
     {
-        save(controller, new File(path), version);
+        save(note, new File(path), version);
     }
 
-    public static void save(NotezControllerBase<?> controller, File file,
+    public static void save(NotezNote note, File file,
                     String version) throws IOException
     {
         NotezParser parser = mapParser.get(version);
@@ -139,6 +139,6 @@ public class NotezParsers
             parser = latestParser;
         }
 
-        parser.save(controller, file);
+        parser.save(note, file);
     }
 }

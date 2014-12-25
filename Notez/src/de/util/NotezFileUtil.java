@@ -1,6 +1,6 @@
 /*
  * $Header$
- * 
+ *
  * $Log$
  * Copyright © 2014 T.Ohm . All Rights Reserved.
  */
@@ -11,17 +11,17 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Objects;
 
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import de.gui.NotezFrame;
+import de.notez.NotezProperties;
 
 public class NotezFileUtil
 {
 	public static final String INCLUDE_FOLDER = "include";
 	public static final String FXML_FOLDER = INCLUDE_FOLDER + File.separator + "fxml";
-	
+
     public static boolean fileCanBeLoad(String filePath)
     {
         return fileCanBeLoad(new File(filePath));
@@ -88,7 +88,7 @@ public class NotezFileUtil
         return NotezFileUtil.class.getClassLoader()
             .getResourceAsStream(icon);
     }
-    
+
     public static void openParentFolderInBrowser(File file) throws IOException
     {
         if(NotezFileUtil.directoryExists(file))
@@ -122,4 +122,11 @@ public class NotezFileUtil
     {
         return fileName.replace(NotezFrame.NOTEZ_FILE_POSFIX, "");
     }
+
+    public static File genNotezFile(String notezName)
+	{
+		return NotezFileUtil.canBeUsedAsFilename(notezName) ? new File(
+			NotezProperties.get(NotezProperties.NOTEZ_WORK_FOLDER) + File.separator + notezName
+							+ NotezFrame.NOTEZ_FILE_POSFIX) : null;
+	}
 }

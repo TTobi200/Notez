@@ -24,7 +24,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import de.gui.controller.NotezControllerBase;
+import de.gui.NotezNote;
 import de.notez.data.NotezData;
 import de.notez.data.NotezPagedData;
 import de.notez.data.NotezStageData;
@@ -57,10 +57,10 @@ public abstract class NotezXmlParserBase extends NotezParserBase
     }
 
     @Override
-    public void save(NotezControllerBase<?> controller, File file)
+    public void save(NotezNote note, File file)
         throws IOException
     {
-        NotezData data = controller.getData();
+        NotezData data = note.getData();
 
         try
         {
