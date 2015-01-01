@@ -33,10 +33,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
-import de.gui.NotezComponent;
 import de.gui.NotezDialog;
-import de.gui.NotezNote;
-import de.gui.NotezNote.NotezBody;
+import de.gui.NotezGui;
+import de.gui.NotezGui.NotezGuiBody;
 import de.notez.NotezProperties;
 import de.notez.NotezRemoteSync;
 import de.notez.NotezRemoteSync.NotezRemoteUser;
@@ -53,6 +52,15 @@ public class NotezSettingsPane extends BorderPane implements NotezComponent
 
 	@FXML
 	private TableView<NotezRemoteUser> tableRemoteuser;
+
+	@FXML
+	private TitledPane tPaneFolder;
+
+	@FXML
+	private TitledPane tPaneButton;
+
+	@FXML
+	private TitledPane tPaneSync;
 
 	@FXML
 	private TitledPane tPaneShareUser;
@@ -156,7 +164,7 @@ public class NotezSettingsPane extends BorderPane implements NotezComponent
 		NotezProperties.set(NotezProperties.NOTEZ_MAIL_PORT, txtPort.getText());
 
 		// TODO only switch if valid?
-		getNote().switchTo(NotezBody.TEXT);
+		getGui().switchToBody(NotezGuiBody.TEXT);
 	}
 
 	@FXML
@@ -166,7 +174,7 @@ public class NotezSettingsPane extends BorderPane implements NotezComponent
 		updateSettings();
 		tableRemoteuser.setItems(NotezRemoteSync.getAllUsers());
 
-		getNote().switchTo(NotezBody.TEXT);
+		getGui().switchToBody(NotezGuiBody.TEXT);
 	}
 
 	@FXML
@@ -177,7 +185,7 @@ public class NotezSettingsPane extends BorderPane implements NotezComponent
 		{
 			try
 			{
-				switch(NotezDialog.showQuestionDialog(getNote().getStage(), "Delete User",
+				switch(NotezDialog.showQuestionDialog(getGui(), "Delete User",
 					"Do you really want to delete user " + user.getUsername() + " ?"))
 				{
 					case NO:
@@ -205,7 +213,7 @@ public class NotezSettingsPane extends BorderPane implements NotezComponent
 		NotezRemoteUser user = null;
 		try
 		{
-			user = NotezDialog.showAddUserDialog(getNote().getStage());
+			user = NotezDialog.showAddUserDialog(getGui());
 		}
 		catch(IOException | InterruptedException e)
 		{
@@ -218,18 +226,18 @@ public class NotezSettingsPane extends BorderPane implements NotezComponent
 		}
 	}
 
-	protected NotezNote note;
+	protected NotezGui gui;
 
 	@Override
-	public void setNote(NotezNote note)
+	public void setGui(NotezGui gui)
 	{
-		this.note = note;
+		this.gui = gui;
 	}
 
 	@Override
-	public NotezNote getNote()
+	public NotezGui getGui()
 	{
-		return note;
+		return gui;
 	}
 
 	@Override
@@ -281,5 +289,81 @@ public class NotezSettingsPane extends BorderPane implements NotezComponent
 		NotezProperties.bindBoolean(NOTEZ_BTN_SAVE, cbSaveNotez.selectedProperty());
 		NotezProperties.bindBoolean(NOTEZ_BTN_REMOVE, cbRemoveNotez.selectedProperty());
 		NotezProperties.bindBoolean(NOTEZ_BTN_PRINT, cbPrintNotez.selectedProperty());
+	}
+
+	public void switchToTab(NotezSettingsPaneTab tab)
+	{
+		switch(tab)
+		{
+			case LOCAL:
+			{
+				tabSettings.getSelectionModel().select(tabLocal);
+				break;
+			}
+			case REMOTE:
+			{
+				tabSettings.getSelectionModel().select(tabRemote);
+				break;
+			}
+		}
+	}
+
+	public void switchToPane(NotezSettingsPaneTabPane pane)
+	{
+		switchToTab(pane.tab);
+
+		switch(pane)
+		{
+			case EMAIL:
+			{
+				tPaneEMail.setExpanded(true);
+				break;
+			}
+			case SHARE:
+			{
+				tPaneShareUser.setExpanded(true);
+				break;
+			}
+			case SYNC:
+			{
+				tPaneSync.setExpanded(true);
+				break;
+			}
+			case BUTTON:
+			{
+				tPaneButton.setExpanded(true);
+				break;
+			}
+			case FOLDER:
+			{
+				tPaneFolder.setExpanded(true);
+				break;
+			}
+		}
+
+		tPaneShareUser.setExpanded(true);
+	}
+
+	public static enum NotezSettingsPaneTab
+	{
+		LOCAL,
+		REMOTE;
+	}
+
+	public static enum NotezSettingsPaneTabPane
+	{
+		FOLDER(NotezSettingsPaneTab.LOCAL),
+		BUTTON(NotezSettingsPaneTab.LOCAL),
+		SYNC(NotezSettingsPaneTab.REMOTE),
+		EMAIL(NotezSettingsPaneTab.REMOTE),
+		SHARE(NotezSettingsPaneTab.REMOTE);
+
+
+		public final NotezSettingsPaneTab tab;
+
+		private NotezSettingsPaneTabPane(NotezSettingsPaneTab tab)
+		{
+			this.tab = tab;
+		}
 	}
 }

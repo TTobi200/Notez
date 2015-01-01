@@ -12,9 +12,8 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import de.gui.NotezComponent;
-import de.gui.NotezNote;
-import de.gui.NotezNote.NotezBody;
+import de.gui.NotezGui;
+import de.gui.NotezGui.NotezGuiBody;
 import de.gui.NotezNotes;
 import de.util.NotezFileUtil;
 import de.util.NotezListenerUtil;
@@ -90,8 +89,8 @@ public class NotezButtonBar extends AnchorPane implements NotezComponent
 	@FXML
 	private void openSettings()
 	{
-		getNote().switchTo(
-			getNote().getNotezBody() == NotezBody.SETTINGS ? NotezBody.TEXT : NotezBody.SETTINGS);
+		getGui().switchToBody(
+			getGui().getCurrentBody() == NotezGuiBody.SETTINGS ? NotezGuiBody.TEXT : NotezGuiBody.SETTINGS);
 	}
 
 	@FXML
@@ -138,18 +137,18 @@ public class NotezButtonBar extends AnchorPane implements NotezComponent
 		}
 	}
 
-	protected NotezNote note;
+	protected NotezGui gui;
 
 	@Override
-	public void setNote(NotezNote note)
+	public void setGui(NotezGui gui)
 	{
-		this.note = note;
+		this.gui = gui;
 	}
 
 	@Override
-	public NotezNote getNote()
+	public NotezGui getGui()
 	{
-		return note;
+		return gui;
 	}
 
 	@Override
@@ -158,13 +157,13 @@ public class NotezButtonBar extends AnchorPane implements NotezComponent
 		txtTitle.setText(getNote().getData().getTitle());
 		txtTitle.textProperty().bindBidirectional(getNote().getData().titleProperty());
 
-		NotezListenerUtil.setAsRelocateNode(txtTitle, getNote().getStage());
-		NotezListenerUtil.setAsRelocateNode(this, getNote().getStage());
+		NotezListenerUtil.setAsRelocateNode(txtTitle, getGui());
+		NotezListenerUtil.setAsRelocateNode(this, getGui());
 
 		btnPin.selectedProperty().addListener((s, o, n) -> {
 			((ImageView)btnPin.getGraphic()).setImage(n.booleanValue() ? iVPinned : iVUnpinned);
 			// btnPin.setGraphic(pinned ? iVPinned : iVUnpinned);
-			getNote().getStage().setAlwaysOnTop(n.booleanValue());
+			getGui().setAlwaysOnTop(n.booleanValue());
 
 			// XXX
 			// do not bind as there are needed several, which could

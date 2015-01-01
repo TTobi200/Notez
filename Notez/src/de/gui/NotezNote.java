@@ -7,34 +7,20 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.Objects;
 
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.print.PrinterJob;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextArea;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import com.sun.javafx.application.PlatformImpl;
 
-import de.gui.comp.NotezButtonBar;
-import de.gui.comp.NotezSettingsPane;
-import de.gui.comp.NotezTextPane;
+import de.gui.NotezGui.NotezGuiBody;
+import de.gui.comp.NotezSettingsPane.NotezSettingsPaneTabPane;
 import de.notez.NotezProperties;
 import de.notez.NotezRemoteSync;
 import de.notez.NotezRemoteSync.NotezRemoteUser;
@@ -46,14 +32,11 @@ import de.notez.parser.UnsupportedVersionException;
 import de.notez.share.NotezShareBase;
 import de.util.NotezDataUtil;
 import de.util.NotezFileUtil;
-import de.util.NotezListenerUtil;
 import de.util.log.NotezLog;
 
 public class NotezNote
 {
-	public static final String ICON_LOGO = "include/icons/logo.png";
-	public static final String FXML_PATH = "include/fxml/NotezGui.fxml";
-	public static final String NOTEZ_LOGO = "include/icons/logo.png";
+
 	public static final String TODO_BOX = "[ ]";
 
 	private static ObservableList<NotezNote> notes = FXCollections.observableArrayList();
@@ -63,132 +46,41 @@ public class NotezNote
 		return FXCollections.unmodifiableObservableList(notes);
 	}
 
-	private Stage stage;
-
 	private NotezDataProperties data;
 
-	@FXML
-	private NotezButtonBar btns;
-	@FXML
-	private NotezSettingsPane settings;
-	@FXML
-	private NotezTextPane text;
-
-	@FXML
-	private ImageView resize;
-	@FXML
-	private Hyperlink fileLink;
-
-	@FXML
-	private StackPane stack;
-
-	protected ObjectProperty<NotezBody> body;
-
-	protected ObjectProperty<File> note;
+	protected ReadOnlyObjectWrapper<File> noteFile;
 
 	protected ReadOnlyBooleanWrapper noteChanged;
 
+	protected NotezGui gui;
+
 	public NotezNote(File file) throws IOException
 	{
-		FXMLLoader loader = new FXMLLoader(NotezFileUtil.getResourceURL(FXML_PATH));
-		loader.setController(this);
-		BorderPane root = loader.load();
-		Scene scene = new Scene(root);
-
-		PlatformImpl.runAndWait(() -> {
-			stage = new Stage(StageStyle.UNDECORATED);
-
-			// XXX Add this to gain drop shadow (1/2)
-			// Group g = new Group();
-			// Scene scene = new Scene(g);
-			// scene.setFill(null);
-			// root.setPadding(new Insets(10, 10, 10, 10));
-			// root.setEffect(new DropShadow());
-
-				stage.setScene(scene);
-				// Fixed set height/width needed for dialogs (relative to)
-				stage.initStyle(StageStyle.TRANSPARENT);
-				stage.getIcons().add(new Image(NotezFileUtil.getResourceStream(NOTEZ_LOGO)));
-				// stage.show();
-
-				// XXX Add this to gain drop shadow (2/2)
-				// g.getChildren().add(root);
-			});
-
-		notes.add(this);
-
 		data = new BaseNotezDataProperties(NotezFileUtil.removeEnding(file.getName()));
 
-		Collection<NotezComponent> comps = new HashSet<>();
-		comps.add(btns);
-		comps.add(settings);
-		comps.add(text);
-
-		for(NotezComponent comp : comps)
-		{
-			comp.setNote(this);
-			comp.setListener();
-		}
-
-		note = new SimpleObjectProperty<File>(file);
-
-		body = new SimpleObjectProperty<NotezNote.NotezBody>(NotezBody.TEXT);
-		stack.getChildren().setAll(text);
+		noteFile = new ReadOnlyObjectWrapper<File>(file);
 
 		noteChanged = new ReadOnlyBooleanWrapper(true);
+
+		PlatformImpl.runAndWait(() -> {
+			try
+			{
+				gui = new NotezGui(this);
+			}
+			catch(Exception e)
+			{
+				NotezLog.error("could not create notez gui", e);
+			}
+		});
+
+		notes.add(this);
 
 		setListeners();
 	}
 
 	private void setListeners()
 	{
-		body.addListener((p, o, n) -> {
-			Node node = null;
-			switch(n)
-			{
-				case TEXT:
-					node = text;
-					break;
 
-				case SETTINGS:
-					node = settings;
-					break;
-			}
-			if (Objects.nonNull(node))
-			{
-				stack.getChildren().setAll(node);
-			}
-		});
-
-		fileLink.setText(note.get().getAbsolutePath());
-		note.addListener((p, o, n) -> {
-			if (Objects.nonNull(n))
-			{
-				fileLink.setText(n.getAbsolutePath());
-			}
-		});
-
-		fileLink.setOnAction(e -> {
-			try
-			{
-				// FIXME: the given path is invalid
-				NotezFileUtil.openParentFolderInBrowser(note.get().getParentFile());
-			}
-			catch(Exception e1)
-			{
-				try
-				{
-					NotezDialog.showExceptionDialog(getStage(), "Error while opening folder",
-						"Could not open the parent folder!", e1);
-				}
-				catch(Exception e2)
-				{
-					NotezLog.error("", e1);
-				}
-			}
-		});
-
-		NotezListenerUtil.setAsResizeNode(resize, getStage());
 	}
 
 	public String getTitle()
@@ -198,12 +90,12 @@ public class NotezNote
 
 	public void show()
 	{
-		getStage().show();
+		getGui().show();
 	}
 
 	public void close(boolean askToSave)
 	{
-		getStage().hide();
+		getGui().hide();
 
 		if (noteChanged.get() && askToSave)
 		{
@@ -215,7 +107,7 @@ public class NotezNote
 			{
 				try
 				{
-					switch(NotezDialog.showRememberQuestionDialog(stage, "Save Changes",
+					switch(NotezDialog.showRememberQuestionDialog(gui, "Save Changes",
 						"Do you like to save the changes?",
 						NotezProperties.NOTEZ_ALWAYS_SAVE_ON_EXIT, true))
 					{
@@ -242,11 +134,11 @@ public class NotezNote
 		}
 
 		if (NotezRemoteSync.isRunning()
-				&& NotezNote.notezList().stream().filter(n -> n.getStage().isShowing()).count() != 0)
+				&& NotezNote.notezList().stream().filter(n -> n.getGui().isShowing()).count() != 0)
 		{
 			try
 			{
-				switch(NotezDialog.showRememberQuestionDialog(stage, "Exit Notez Receiver",
+				switch(NotezDialog.showRememberQuestionDialog(gui, "Exit Notez Receiver",
 					"Keep Notez-Receiver running in background?",
 					NotezProperties.NOTEZ_LET_RECEIVER_RUNNING))
 				{
@@ -270,7 +162,7 @@ public class NotezNote
 		}
 
 		NotezProperties.save();
-		stage.hide();
+		gui.hide();
 	}
 
 	public void delete()
@@ -278,7 +170,7 @@ public class NotezNote
 		// TODO Animate that? :-)
 		try
 		{
-			switch(NotezDialog.showQuestionDialog(stage, "Delete Notez",
+			switch(NotezDialog.showQuestionDialog(gui, "Delete Notez",
 				"Do you really want to delete this Notez?"))
 			{
 				default:
@@ -288,9 +180,9 @@ public class NotezNote
 					return;
 
 				case YES:
-					if (note != null && note.get().exists())
+					if (noteFile != null && noteFile.get().exists())
 					{
-						note.get().delete();
+						noteFile.get().delete();
 					}
 					close(false); // don't ask to save
 					notes.remove(this);
@@ -326,7 +218,7 @@ public class NotezNote
 	{
 		return NotezFileUtil.canBeUsedAsFilename(notezName) ? new File(
 				NotezProperties.get(NotezProperties.NOTEZ_WORK_FOLDER) + notezName
-						+ NotezFrame.NOTEZ_FILE_POSFIX) : note.get();
+						+ NotezFrame.NOTEZ_FILE_POSFIX) : noteFile.get();
 	}
 
 	public void save()
@@ -338,12 +230,12 @@ public class NotezNote
 	{
 		if (Objects.isNull(note))
 		{
-			note = this.note.get();
+			note = this.noteFile.get();
 		}
 		// If opened notez differes from to saving note
-		else if (!note.equals(this.note.get()))
+		else if (!note.equals(this.noteFile.get()))
 		{
-			this.note.get().delete();
+			this.noteFile.get().delete();
 		}
 
 		File parent = note.getParentFile();
@@ -351,7 +243,7 @@ public class NotezNote
 		{
 			try
 			{
-				switch(NotezDialog.showQuestionDialog(stage, "Create folder",
+				switch(NotezDialog.showQuestionDialog(gui, "Create folder",
 					"Notez folder not found. Create new?"))
 				{
 					default:
@@ -378,27 +270,14 @@ public class NotezNote
 		{
 			NotezLog.error("Error while saving", e);
 		}
-		this.note.set(note);
-	}
-
-	public void saveSettings() throws IOException
-	{
-		NotezProperties.set(NotezProperties.NOTEZ_WORK_FOLDER, txtPropNotezWorkFold.getText());
-		NotezProperties.set(NotezProperties.NOTEZ_REMOTE_FOLDER, txtPropNotezRemoteFold.getText());
-
-		NotezProperties.set(NotezProperties.NOTEZ_MAIL_USER, txtEmail.getText());
-		NotezProperties.set(NotezProperties.NOTEZ_MAIL_HOST, txtHost.getText());
-		NotezProperties.set(NotezProperties.NOTEZ_MAIL_PORT, txtPort.getText());
-
-		// TODO only switch if valid?
-		c.switchTo(borderPaneNotez);
+		this.noteFile.set(note);
 	}
 
 	public void printNote() throws Exception
 	{
-		TextArea toPrint = null;
+		TextArea toPrint = new TextArea(getData().getPageData().getText());
 
-		switch(NotezDialog.showQuestionDialog(stage, "Print the Notez",
+		switch(NotezDialog.showQuestionDialog(gui, "Print the Notez",
 			"Format Notez into TODO-List?"))
 		{
 			default:
@@ -407,17 +286,16 @@ public class NotezNote
 				// Stop printing action
 				return;
 			case NO:
-				toPrint = text.getTxt();
 				break;
 
 			case OK:
 			case YES:
-				toPrint = formatToTODO(text.getTxt());
+				toPrint = formatToTODO(toPrint);
 				break;
 		}
 
 		PrinterJob print = PrinterJob.createPrinterJob();
-		if (toPrint != null && print.showPrintDialog(stage))
+		if (toPrint != null && print.showPrintDialog(gui))
 		{
 			// TODO add the logo in background
 			// toPrint.setStyle("-fx-background-image: url('../icons/tray.png'); "
@@ -473,7 +351,7 @@ public class NotezNote
 	{
 		if (NotezRemoteSync.getAllUsers().isEmpty())
 		{
-			switch(NotezDialog.showQuestionDialog(stage, "No user to share with",
+			switch(NotezDialog.showQuestionDialog(gui, "No user to share with",
 				"You have no user registered to share with.\r\n" + "Like to add one?"))
 			{
 				case CANCEL:
@@ -485,22 +363,23 @@ public class NotezNote
 				case OK:
 				case YES:
 					// Switch to share user settings and open add dialog
-					switchTo(NotezBody.SETTINGS);
-					tabSettings.getSelectionModel().select(tabRemote);
-					tPaneShareUser.setExpanded(true);
+					getGui().switchToBody(NotezGuiBody.SETTINGS);
+
+					getGui().getSettingsPane().switchToPane(NotezSettingsPaneTabPane.SHARE);
+
 					addNewUser();
 					break;
 			}
 			return;
 		}
 
-		NotezRemoteUser user = NotezDialog.showShareWithDialog(stage, "Share Notez",
+		NotezRemoteUser user = NotezDialog.showShareWithDialog(gui, "Share Notez",
 			"Share this Notez with ", NotezRemoteSync.getAllUsers());
 
 		if (user != null)
 		{
 			String msg = "";
-			switch(NotezShareBase.shareNotez(this, note.get(), user.getShare()))
+			switch(NotezShareBase.shareNotez(this, noteFile.get(), user.getShare()))
 			{
 				default:
 				case NOT_SUPPORTED:
@@ -520,28 +399,8 @@ public class NotezNote
 					return;
 			}
 
-			NotezDialog.showInfoDialog(stage, "Share Notez with " + user.getUsername(), msg);
+			NotezDialog.showInfoDialog(gui, "Share Notez with " + user.getUsername(), msg);
 		}
-	}
-
-	public void switchTo(NotezBody body)
-	{
-		setNotezBody(body);
-	}
-
-	public void setNotezBody(NotezBody body)
-	{
-		notezBodyProperty().set(body);
-	}
-
-	public NotezBody getNotezBody()
-	{
-		return notezBodyProperty().get();
-	}
-
-	public ObjectProperty<NotezBody> notezBodyProperty()
-	{
-		return body;
 	}
 
 	public void loadData(NotezData data)
@@ -554,19 +413,18 @@ public class NotezNote
 		return data;
 	}
 
-	public Stage getStage()
-	{
-		return stage;
-	}
-
 	public File getNoteFile()
 	{
-		return note.get();
+		return noteFileProperty().get();
 	}
 
-	public static enum NotezBody
+	public ReadOnlyObjectProperty<File> noteFileProperty()
 	{
-		TEXT, SETTINGS,
+		return noteFile.getReadOnlyProperty();
+	}
 
+	public NotezGui getGui()
+	{
+		return gui;
 	}
 }

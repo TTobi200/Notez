@@ -42,8 +42,8 @@ public class NotezNotes
 			return null;
 		}
 
-		note.getStage().setHeight(DEF_HEIGTH);
-		note.getStage().setWidth(DEF_WIDTH);
+		note.getGui().setHeight(DEF_HEIGTH);
+		note.getGui().setWidth(DEF_WIDTH);
 
 		return note;
 	}

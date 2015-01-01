@@ -24,7 +24,7 @@
                <content>
                   <Accordion>
                     <panes>
-                      <TitledPane expanded="false" text="Folder">
+                      <TitledPane expanded="false" text="Folder" fx:id="tPaneFolder" >
                            <content>
                               <ScrollPane fitToHeight="true" fitToWidth="true" prefViewportHeight="100.0" prefViewportWidth="251.0">
                                  <content>
@@ -57,7 +57,7 @@
                               </ScrollPane>
                            </content>
                       </TitledPane>
-                      <TitledPane expanded="false" text="Button">
+                      <TitledPane expanded="false" text="Button" fx:id="tPaneButton" >
                            <content>
                               <ScrollPane fitToHeight="true" fitToWidth="true" prefViewportHeight="103.0" prefViewportWidth="141.0">
                                  <content>
@@ -140,7 +140,7 @@
                <content>
                   <Accordion>
                     <panes>
-                      <TitledPane text="Synchronisation">
+                      <TitledPane text="Synchronisation" fx:id="tPaneSync">
                            <content>
                               <ScrollPane fitToHeight="true" fitToWidth="true" prefViewportWidth="251.0">
                                  <content>

@@ -43,7 +43,7 @@ public class NotezLoadSplash extends Application
 	public void init()
 	{
 		ImageView splash = new ImageView(new Image(
-			NotezFileUtil.getResourceStream(NotezNote.ICON_LOGO)));
+			NotezFileUtil.getResourceStream(NotezGui.ICON_LOGO)));
 		loadProgress = new ProgressBar();
 		loadProgress.setPrefWidth(SPLASH_WIDTH - 20);
 		progressText = new Label("Notez starting...");
@@ -106,7 +106,7 @@ public class NotezLoadSplash extends Application
 
 				return foundNotez;
 			}
-			
+
 		});
 	}
 

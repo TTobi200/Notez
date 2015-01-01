@@ -10,8 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
-import de.gui.NotezComponent;
-import de.gui.NotezNote;
+import de.gui.NotezGui;
 import de.util.NotezFileUtil;
 import de.util.NotezSystemUtil;
 
@@ -62,18 +61,18 @@ public class NotezTextPane extends BorderPane implements NotezComponent
 		return txt;
 	}
 
-	protected NotezNote note;
+	protected NotezGui gui;
 
 	@Override
-	public void setNote(NotezNote note)
+	public void setGui(NotezGui gui)
 	{
-		this.note = note;
+		this.gui = gui;
 	}
 
 	@Override
-	public NotezNote getNote()
+	public NotezGui getGui()
 	{
-		return note;
+		return gui;
 	}
 
 	@Override
