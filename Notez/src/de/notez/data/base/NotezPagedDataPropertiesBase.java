@@ -74,6 +74,9 @@ public abstract class NotezPagedDataPropertiesBase extends BaseNotezTextDataProp
 		getPagesModifiable().setAll(
 			pages.stream().map(NotezPagedDataPropertiesBase::toTextDataProperties)
 					.collect(Collectors.toList()));
+
+		setCurPageIndex(0);
+		curPagePropertyModifiable().set(getPagesObservable().get(0));
 	}
 
 	@Override

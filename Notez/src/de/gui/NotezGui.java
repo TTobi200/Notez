@@ -93,7 +93,7 @@ public class NotezGui extends Stage
 	private void setListeners()
 	{
 		fileLink.setText(note.getNoteFile().getAbsolutePath());
-		note.noteFileProperty().addListener((p, o, n) -> {
+		getNote().noteFileProperty().addListener((p, o, n) -> {
 			if (Objects.nonNull(n))
 			{
 				fileLink.setText(n.getAbsolutePath());
@@ -121,6 +121,15 @@ public class NotezGui extends Stage
 		});
 
 		NotezListenerUtil.setAsResizeNode(resize, this);
+
+		doOnShowing(() ->
+		{
+			setX(getNote().getData().getStageData().getStageX());
+			setY(getNote().getData().getStageData().getStageY());
+			setWidth(getNote().getData().getStageData().getStageWidth());
+			setHeight(getNote().getData().getStageData().getStageHeight());
+			getNote().getData().getStageData().bind(this);
+		});
 	}
 
 	public void switchToBody(NotezGuiBody body)
@@ -142,6 +151,24 @@ public class NotezGui extends Stage
 			}
 
 			this.body = body;
+		}
+	}
+
+	public void doOnShowing(Runnable run)
+	{
+		if(isShowing())
+		{
+			run.run();
+		}
+		else
+		{
+			showingProperty().addListener((p, o, n) ->
+			{
+				if(n.booleanValue())
+				{
+					run.run();
+				}
+			});
 		}
 	}
 

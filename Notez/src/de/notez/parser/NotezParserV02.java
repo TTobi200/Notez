@@ -37,13 +37,13 @@ public class NotezParserV02 extends NotezParserBase
                 .append(VERSION)
                 .append(System.lineSeparator())
 
-                .append(note.getStage().getX())
+                .append(note.getGui().getX())
                 .append(' ')
-                .append(note.getStage().getY())
+                .append(note.getGui().getY())
                 .append(' ')
-                .append(note.getStage().getWidth())
+                .append(note.getGui().getWidth())
                 .append(' ')
-                .append(note.getStage().getHeight())
+                .append(note.getGui().getHeight())
                 .append(System.lineSeparator())
 
                 .append(note.getData().getPageData().getText())

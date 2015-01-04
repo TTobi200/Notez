@@ -91,6 +91,7 @@ public class NotezTextPane extends BorderPane implements NotezComponent
 				.subtract(1))
 			.and(txt.textProperty().isEmpty()));
 
+		txt.setText(getNote().getData().getPageData().getText());
 		txt.textProperty().bindBidirectional(getNote().getData().getPageData().textProperty());
 	}
 }

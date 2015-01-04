@@ -257,15 +257,14 @@ public class NotezSettingsPane extends BorderPane implements NotezComponent
 		txtHost.setText(get(NOTEZ_MAIL_HOST));
 		txtPort.setText(get(NOTEZ_MAIL_PORT));
 
-		// TODO
 		// Button invisibility
-//		cbAddNotez.selectedProperty().bindBidirectional(btnAdd.visibleProperty());
-//		cbPinNotez.selectedProperty().bindBidirectional(btnPin.visibleProperty());
-//		cbRemoveNotez.selectedProperty().bindBidirectional(btnDelete.visibleProperty());
-//		cbSaveNotez.selectedProperty().bindBidirectional(btnSave.visibleProperty());
-//		cbShareNotez.selectedProperty().bindBidirectional(btnShare.visibleProperty());
-//		cbGroupNotez.selectedProperty().bindBidirectional(pickNote.visibleProperty());
-//		cbPrintNotez.selectedProperty().bindBidirectional(btnPrint.visibleProperty());
+		// cbAddNotez.selectedProperty().bindBidirectional(btnAdd.visibleProperty());
+		// cbPinNotez.selectedProperty().bindBidirectional(btnPin.visibleProperty());
+		// cbRemoveNotez.selectedProperty().bindBidirectional(btnDelete.visibleProperty());
+		// cbSaveNotez.selectedProperty().bindBidirectional(btnSave.visibleProperty());
+		// cbShareNotez.selectedProperty().bindBidirectional(btnShare.visibleProperty());
+		// cbGroupNotez.selectedProperty().bindBidirectional(pickNote.visibleProperty());
+		// cbPrintNotez.selectedProperty().bindBidirectional(btnPrint.visibleProperty());
 
 		// Bin check boxes <-> settings
 		NotezProperties.bindBoolean(NOTEZ_RECEIVER_ON_STARTUP,
@@ -346,18 +345,14 @@ public class NotezSettingsPane extends BorderPane implements NotezComponent
 
 	public static enum NotezSettingsPaneTab
 	{
-		LOCAL,
-		REMOTE;
+		LOCAL, REMOTE;
 	}
 
 	public static enum NotezSettingsPaneTabPane
 	{
-		FOLDER(NotezSettingsPaneTab.LOCAL),
-		BUTTON(NotezSettingsPaneTab.LOCAL),
-		SYNC(NotezSettingsPaneTab.REMOTE),
-		EMAIL(NotezSettingsPaneTab.REMOTE),
-		SHARE(NotezSettingsPaneTab.REMOTE);
-
+		FOLDER(NotezSettingsPaneTab.LOCAL), BUTTON(NotezSettingsPaneTab.LOCAL), SYNC(
+				NotezSettingsPaneTab.REMOTE), EMAIL(NotezSettingsPaneTab.REMOTE), SHARE(
+				NotezSettingsPaneTab.REMOTE);
 
 		public final NotezSettingsPaneTab tab;
 

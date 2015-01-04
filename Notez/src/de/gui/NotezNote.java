@@ -36,7 +36,6 @@ import de.util.log.NotezLog;
 
 public class NotezNote
 {
-
 	public static final String TODO_BOX = "[ ]";
 
 	private static ObservableList<NotezNote> notes = FXCollections.observableArrayList();
@@ -59,6 +58,8 @@ public class NotezNote
 		data = new BaseNotezDataProperties(NotezFileUtil.removeEnding(file.getName()));
 
 		noteFile = new ReadOnlyObjectWrapper<File>(file);
+
+		loadData(file);
 
 		noteChanged = new ReadOnlyBooleanWrapper(true);
 
@@ -367,7 +368,8 @@ public class NotezNote
 
 					getGui().getSettingsPane().switchToPane(NotezSettingsPaneTabPane.SHARE);
 
-					addNewUser();
+					// TODO $ddd
+//					addNewUser();
 					break;
 			}
 			return;

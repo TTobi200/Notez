@@ -23,8 +23,8 @@ import de.util.log.NotezLog;
 public class NotezButtonBar extends AnchorPane implements NotezComponent
 {
 	public static final String FXML = "NotezButtonBar.fxml";
-    public static final String ICON_UNPINNED = "include/icons/pin.png";
-    public static final String ICON_PINNED = "include/icons/pin_2.png";
+	public static final String ICON_UNPINNED = "include/icons/pin.png";
+	public static final String ICON_PINNED = "include/icons/pin_2.png";
 
 	@FXML
 	private Button btnClose;
@@ -74,10 +74,8 @@ public class NotezButtonBar extends AnchorPane implements NotezComponent
 			loader.load();
 		}
 
-		iVPinned = new Image(
-            NotezFileUtil.getResourceStream(ICON_PINNED));
-        iVUnpinned = new Image(
-            NotezFileUtil.getResourceStream(ICON_UNPINNED));
+		iVPinned = new Image(NotezFileUtil.getResourceStream(ICON_PINNED));
+		iVUnpinned = new Image(NotezFileUtil.getResourceStream(ICON_UNPINNED));
 	}
 
 	@FXML
@@ -90,7 +88,8 @@ public class NotezButtonBar extends AnchorPane implements NotezComponent
 	private void openSettings()
 	{
 		getGui().switchToBody(
-			getGui().getCurrentBody() == NotezGuiBody.SETTINGS ? NotezGuiBody.TEXT : NotezGuiBody.SETTINGS);
+			getGui().getCurrentBody() == NotezGuiBody.SETTINGS ? NotezGuiBody.TEXT
+					: NotezGuiBody.SETTINGS);
 	}
 
 	@FXML
@@ -164,18 +163,6 @@ public class NotezButtonBar extends AnchorPane implements NotezComponent
 			((ImageView)btnPin.getGraphic()).setImage(n.booleanValue() ? iVPinned : iVUnpinned);
 			// btnPin.setGraphic(pinned ? iVPinned : iVUnpinned);
 			getGui().setAlwaysOnTop(n.booleanValue());
-
-			// XXX
-			// do not bind as there are needed several, which could
-			// collide
-			// if(c.noteParent.get() != null)
-			// {
-			// c.noteParent.get().btnPin.setSelected(n.booleanValue());
-			// }
-			// if(c.noteChild.get() != null)
-			// {
-			// c.noteChild.get().btnPin.setSelected(n.booleanValue());
-			// }
 		});
 	}
 }
