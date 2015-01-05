@@ -8,7 +8,7 @@ package de.util.pref;
 
 import java.util.prefs.Preferences;
 
-import de.gui.controller.NotezController;
+import de.gui.NotezNote;
 
 /**
  * Preferences of and from Notez
@@ -19,7 +19,7 @@ public class NotezPreferences
 {
 	/** The root preference for Notez */
 	public static final Preferences NOTEZ_PREFERENCES = Preferences
-			.userNodeForPackage(NotezController.class);
+			.userNodeForPackage(NotezNote.class);
 	/** Prefix for all Notez-related Preferences */
 	public static final String PREFERENCES_NODE_PREFIX = "Notez";
 	/** Name of the preference showing whether notez is currently running */

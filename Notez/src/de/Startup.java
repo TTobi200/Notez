@@ -1,14 +1,19 @@
 /*
  * $Header$
- *
+ * 
  * $Log$ Copyright © 2014 T.Ohm . All Rights Reserved.
  */
 package de;
 
+import static de.notez.NotezProperties.NOTEZ_REMOTE_FOLDER;
+import static de.notez.NotezProperties.get;
+
+import java.io.File;
 import java.io.IOException;
 
 import javafx.application.Application;
 import de.gui.NotezLoadSplash;
+import de.notez.NotezRemoteSync;
 import de.notez.network.NotezServer;
 import de.util.NotezLoggerUtil;
 import de.util.NotezPlatformUtil;
@@ -28,8 +33,8 @@ public class Startup
 	{
 		try
 		{
-			NotezLoggerUtil.initLogging(LOGGING_FOLDER,
-				DAYS_TO_SAVE_LOGS, REORG_LOGS);
+			NotezLoggerUtil.initLogging(LOGGING_FOLDER, DAYS_TO_SAVE_LOGS,
+				REORG_LOGS);
 		}
 		catch(IOException e)
 		{
@@ -38,9 +43,9 @@ public class Startup
 			NotezSystemUtil.exit(NotezSystemUtil.FATAL);
 		}
 
-		if (!DEBUG)
+		if(!DEBUG)
 		{
-			if (NotezPreferences.isNotezAlreadyRunning())
+			if(NotezPreferences.isNotezAlreadyRunning())
 			{
 				System.err.println("ERROR: Notez already running");
 				NotezSystemUtil.exit(NotezSystemUtil.FATAL);
@@ -48,7 +53,7 @@ public class Startup
 
 			NotezPreferences.setNotezRunning(true);
 		}
-		
+
 		try
 		{
 			NotezServer.initialize();
@@ -57,8 +62,10 @@ public class Startup
 		{
 			NotezLog.error("error while initializing the server", e);
 		}
-		
+
 		NotezPlatformUtil.initialize();
+
+		NotezRemoteSync.initialize(new File(get(NOTEZ_REMOTE_FOLDER)));
 
 		Application.launch(NotezLoadSplash.class, args);
 	}

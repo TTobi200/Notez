@@ -46,7 +46,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import de.gui.controller.NotezController;
 import de.notez.NotezRemoteSync.NotezRemoteUser;
 import de.util.NotezFileUtil;
 
@@ -57,6 +56,7 @@ public class NotezDialog
     private static final String ICON_QUESTION = "include/icons/dialog-question.png";
     private static final String ICON_WARNING = "include/icons/dialog-warning.png";
     private static final String ICON_INFO = "include/icons/dialog-info.png";
+    private static final String ICON_CLOSE = "include/icons/icon-close.png";
 
     private static final double HEIGHT = 100d;
     private static final double WIDTH = 300;
@@ -466,7 +466,7 @@ public class NotezDialog
         private void loadIcons()
         {
             btnClose.setGraphic(new ImageView(new Image(
-                NotezFileUtil.getResourceStream(NotezController.ICON_CLOSE))));
+                NotezFileUtil.getResourceStream(ICON_CLOSE))));
             // icon.setImage(imgIcon);
             lblMsg.setGraphic(new ImageView(imgIcon));
         }

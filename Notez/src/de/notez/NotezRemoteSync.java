@@ -14,9 +14,11 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.stage.Stage;
 
 import javax.swing.Timer;
 
+import de.gui.NotezDialog;
 import de.gui.NotezLoadSplash;
 import de.gui.NotezTray;
 import de.util.NotezFileUtil;
@@ -72,7 +74,7 @@ public class NotezRemoteSync
                                && !notezFiles.contains(f))
                             {
 
-                                NotezLoadSplash.loadAllNotez(folder, true);
+                                NotezLoadSplash.loadAllNotez(folder);
                                 notezFiles.add(f);
                             }
                         }
@@ -94,6 +96,17 @@ public class NotezRemoteSync
     public static synchronized void removeUser(NotezRemoteUser user)
     {
         availableRemoteUser.remove(user);
+    }
+    
+    public static void addNewUser(Stage stage) throws IOException, InterruptedException
+    {
+        NotezRemoteUser user = NotezDialog.showAddUserDialog(stage);
+
+        if(user != null && user.getUsername() != null
+           && user.getShare() != null)
+        {
+            addUser(user);
+        }
     }
 
     public static NotezRemoteUser getUser(String username)

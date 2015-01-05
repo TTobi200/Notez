@@ -14,13 +14,13 @@ import java.net.URL;
 
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
-import de.gui.NotezFrame;
 import de.notez.NotezProperties;
 
 public class NotezFileUtil
 {
 	public static final String INCLUDE_FOLDER = "include";
 	public static final String FXML_FOLDER = INCLUDE_FOLDER + File.separator + "fxml";
+	public static final String NOTEZ_FILE_POSFIX = ".notez";
 
     public static boolean fileCanBeLoad(String filePath)
     {
@@ -115,18 +115,18 @@ public class NotezFileUtil
     public static boolean isNotez(File f)
     {
         return f.getName().endsWith(
-            NotezFrame.NOTEZ_FILE_POSFIX);
+            NOTEZ_FILE_POSFIX);
     }
 
     public static String removeEnding(String fileName)
     {
-        return fileName.replace(NotezFrame.NOTEZ_FILE_POSFIX, "");
+        return fileName.replace(NOTEZ_FILE_POSFIX, "");
     }
 
     public static File genNotezFile(String notezName)
 	{
 		return NotezFileUtil.canBeUsedAsFilename(notezName) ? new File(
 			NotezProperties.get(NotezProperties.NOTEZ_WORK_FOLDER) + File.separator + notezName
-							+ NotezFrame.NOTEZ_FILE_POSFIX) : null;
+							+ NOTEZ_FILE_POSFIX) : null;
 	}
 }

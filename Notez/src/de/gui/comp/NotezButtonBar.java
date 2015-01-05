@@ -5,15 +5,24 @@ import java.io.IOException;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBase;
+import javafx.scene.control.Control;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import de.gui.NotezGui;
 import de.gui.NotezGui.NotezGuiBody;
+import de.gui.NotezNote;
 import de.gui.NotezNotes;
 import de.util.NotezFileUtil;
 import de.util.NotezListenerUtil;
@@ -22,6 +31,9 @@ import de.util.log.NotezLog;
 
 public class NotezButtonBar extends AnchorPane implements NotezComponent
 {
+	public static DataFormat NOTEZ_CONTROLLER_DATA_FORMAT = new DataFormat(
+		NotezNote.class.getName());
+
 	public static final String FXML = "NotezButtonBar.fxml";
 	public static final String ICON_UNPINNED = "include/icons/pin.png";
 	public static final String ICON_PINNED = "include/icons/pin_2.png";
@@ -64,10 +76,11 @@ public class NotezButtonBar extends AnchorPane implements NotezComponent
 
 	public NotezButtonBar() throws IOException
 	{
-		if (!NotezSystemUtil.isRunningInSceneBuilder())
+		if(!NotezSystemUtil.isRunningInSceneBuilder())
 		{
 			FXMLLoader loader = new FXMLLoader(
-					NotezFileUtil.getResourceURL(NotezFileUtil.FXML_FOLDER + File.separator + FXML));
+				NotezFileUtil.getResourceURL(NotezFileUtil.FXML_FOLDER
+											 + File.separator + FXML));
 			loader.setRoot(this);
 			loader.setController(this);
 
@@ -89,7 +102,7 @@ public class NotezButtonBar extends AnchorPane implements NotezComponent
 	{
 		getGui().switchToBody(
 			getGui().getCurrentBody() == NotezGuiBody.SETTINGS ? NotezGuiBody.TEXT
-					: NotezGuiBody.SETTINGS);
+							: NotezGuiBody.SETTINGS);
 	}
 
 	@FXML
@@ -154,15 +167,99 @@ public class NotezButtonBar extends AnchorPane implements NotezComponent
 	public void setListener()
 	{
 		txtTitle.setText(getNote().getData().getTitle());
-		txtTitle.textProperty().bindBidirectional(getNote().getData().titleProperty());
+		txtTitle.textProperty().bindBidirectional(
+			getNote().getData().titleProperty());
 
 		NotezListenerUtil.setAsRelocateNode(txtTitle, getGui());
 		NotezListenerUtil.setAsRelocateNode(this, getGui());
 
-		btnPin.selectedProperty().addListener((s, o, n) -> {
-			((ImageView)btnPin.getGraphic()).setImage(n.booleanValue() ? iVPinned : iVUnpinned);
-			// btnPin.setGraphic(pinned ? iVPinned : iVUnpinned);
-			getGui().setAlwaysOnTop(n.booleanValue());
+		btnPin.selectedProperty()
+			.addListener(
+				(s, o, n) ->
+				{
+					((ImageView)btnPin.getGraphic()).setImage(n.booleanValue() ? iVPinned
+									: iVUnpinned);
+					// btnPin.setGraphic(pinned ? iVPinned : iVUnpinned);
+					getGui().setAlwaysOnTop(n.booleanValue());
+				});
+
+		setAsDndSource(pickNote);
+		setAsDndTarget(this);
+		getChildrenUnmodifiable().forEach(this::setAsDndTarget);
+
+		Node[] itms = getChildrenUnmodifiable()
+			.stream()
+			.toArray(Node[]::new);
+
+		// Add item visibility
+		NotezListenerUtil.addVisibleNodeHider(this, itms);
+
+		for(Object o : itms)
+		{
+			if(o instanceof Control)
+			{
+				Tooltip tT = ((ButtonBase)o).getTooltip();
+				if(tT != null)
+				{
+					// Add Tooltip visibility
+					NotezListenerUtil.addVisibleNodeHider(tT, itms);
+				}
+			}
+		}
+	}
+
+	protected void setAsDndSource(final Node node)
+	{
+		node.setOnDragDetected(event ->
+		{
+			Dragboard db = node.startDragAndDrop(TransferMode.MOVE);
+
+			// Copy index of this Notez to clipboard
+			ClipboardContent content = new ClipboardContent();
+			// content.putString(String.valueOf(c.idx));
+			content.put(NOTEZ_CONTROLLER_DATA_FORMAT, getNote().getIndex());
+			db.setContent(content);
+
+			event.consume();
+		});
+
+		node.setCursor(Cursor.HAND);
+	}
+
+	@SuppressWarnings("unused")
+	protected void setAsDndTarget(final Node node)
+	{
+		node.setOnDragOver(event ->
+		{
+			if(event.getDragboard().hasContent(NOTEZ_CONTROLLER_DATA_FORMAT)
+			   && !event.getDragboard()
+				   .getContent(NOTEZ_CONTROLLER_DATA_FORMAT)
+				   .equals(new Integer(getNote().getIndex())))
+			{
+				// Accept the move
+				event.acceptTransferModes(TransferMode.MOVE);
+				event.consume();
+			}
+		});
+
+		node.setOnDragDropped(event ->
+		{
+
+			// Get dropped notez id from clipbord and pin it to this notez
+			if(event.isAccepted())
+			{
+				Dragboard db = event.getDragboard();
+				// NotezController ctrl =
+				// NotezFrame.getNotez(Integer.valueOf(db.getString()));
+				NotezNote note = NotezNote.notezList()
+					.get(
+						((Integer)db.getContent(NOTEZ_CONTROLLER_DATA_FORMAT)).intValue());
+				// TODO
+				// ctrl.pinToNode(c);
+			}
+
+			event.setDropCompleted(true);
+			event.consume();
 		});
 	}
 }

@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import de.notez.data.NotezData;
+import de.util.NotezFileUtil;
 import de.util.log.NotezLog;
 
 public class NotezNotes
@@ -26,7 +27,7 @@ public class NotezNotes
 							+ File.separator
 							+ new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date(
 								System.currentTimeMillis()))
-							+ NotezFrame.NOTEZ_FILE_POSFIX));
+							+ NotezFileUtil.NOTEZ_FILE_POSFIX));
 	}
 
 	public static NotezNote creNote(File f)

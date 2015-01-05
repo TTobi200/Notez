@@ -1,10 +1,15 @@
 package de.util;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class NotezListenerUtil
 {
@@ -85,4 +90,31 @@ public class NotezListenerUtil
 		node.setOnMousePressed(lis);
 		node.setOnMouseDragged(lis);
 	}
+	
+	public static void displayNodes(Node[] nodes, boolean visible)
+    {
+        Timeline line = new Timeline();
+        final Duration DUR = Duration.seconds(1d);
+        for(Node n : nodes)
+        {
+            line.getKeyFrames().add(
+                new KeyFrame(DUR, new KeyValue(n.opacityProperty(),
+                    visible ? 1d : 0d)));
+        }
+        line.play();
+    }
+	
+	public static void addVisibleNodeHider(Tooltip tT, Node... itms)
+    {
+        tT.setOnShowing(s -> displayNodes(itms, true));
+
+        tT.setOnHiding(s -> displayNodes(itms, true));
+    }
+
+    public static void addVisibleNodeHider(final Node node, Node... itms)
+    {
+        node.setOnMouseEntered(me -> displayNodes(itms, true));
+
+        node.setOnMouseExited(me -> displayNodes(itms, false));
+    }
 }

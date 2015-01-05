@@ -243,6 +243,7 @@ public class NotezSettingsPane extends BorderPane implements NotezComponent
 	@Override
 	public void setListener()
 	{
+		tableRemoteuser.setItems(NotezRemoteSync.getAllUsers());
 		colUsername.setCellValueFactory(new PropertyValueFactory<NotezRemoteUser, String>(
 				"username"));
 		colShare.setCellValueFactory(new PropertyValueFactory<NotezRemoteUser, String>("share"));
@@ -292,6 +293,8 @@ public class NotezSettingsPane extends BorderPane implements NotezComponent
 
 	public void switchToTab(NotezSettingsPaneTab tab)
 	{
+		getGui().switchToBody(NotezGuiBody.SETTINGS);
+		
 		switch(tab)
 		{
 			case LOCAL:
@@ -311,6 +314,12 @@ public class NotezSettingsPane extends BorderPane implements NotezComponent
 	{
 		switchToTab(pane.tab);
 
+		tPaneEMail.setExpanded(false);
+		tPaneShareUser.setExpanded(false);
+		tPaneSync.setExpanded(false);
+		tPaneButton.setExpanded(false);
+		tPaneFolder.setExpanded(false);
+		
 		switch(pane)
 		{
 			case EMAIL:
@@ -339,8 +348,6 @@ public class NotezSettingsPane extends BorderPane implements NotezComponent
 				break;
 			}
 		}
-
-		tPaneShareUser.setExpanded(true);
 	}
 
 	public static enum NotezSettingsPaneTab

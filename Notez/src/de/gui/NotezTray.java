@@ -65,8 +65,9 @@ public class NotezTray
 					// TODO add sender username
 					try
 					{
-						showMsgNewNotez(NotezFrame.createNotezFrame((NotezData)e.getRemoteObject())
-							.getStage(), "Username");
+						showMsgNewNotez(NotezNotes.creNote((NotezData)e.getRemoteObject()).getGui(), "Username");
+//						showMsgNewNotez(NotezFrame.createNotezFrame((NotezData)e.getRemoteObject())
+//							.getStage(), "Username");
 					}
 					catch(Exception ex)
 					{
@@ -157,12 +158,14 @@ public class NotezTray
 
     private void creNewNotez()
     {
+    	NotezNotes.creNote().show();
         Platform.runLater(() ->
         {
             try
             {
-                NotezFrame.createNotezFrame()
-                    .getStage().show();
+            	NotezNotes.creNote().show();
+//                NotezFrame.createNotezFrame()
+//                    .getStage().show();
             }
             catch(Exception e1)
             {

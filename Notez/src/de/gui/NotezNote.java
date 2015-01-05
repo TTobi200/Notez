@@ -219,7 +219,7 @@ public class NotezNote
 	{
 		return NotezFileUtil.canBeUsedAsFilename(notezName) ? new File(
 				NotezProperties.get(NotezProperties.NOTEZ_WORK_FOLDER) + notezName
-						+ NotezFrame.NOTEZ_FILE_POSFIX) : noteFile.get();
+						+ NotezFileUtil.NOTEZ_FILE_POSFIX) : noteFile.get();
 	}
 
 	public void save()
@@ -369,7 +369,7 @@ public class NotezNote
 					getGui().getSettingsPane().switchToPane(NotezSettingsPaneTabPane.SHARE);
 
 					// TODO $ddd
-//					addNewUser();
+					NotezRemoteSync.addNewUser(getGui());
 					break;
 			}
 			return;
@@ -428,5 +428,10 @@ public class NotezNote
 	public NotezGui getGui()
 	{
 		return gui;
+	}
+	
+	public int getIndex()
+	{
+		return notezList().indexOf(this);
 	}
 }

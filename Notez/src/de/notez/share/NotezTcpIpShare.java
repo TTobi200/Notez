@@ -9,7 +9,7 @@ package de.notez.share;
 import java.io.File;
 import java.io.IOException;
 
-import de.gui.controller.NotezController;
+import de.gui.NotezNote;
 import de.notez.network.NotezServer;
 
 public class NotezTcpIpShare extends NotezShareBase
@@ -22,13 +22,13 @@ public class NotezTcpIpShare extends NotezShareBase
 	}
 
 	@Override
-	public NotezShareResult shareNotez(NotezController ctrl, File notez)
+	public NotezShareResult shareNotez(NotezNote note, File notez)
 		throws IOException
 	{
 		try
 		{
 			NotezServer.getConnection(ip).send(
-				ctrl.getData().asSerializableData());
+				note.getData().asSerializableData());
 			return NotezShareResult.SHARED.setDetailMsg("Notez sucsessfull shared with "
 														+ ip);
 		}

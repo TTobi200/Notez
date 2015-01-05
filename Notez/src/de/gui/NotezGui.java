@@ -5,16 +5,30 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 import de.gui.comp.NotezButtonBar;
 import de.gui.comp.NotezComponent;
 import de.gui.comp.NotezSettingsPane;
@@ -54,7 +68,8 @@ public class NotezGui extends Stage
 
 		this.note = note;
 
-		FXMLLoader loader = new FXMLLoader(NotezFileUtil.getResourceURL(FXML_PATH));
+		FXMLLoader loader = new FXMLLoader(
+			NotezFileUtil.getResourceURL(FXML_PATH));
 		loader.setController(this);
 		BorderPane root = loader.load();
 		Scene scene = new Scene(root);
@@ -93,24 +108,28 @@ public class NotezGui extends Stage
 	private void setListeners()
 	{
 		fileLink.setText(note.getNoteFile().getAbsolutePath());
-		getNote().noteFileProperty().addListener((p, o, n) -> {
-			if (Objects.nonNull(n))
+		getNote().noteFileProperty().addListener((p, o, n) ->
+		{
+			if(Objects.nonNull(n))
 			{
 				fileLink.setText(n.getAbsolutePath());
 			}
 		});
 
-		fileLink.setOnAction(e -> {
+		fileLink.setOnAction(e ->
+		{
 			try
 			{
 				// FIXME: the given path is invalid
-				NotezFileUtil.openParentFolderInBrowser(note.getNoteFile().getParentFile());
+				NotezFileUtil.openParentFolderInBrowser(note.getNoteFile()
+					.getParentFile());
 			}
 			catch(Exception e1)
 			{
 				try
 				{
-					NotezDialog.showExceptionDialog(this, "Error while opening folder",
+					NotezDialog.showExceptionDialog(this,
+						"Error while opening folder",
 						"Could not open the parent folder!", e1);
 				}
 				catch(Exception e2)
@@ -122,14 +141,66 @@ public class NotezGui extends Stage
 
 		NotezListenerUtil.setAsResizeNode(resize, this);
 
+		DoubleBinding b = null;
+		for(Node n : btns.getChildrenUnmodifiable())
+		{
+			if(n instanceof Region)
+			{
+				Region r = (Region)n;
+				if(b == null)
+				{
+					b = Bindings.add(0d, r.widthProperty());
+				}
+				else
+				{
+					b = b.add(r.widthProperty());
+				}
+			}
+		}
+		btns.prefWidthProperty().bind(b);
+
+		minWidthProperty().bind(btns.prefWidthProperty());
+
 		doOnShowing(() ->
 		{
-			setX(getNote().getData().getStageData().getStageX());
-			setY(getNote().getData().getStageData().getStageY());
-			setWidth(getNote().getData().getStageData().getStageWidth());
-			setHeight(getNote().getData().getStageData().getStageHeight());
+			final Duration DUR = Duration.seconds(1d);
+
+	        DoubleProperty x = new SimpleDoubleProperty(getX());
+	        DoubleProperty y = new SimpleDoubleProperty(getY());
+
+	        ChangeListener<Number> xLis = (xx, old, newOne) -> setX(newOne.doubleValue());
+	        x.addListener(xLis);
+	        ChangeListener<Number> yLis = (yy, old, newOne) -> setY(newOne.doubleValue());
+	        y.addListener(yLis);
+
+	        new Timeline(new KeyFrame(DUR, new KeyValue(x, getNote().getData().getStageData().getStageX()),
+	            new KeyValue(y, getNote().getData().getStageData().getStageY())))
+	            .play();
+			
+//			setX(getNote().getData().getStageData().getStageX());
+//			setY(getNote().getData().getStageData().getStageY());
+//			setWidth(getNote().getData().getStageData().getStageWidth());
+//			setHeight(getNote().getData().getStageData().getStageHeight());
 			getNote().getData().getStageData().bind(this);
+			
+			setAccelerators();
 		});
+		
+		NotezListenerUtil.addVisibleNodeHider(fileLink, fileLink);
+	}
+
+	protected void setAccelerators()
+	{
+		Scene s = getScene();
+
+		addAcceleratorToScene(s, KeyCode.S, () -> getNote().save());
+		addAcceleratorToScene(s, KeyCode.N, () -> NotezNotes.creNote());
+	}
+
+	protected void addAcceleratorToScene(Scene s, KeyCode key, Runnable run)
+	{
+		s.getAccelerators().put(
+			new KeyCodeCombination(key, KeyCombination.SHORTCUT_DOWN), run);
 	}
 
 	public void switchToBody(NotezGuiBody body)
@@ -199,7 +270,6 @@ public class NotezGui extends Stage
 
 	public static enum NotezGuiBody
 	{
-		TEXT,
-		SETTINGS;
+		TEXT, SETTINGS;
 	}
 }
