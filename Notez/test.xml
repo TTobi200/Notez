@@ -1,7 +1,0 @@
-<project name="install Notez" basedir="." default="test">
-	<target name="test">
-		<echo>test test 1 2 3</echo>
-		<echo>test test 1 2 3</echo>
-		<echo>test test 1 2 3</echo>
-	</target>
-</project>
