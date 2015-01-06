@@ -312,7 +312,7 @@ public class NotezSettingsPane extends BorderPane implements NotezComponent
 
 	public void switchToPane(NotezSettingsPaneTabPane pane)
 	{
-		switchToTab(pane.tab);
+		switchToTab(pane.TAB);
 
 		tPaneEMail.setExpanded(false);
 		tPaneShareUser.setExpanded(false);
@@ -350,22 +350,43 @@ public class NotezSettingsPane extends BorderPane implements NotezComponent
 		}
 	}
 
+	/**
+	 * enum representing the different tabs of a settings pane
+	 * 
+	 * @author ddd
+	 */
 	public static enum NotezSettingsPaneTab
 	{
-		LOCAL, REMOTE;
+		/** Tab showing all local/general settings of a notezgui */
+		LOCAL,
+		/** Tab for showing all sharing-related settings of a notezgui */
+		REMOTE;
 	}
 
+	/**
+	 * enum representing the different pane possibly showing in a settings pane
+	 * 
+	 * @author ddd
+	 */
 	public static enum NotezSettingsPaneTabPane
 	{
-		FOLDER(NotezSettingsPaneTab.LOCAL), BUTTON(NotezSettingsPaneTab.LOCAL), SYNC(
-				NotezSettingsPaneTab.REMOTE), EMAIL(NotezSettingsPaneTab.REMOTE), SHARE(
-				NotezSettingsPaneTab.REMOTE);
+		/** Pane showing folder-related settings in the {@link NotezSettingsPaneTab#LOCAL local}-tab */
+		FOLDER(NotezSettingsPaneTab.LOCAL),
+		/** Pane showing button-related settings in the {@link NotezSettingsPaneTab#LOCAL local}-tab */
+		BUTTON(NotezSettingsPaneTab.LOCAL),
+		/** Pane showing synchronization-related settings in the {@link NotezSettingsPaneTab#REMOTE remote}-tab */
+		SYNC(NotezSettingsPaneTab.REMOTE),
+		/** Pane showing eMail-related settings in the {@link NotezSettingsPaneTab#REMOTE remote}-tab */
+		EMAIL(NotezSettingsPaneTab.REMOTE),
+		/** Pane showing sharing-related settings in the {@link NotezSettingsPaneTab#REMOTE remote}-tab */
+		SHARE(NotezSettingsPaneTab.REMOTE);
 
-		public final NotezSettingsPaneTab tab;
+		/** The tab this pane is positioned in */
+		public final NotezSettingsPaneTab TAB;
 
 		private NotezSettingsPaneTabPane(NotezSettingsPaneTab tab)
 		{
-			this.tab = tab;
+			this.TAB = tab;
 		}
 	}
 }

@@ -13,9 +13,14 @@ import javafx.util.Duration;
 
 public class NotezListenerUtil
 {
+	/**
+	 * Add listeners so that the given node acts as a relocator for the given stage
+	 * 
+	 * @param node The new relocator
+	 * @param stage The stage to be relocated
+	 */
 	public static void setAsRelocateNode(Node node, Stage stage)
 	{
-
 		EventHandler<MouseEvent> lis = new EventHandler<MouseEvent>()
 		{
 			private double x;
@@ -45,6 +50,12 @@ public class NotezListenerUtil
 		node.setOnMouseDragged(lis);
 	}
 
+	/**
+	 * Add listeners so that the given node can be used to resize the given stage.
+	 * 
+	 * @param node The new resizer
+	 * @param stage The stage to be resized
+	 */
 	public static void setAsResizeNode(Node node, Stage stage)
 	{
 		EventHandler<MouseEvent> lis = new EventHandler<MouseEvent>()

@@ -37,12 +37,18 @@ import de.util.NotezFileUtil;
 import de.util.NotezListenerUtil;
 import de.util.log.NotezLog;
 
+/**
+ * The graphical interpretation of a {@link NotezNote}
+ * 
+ * @author ddd
+ */
 public class NotezGui extends Stage
 {
 	public static final String ICON_LOGO = "include/icons/logo.png";
 	public static final String FXML_PATH = "include/fxml/NotezGui.fxml";
 	public static final String NOTEZ_LOGO = "include/icons/logo.png";
 
+	/** The note represented by this gui */
 	protected NotezNote note;
 
 	@FXML
@@ -60,8 +66,15 @@ public class NotezGui extends Stage
 	@FXML
 	private StackPane stack;
 
+	/** the body currently showing */
 	protected NotezGuiBody body;
 
+	/**
+	 * Create a new gui representing the given note
+	 * 
+	 * @param note the note to be represented by this gui
+	 * @throws IOException
+	 */
 	public NotezGui(NotezNote note) throws IOException
 	{
 		super(StageStyle.UNDECORATED);
@@ -203,6 +216,9 @@ public class NotezGui extends Stage
 			new KeyCodeCombination(key, KeyCombination.SHORTCUT_DOWN), run);
 	}
 
+	/**
+	 * @param body The body to be shown in this gui
+	 */
 	public void switchToBody(NotezGuiBody body)
 	{
 		if(this.body != body)
@@ -225,6 +241,9 @@ public class NotezGui extends Stage
 		}
 	}
 
+	/**
+	 * @param run The operation to only be done if this gui is showing
+	 */
 	public void doOnShowing(Runnable run)
 	{
 		if(isShowing())
@@ -268,8 +287,16 @@ public class NotezGui extends Stage
 		return settings;
 	}
 
+	/**
+	 * enum for representing the different bodies a gui can have.
+	 * 
+	 * @author ddd
+	 */
 	public static enum NotezGuiBody
 	{
-		TEXT, SETTINGS;
+		/** The textual representation of the pageddata of the note */
+		TEXT,
+		/** A pane for manipulating the settings of the gui. */
+		SETTINGS;
 	}
 }
