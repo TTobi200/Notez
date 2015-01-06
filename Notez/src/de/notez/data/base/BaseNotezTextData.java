@@ -1,6 +1,7 @@
 package de.notez.data.base;
 
 import de.notez.data.NotezTextData;
+import de.util.NotezDataUtil;
 
 /**
  * a basic implementation of the {@link NotezTextData}-interface
@@ -34,4 +35,9 @@ public class BaseNotezTextData implements NotezTextData
 		this.text = text == null ? "" : text;
 	}
 
+	@Override
+	public String toString()
+	{
+		return NotezDataUtil.toString(this);
+	}
 }

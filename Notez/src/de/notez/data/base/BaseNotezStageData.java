@@ -1,6 +1,7 @@
 package de.notez.data.base;
 
 import de.notez.data.NotezStageData;
+import de.util.NotezDataUtil;
 
 public class BaseNotezStageData implements NotezStageData
 {
@@ -78,5 +79,11 @@ public class BaseNotezStageData implements NotezStageData
 	public void setStageHeight(double stageHeight)
 	{
 		this.stageHeight = stageHeight > 0d ? stageHeight : 0d;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return NotezDataUtil.toString(this);
 	}
 }

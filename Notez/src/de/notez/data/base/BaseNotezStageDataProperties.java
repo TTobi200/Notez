@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.stage.Stage;
 import de.notez.data.NotezStageData;
 import de.notez.data.NotezStageDataProperties;
+import de.util.NotezDataUtil;
 
 public class BaseNotezStageDataProperties implements NotezStageDataProperties
 {
@@ -93,4 +94,9 @@ public class BaseNotezStageDataProperties implements NotezStageDataProperties
 		return stageHeight;
 	}
 
+	@Override
+	public String toString()
+	{
+		return NotezDataUtil.toString(this);
+	}
 }

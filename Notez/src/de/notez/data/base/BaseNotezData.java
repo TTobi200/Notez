@@ -3,6 +3,7 @@ package de.notez.data.base;
 import de.notez.data.NotezData;
 import de.notez.data.NotezPagedData;
 import de.notez.data.NotezStageData;
+import de.util.NotezDataUtil;
 
 /**
  * A basic implementation of the {@link NotezData}-interface.<br>
@@ -58,4 +59,10 @@ public class BaseNotezData implements NotezData
     {
         return pageData;
     }
+    
+    @Override
+	public String toString()
+	{
+		return NotezDataUtil.toString(this);
+	}
 }

@@ -4,6 +4,7 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableStringValue;
 import de.notez.data.NotezTextData;
 import de.notez.data.NotezTextDataProperties;
+import de.util.NotezDataUtil;
 import de.util.NotezNonNullStringProperty;
 
 /**
@@ -41,5 +42,11 @@ public class BaseNotezTextDataProperties implements NotezTextDataProperties
 	public StringProperty textProperty()
 	{
 		return text;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return NotezDataUtil.toString(this);
 	}
 }

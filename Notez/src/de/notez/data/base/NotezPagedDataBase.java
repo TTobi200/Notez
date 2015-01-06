@@ -6,6 +6,7 @@ import java.util.List;
 
 import de.notez.data.NotezPagedData;
 import de.notez.data.NotezTextData;
+import de.util.NotezDataUtil;
 
 /**
  * Base for the implementation of a {@link NotezPagedData}
@@ -66,5 +67,11 @@ public abstract class NotezPagedDataBase implements NotezPagedData
 	public void removePages(NotezTextData... pages)
 	{
 		getPagesModifiable().removeAll(Arrays.asList(pages));
+	}
+	
+	@Override
+	public String toString()
+	{
+		return NotezDataUtil.toString(this);
 	}
 }

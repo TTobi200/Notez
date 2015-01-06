@@ -15,6 +15,7 @@ import de.notez.data.NotezPagedData;
 import de.notez.data.NotezPagedDataProperties;
 import de.notez.data.NotezTextData;
 import de.notez.data.NotezTextDataProperties;
+import de.util.NotezDataUtil;
 import de.util.NotezObservablesUtil;
 
 /**
@@ -169,5 +170,11 @@ public abstract class NotezPagedDataPropertiesBase extends BaseNotezTextDataProp
 	public ReadOnlyIntegerProperty sizeProperty()
 	{
 		return NotezObservablesUtil.sizePropertyForList(getPagesModifiable());
+	}
+	
+	@Override
+	public String toString()
+	{
+		return NotezDataUtil.toString(this);
 	}
 }

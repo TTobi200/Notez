@@ -9,6 +9,7 @@ import de.notez.data.NotezPagedData;
 import de.notez.data.NotezPagedDataProperties;
 import de.notez.data.NotezStageData;
 import de.notez.data.NotezStageDataProperties;
+import de.util.NotezDataUtil;
 import de.util.NotezNonNullStringProperty;
 
 /**
@@ -75,4 +76,10 @@ public abstract class NotezDataPropertiesBase implements NotezDataProperties
 	 * @return the modifiable property for the stageData
 	 */
 	protected abstract ReadOnlyObjectWrapper<NotezStageDataProperties> stageDataPropertyModifiable();
+	
+	@Override
+	public String toString()
+	{
+		return NotezDataUtil.toString(this);
+	}
 }
