@@ -22,8 +22,8 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import de.gui.NotezGui;
 import de.gui.NotezGui.NotezGuiBody;
-import de.gui.NotezNote;
-import de.gui.NotezNotes;
+import de.notez.NotezNote;
+import de.notez.NotezNotes;
 import de.util.NotezFileUtil;
 import de.util.NotezListenerUtil;
 import de.util.NotezSystemUtil;
@@ -228,7 +228,6 @@ public class NotezButtonBar extends AnchorPane implements NotezComponent
 		node.setCursor(Cursor.HAND);
 	}
 
-	@SuppressWarnings("unused")
 	protected void setAsDndTarget(final Node node)
 	{
 		node.setOnDragOver(event ->
@@ -256,8 +255,7 @@ public class NotezButtonBar extends AnchorPane implements NotezComponent
 				NotezNote note = NotezNote.notezList()
 					.get(
 						((Integer)db.getContent(NOTEZ_CONTROLLER_DATA_FORMAT)).intValue());
-				// TODO
-				// ctrl.pinToNode(c);
+				note.setNoteParent(getNote());
 			}
 
 			event.setDropCompleted(true);

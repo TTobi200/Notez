@@ -9,7 +9,7 @@ package de.notez.share;
 import java.io.File;
 import java.io.IOException;
 
-import de.gui.NotezNote;
+import de.notez.NotezNote;
 import de.notez.network.NotezServer;
 
 public class NotezTcpIpShare extends NotezShareBase

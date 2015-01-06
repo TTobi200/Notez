@@ -1,4 +1,4 @@
-package de.gui;
+package de.notez;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,10 +19,10 @@ import javafx.scene.control.TextArea;
 
 import com.sun.javafx.application.PlatformImpl;
 
+import de.gui.NotezDialog;
+import de.gui.NotezGui;
 import de.gui.NotezGui.NotezGuiBody;
 import de.gui.comp.NotezSettingsPane.NotezSettingsPaneTabPane;
-import de.notez.NotezProperties;
-import de.notez.NotezRemoteSync;
 import de.notez.NotezRemoteSync.NotezRemoteUser;
 import de.notez.data.NotezData;
 import de.notez.data.NotezDataProperties;
@@ -67,6 +67,11 @@ public class NotezNote
 	/** The gui showing this note */
 	protected NotezGui gui;
 
+	/** the parentnote of this one */
+	protected ReadOnlyObjectWrapper<NotezNote> noteParent;
+	/** the childnote of this one */
+	protected ReadOnlyObjectWrapper<NotezNote> noteChild;
+
 	/**
 	 * Create a new note, that is or should be saved in the given file.
 	 * 
@@ -80,8 +85,11 @@ public class NotezNote
 
 		noteFile = new ReadOnlyObjectWrapper<File>(file);
 
+		noteParent = new ReadOnlyObjectWrapper<NotezNote>(null);
+		noteChild = new ReadOnlyObjectWrapper<NotezNote>(null);
+
 		loadData(file);
-		
+
 		setListeners();
 
 		PlatformImpl.runAndWait(() ->
@@ -102,29 +110,55 @@ public class NotezNote
 	BooleanBinding titleChanged;
 	BooleanBinding stageDataChanged;
 	BooleanBinding pagedDataChanged;
-	
+
 	private void setListeners()
 	{
 		if(Objects.isNull(noteChanged))
 		{
 			noteChanged = new ReadOnlyBooleanWrapper();
+
+			// only parent can be set from outside, so the old parent has to get
+			// a null child while the new parents child has to be set
+			noteParent.addListener((p, o, n) ->
+			{
+				if(Objects.nonNull(o))
+				{
+					o.setNoteChild(null);
+				}
+				if(Objects.nonNull(n))
+				{
+					n.setNoteChild(this);
+				}
+			});
+
+			noteChild.addListener((p, o, n) ->
+			{
+				// TODO
+			});
 		}
 
 		titleChanged = getData().titleProperty().isNotEqualTo(
 			getData().getTitle());
 		stageDataChanged = getData().getStageData()
 			.stageXProperty()
-			.isNotEqualTo(getData().getStageData().getStageX(), .1).or(getData().getStageData()
+			.isNotEqualTo(getData().getStageData().getStageX(), .1)
+			.or(getData().getStageData()
 				.stageYProperty()
-				.isNotEqualTo(getData().getStageData().getStageY(), .1)).or(getData().getStageData()
-			.stageWidthProperty()
-			.isNotEqualTo(getData().getStageData().getStageWidth(), .1)).or(getData().getStageData()
-			.stageHeightProperty()
-			.isNotEqualTo(getData().getStageData().getStageHeight(), .1));
+				.isNotEqualTo(getData().getStageData().getStageY(), .1))
+			.or(getData().getStageData()
+				.stageWidthProperty()
+				.isNotEqualTo(getData().getStageData().getStageWidth(), .1))
+			.or(getData().getStageData()
+				.stageHeightProperty()
+				.isNotEqualTo(getData().getStageData().getStageHeight(), .1));
 		// TODO $DDD just controls the size of the pages, not their entry.
-		pagedDataChanged = Bindings.when(getData().getPageData().sizeProperty().isEqualTo(getData().getPageData().getPages().size()))
-						.then(false).otherwise(true);
-		
+		pagedDataChanged = Bindings.when(
+			getData().getPageData()
+				.sizeProperty()
+				.isEqualTo(getData().getPageData().getPages().size()))
+			.then(false)
+			.otherwise(true);
+
 		noteChanged.bind(titleChanged.or(pagedDataChanged).or(stageDataChanged));
 	}
 
@@ -558,10 +592,40 @@ public class NotezNote
 	{
 		return gui;
 	}
-	
+
 	public ReadOnlyBooleanProperty changedProperty()
 	{
 		return noteChanged.getReadOnlyProperty();
+	}
+
+	public ReadOnlyObjectProperty<NotezNote> noteParentProperty()
+	{
+		return noteParent.getReadOnlyProperty();
+	}
+
+	public ReadOnlyObjectProperty<NotezNote> noteChildProperty()
+	{
+		return noteChild.getReadOnlyProperty();
+	}
+
+	public void setNoteParent(NotezNote note)
+	{
+		if(Objects.isNull(note) || this == note)
+		{
+			return;
+		}
+
+		noteParent.set(note);
+	}
+
+	protected void setNoteChild(NotezNote note)
+	{
+		if(Objects.isNull(note) || this == note)
+		{
+			return;
+		}
+
+		noteChild.set(note);
 	}
 
 	/**

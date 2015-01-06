@@ -20,7 +20,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import de.gui.NotezNote;
+import de.notez.NotezNote;
 import de.notez.data.NotezData;
 
 public class NotezParsers

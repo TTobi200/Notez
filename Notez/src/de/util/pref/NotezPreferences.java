@@ -8,7 +8,7 @@ package de.util.pref;
 
 import java.util.prefs.Preferences;
 
-import de.gui.NotezNote;
+import de.notez.NotezNote;
 
 /**
  * Preferences of and from Notez

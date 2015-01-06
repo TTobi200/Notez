@@ -9,7 +9,7 @@ package de.notez.share;
 import java.io.File;
 import java.io.IOException;
 
-import de.gui.NotezNote;
+import de.notez.NotezNote;
 import de.notez.share.NotezShareBase.NotezShareResult;
 
 public interface NotezShare

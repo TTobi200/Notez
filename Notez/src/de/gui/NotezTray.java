@@ -22,6 +22,7 @@ import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
 
+import de.notez.NotezNotes;
 import de.notez.NotezRemoteSync;
 import de.notez.data.NotezData;
 import de.notez.network.NotezServer;

@@ -9,7 +9,7 @@ package de.notez.parser;
 import java.io.File;
 import java.io.IOException;
 
-import de.gui.NotezNote;
+import de.notez.NotezNote;
 import de.notez.data.NotezData;
 
 public interface NotezParser

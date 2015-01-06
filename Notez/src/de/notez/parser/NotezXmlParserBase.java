@@ -24,7 +24,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import de.gui.NotezNote;
+import de.notez.NotezNote;
 import de.notez.data.NotezData;
 import de.notez.data.NotezPagedData;
 import de.notez.data.NotezStageData;

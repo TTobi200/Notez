@@ -33,6 +33,8 @@ import de.gui.comp.NotezButtonBar;
 import de.gui.comp.NotezComponent;
 import de.gui.comp.NotezSettingsPane;
 import de.gui.comp.NotezTextPane;
+import de.notez.NotezNote;
+import de.notez.NotezNotes;
 import de.util.NotezFileUtil;
 import de.util.NotezListenerUtil;
 import de.util.log.NotezLog;

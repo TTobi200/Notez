@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Arrays;
 
-import de.gui.NotezNote;
+import de.notez.NotezNote;
 import de.notez.data.NotezData;
 import de.notez.data.base.BaseNotezData;
 import de.notez.data.base.BaseNotezPagedData;

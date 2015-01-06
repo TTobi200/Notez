@@ -26,8 +26,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import de.gui.NotezDialog;
-import de.gui.NotezNote;
 import de.gui.comp.NotezSettingsPane.NotezSettingsPaneTabPane;
+import de.notez.NotezNote;
 import de.notez.data.NotezData;
 
 public class NotezMailShare extends NotezShareBase

@@ -1,4 +1,4 @@
-package de.gui;
+package de.notez;
 
 import static de.notez.NotezProperties.NOTEZ_WORK_FOLDER;
 import static de.notez.NotezProperties.get;

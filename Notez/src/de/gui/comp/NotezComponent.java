@@ -1,7 +1,7 @@
 package de.gui.comp;
 
 import de.gui.NotezGui;
-import de.gui.NotezNote;
+import de.notez.NotezNote;
 
 /**
  * basic interface a compoment of a notezgui should implement
