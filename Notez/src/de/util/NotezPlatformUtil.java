@@ -1,6 +1,3 @@
-/*
- * Copyright © 2014 Unitechnik Systems GmbH. All Rights Reserved.
- */
 package de.util;
 
 import javafx.application.Platform;

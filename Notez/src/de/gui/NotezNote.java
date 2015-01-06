@@ -6,6 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Objects;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -78,6 +81,8 @@ public class NotezNote
 		noteFile = new ReadOnlyObjectWrapper<File>(file);
 
 		loadData(file);
+		
+		setListeners();
 
 		PlatformImpl.runAndWait(() ->
 		{
@@ -92,13 +97,35 @@ public class NotezNote
 		});
 
 		notes.add(this);
-
-		setListeners();
 	}
 
+	BooleanBinding titleChanged;
+	BooleanBinding stageDataChanged;
+	BooleanBinding pagedDataChanged;
+	
 	private void setListeners()
 	{
-		noteChanged = new ReadOnlyBooleanWrapper(true);
+		if(Objects.isNull(noteChanged))
+		{
+			noteChanged = new ReadOnlyBooleanWrapper();
+		}
+
+		titleChanged = getData().titleProperty().isNotEqualTo(
+			getData().getTitle());
+		stageDataChanged = getData().getStageData()
+			.stageXProperty()
+			.isNotEqualTo(getData().getStageData().getStageX(), .1).or(getData().getStageData()
+				.stageYProperty()
+				.isNotEqualTo(getData().getStageData().getStageY(), .1)).or(getData().getStageData()
+			.stageWidthProperty()
+			.isNotEqualTo(getData().getStageData().getStageWidth(), .1)).or(getData().getStageData()
+			.stageHeightProperty()
+			.isNotEqualTo(getData().getStageData().getStageHeight(), .1));
+		// TODO $DDD just controls the size of the pages, not their entry.
+		pagedDataChanged = Bindings.when(getData().getPageData().sizeProperty().isEqualTo(getData().getPageData().getPages().size()))
+						.then(false).otherwise(true);
+		
+		noteChanged.bind(titleChanged.or(pagedDataChanged).or(stageDataChanged));
 	}
 
 	/**
@@ -327,6 +354,8 @@ public class NotezNote
 		try
 		{
 			NotezParsers.save(this, note);
+			// TODO $DDD just solution for short
+			setListeners();
 		}
 		catch(IOException e)
 		{
@@ -384,7 +413,8 @@ public class NotezNote
 	 * purpose every line non-empty line is resized to the same size and the
 	 * {@link #TODO_BOX} is added at itsend.
 	 * 
-	 * @param toPrint The String to be formatted
+	 * @param toPrint
+	 *            The String to be formatted
 	 * @return The given String formatted as to do-list
 	 */
 	protected String formatToTODO(String toPrint)
@@ -498,7 +528,8 @@ public class NotezNote
 	}
 
 	/**
-	 * @param data The new data for this note
+	 * @param data
+	 *            The new data for this note
 	 */
 	public void loadData(NotezData data)
 	{
@@ -527,9 +558,15 @@ public class NotezNote
 	{
 		return gui;
 	}
+	
+	public ReadOnlyBooleanProperty changedProperty()
+	{
+		return noteChanged.getReadOnlyProperty();
+	}
 
 	/**
-	 * @return The index of this note in the list of all notes currently existing
+	 * @return The index of this note in the list of all notes currently
+	 *         existing
 	 */
 	public int getIndex()
 	{

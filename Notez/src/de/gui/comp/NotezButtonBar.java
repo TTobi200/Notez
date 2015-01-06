@@ -206,6 +206,8 @@ public class NotezButtonBar extends AnchorPane implements NotezComponent
 				}
 			}
 		}
+		
+		btnSave.disableProperty().bind(getNote().changedProperty().not());
 	}
 
 	protected void setAsDndSource(final Node node)
