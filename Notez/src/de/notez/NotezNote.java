@@ -121,7 +121,7 @@ public class NotezNote
 			// a null child while the new parents child has to be set
 			noteParent.addListener((p, o, n) ->
 			{
-				if(Objects.nonNull(o))
+				if(Objects.nonNull(o) && o.noteChildProperty().get() == this)
 				{
 					o.setNoteChild(null);
 				}
@@ -133,6 +133,10 @@ public class NotezNote
 
 			noteChild.addListener((p, o, n) ->
 			{
+				if(Objects.nonNull(o) && o.noteParentProperty().get() == this)
+				{
+					o.setNoteParent(null);
+				}
 				// TODO
 			});
 		}
@@ -610,7 +614,7 @@ public class NotezNote
 
 	public void setNoteParent(NotezNote note)
 	{
-		if(Objects.isNull(note) || this == note)
+		if(this == note)
 		{
 			return;
 		}
@@ -620,12 +624,18 @@ public class NotezNote
 
 	protected void setNoteChild(NotezNote note)
 	{
-		if(Objects.isNull(note) || this == note)
+		if(this == note)
 		{
 			return;
 		}
 
 		noteChild.set(note);
+	}
+	
+	@Override
+	public String toString()
+	{
+		return new StringBuilder("NotezNote: ").append(data.toString()).toString();
 	}
 
 	/**

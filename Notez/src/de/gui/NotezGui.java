@@ -202,6 +202,47 @@ public class NotezGui extends Stage
 		});
 		
 		NotezListenerUtil.addVisibleNodeHider(fileLink, fileLink);
+		
+		ChangeListener<Number> lisX = (p, o, n) ->
+		{
+			setX(n.doubleValue());
+		};
+		
+		ChangeListener<Number> lisY = (p, o, n) ->
+		{
+			setY(n.doubleValue() + getButtonBar().getHeight());
+		};
+		ChangeListener<Number> lisY2 = (p, o, n) ->
+		{
+			setY(n.doubleValue() - getButtonBar().getHeight());
+		};
+		
+		getNote().noteParentProperty().addListener((p, o, n) ->
+		{
+			if(Objects.nonNull(o))
+			{
+				o.getGui().xProperty().removeListener(lisX);
+				o.getGui().yProperty().removeListener(lisY);
+			}
+			if(Objects.nonNull(n))
+			{
+				n.getGui().xProperty().addListener(lisX);
+				n.getGui().yProperty().addListener(lisY);
+			}
+		});
+		getNote().noteChildProperty().addListener((p, o, n) ->
+		{
+			if(Objects.nonNull(o))
+			{
+				o.getGui().xProperty().removeListener(lisX);
+				o.getGui().yProperty().removeListener(lisY2);
+			}
+			if(Objects.nonNull(n))
+			{
+				n.getGui().xProperty().addListener(lisX);
+				n.getGui().yProperty().addListener(lisY2);
+			}
+		});
 	}
 
 	protected void setAccelerators()
