@@ -2,6 +2,7 @@ package de.gui.comp;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -206,7 +207,7 @@ public class NotezButtonBar extends AnchorPane implements NotezComponent
 				}
 			}
 		}
-		
+
 		btnSave.disableProperty().bind(getNote().changedProperty().not());
 	}
 
@@ -255,7 +256,14 @@ public class NotezButtonBar extends AnchorPane implements NotezComponent
 				NotezNote note = NotezNote.notezList()
 					.get(
 						((Integer)db.getContent(NOTEZ_CONTROLLER_DATA_FORMAT)).intValue());
-				note.setNoteParent(getNote());
+
+				NotezNote parent = getNote();
+				while(Objects.nonNull(parent.noteChildProperty().get()))
+				{
+					parent = parent.noteChildProperty().get();
+				}
+
+				note.setNoteParent(parent);
 			}
 
 			event.setDropCompleted(true);
