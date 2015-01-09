@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.web.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.effect.*?>
@@ -23,6 +24,6 @@
       </BorderPane>
    </bottom>
    <center>
-				<TextArea fx:id="txt" styleClass="background" stylesheets="@/include/fxml/Stylesheets.css" BorderPane.alignment="CENTER" />
+      <HTMLEditor fx:id="txt" styleClass="background" stylesheets="@/include/fxml/Stylesheets.css" prefHeight="200.0" prefWidth="506.0" BorderPane.alignment="CENTER" />
    </center>
 </fx:root>
