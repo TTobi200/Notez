@@ -56,7 +56,7 @@ public class NotezDialog
     private static final String ICON_QUESTION = "include/icons/dialog-question.png";
     private static final String ICON_WARNING = "include/icons/dialog-warning.png";
     private static final String ICON_INFO = "include/icons/dialog-info.png";
-    private static final String ICON_CLOSE = "include/icons/icon-close.png";
+    private static final String ICON_CLOSE = "include/icons/icon_close.png";
 
     private static final double HEIGHT = 100d;
     private static final double WIDTH = 300;
@@ -229,7 +229,7 @@ public class NotezDialog
 
         StackTraceElement[] trace = t.getStackTrace();
         for(StackTraceElement element : trace)
-		{
+        {
             stack.append(element)
                 .append("\n");
         }
