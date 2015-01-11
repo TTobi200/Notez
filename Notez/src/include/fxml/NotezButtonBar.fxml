@@ -35,7 +35,7 @@
 				</TextField>
 			</children>
 		</HBox>
-		<HBox nodeOrientation="RIGHT_TO_LEFT" AnchorPane.rightAnchor="0.0">
+		<HBox nodeOrientation="RIGHT_TO_LEFT" AnchorPane.rightAnchor="0.0" fx:id="hboxButtons">
 			<children>
 				<Button fx:id="btnClose" mnemonicParsing="false" onAction="#closeNote"
 					opacity="1d" styleClass="background-darker" stylesheets="@/include/fxml/Stylesheets.css"
