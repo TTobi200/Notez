@@ -12,7 +12,7 @@ public class NotezPropertiesTest
 	@Test
 	public void testProperties()
 	{
-		NotezProperties p = new NotezPropertiesImp();
+		NotezProperties p = new NotezProperties();
 
 		p.putBoolean("bool", true);
 		p.putLong("long", Long.MAX_VALUE);

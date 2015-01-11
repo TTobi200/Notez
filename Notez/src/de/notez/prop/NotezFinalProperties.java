@@ -9,7 +9,7 @@ import javafx.beans.property.Property;
  * @author ddd
  *
  */
-public class NotezFinalProperties extends NotezPropertiesImp
+public class NotezFinalProperties extends NotezProperties
 {
 	public NotezFinalProperties()
 	{
