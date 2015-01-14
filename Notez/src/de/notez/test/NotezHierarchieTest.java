@@ -1,4 +1,4 @@
-package de.notez;
+package de.notez.test;
 
 import static org.junit.Assert.assertEquals;
 
@@ -6,6 +6,7 @@ import java.io.File;
 
 import org.junit.Test;
 
+import de.notez.NotezNote;
 import de.util.NotezPlatformUtil;
 
 public class NotezHierarchieTest

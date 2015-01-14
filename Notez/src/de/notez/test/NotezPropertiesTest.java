@@ -1,10 +1,13 @@
-package de.notez.prop;
+package de.notez.test;
 
 import static org.junit.Assert.assertEquals;
 import javafx.beans.property.SimpleStringProperty;
 
 import org.junit.Assert;
 import org.junit.Test;
+
+import de.notez.prop.*;
+import de.notez.prop.NotezProperties.NotezPropertyType;
 
 public class NotezPropertiesTest
 {
