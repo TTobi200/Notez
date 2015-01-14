@@ -1,24 +1,8 @@
 package de.notez.prop;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.FloatProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.LongProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleFloatProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleLongProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.collections.ObservableMap;
 
 import com.sun.javafx.collections.ObservableMapWrapper;
@@ -26,8 +10,6 @@ import com.sun.javafx.collections.ObservableMapWrapper;
 public class NotezProperties extends ObservableMapWrapper<String, Property<?>> implements
 		ObservableMap<String, Property<?>>
 {
-	public static final String PROP_FILE = "./Notez.properties";
-
 	public static final String DEF_LOCAL_NOTEZ_FOLDER = ".";
 	public static final String DEF_REMOTE_NOTEZ_FOLDER = "./remote";
 

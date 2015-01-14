@@ -43,8 +43,8 @@ public class NotezTray
     {
         Platform.runLater(() ->
         {
-            init(NotezSystemUtil.getSystemProperties().getString(NOTEZ_OPEN_RECEIVED_NOTEZ_DIRECTLY),
-            	NotezSystemUtil.getSystemProperties().getString(NOTEZ_SHOW_MESSAGE_ON_NEW_NOTEZ));
+            init(NotezSystemUtil.getSystemProperties().getBoolean(NOTEZ_OPEN_RECEIVED_NOTEZ_DIRECTLY),
+            	NotezSystemUtil.getSystemProperties().getBoolean(NOTEZ_SHOW_MESSAGE_ON_NEW_NOTEZ));
         });
         
         NotezServer.addRemoteListener(e ->
@@ -69,7 +69,7 @@ public class NotezTray
         });
     }
 
-    private void init(String openDirectly, String showMessage)
+    private void init(boolean openDirectly, boolean showMessage)
     {
         try
         {
@@ -80,10 +80,8 @@ public class NotezTray
                 return;
             }
 
-            boolean openEnabled = openDirectly == null ? true
-                            : Boolean.valueOf(openDirectly);
-            boolean messageEnabled = showMessage == null ? true
-                            : Boolean.valueOf(showMessage);
+            boolean openEnabled = openDirectly;
+            boolean messageEnabled = showMessage;
 
             tray = SystemTray.getSystemTray();
 

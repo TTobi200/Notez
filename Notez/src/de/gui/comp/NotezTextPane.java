@@ -1,24 +1,15 @@
 package de.gui.comp;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 import javafx.beans.binding.Bindings;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
+import javafx.fxml.*;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToolBar;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 import javafx.scene.web.HTMLEditor;
 import de.gui.NotezGui;
-import de.util.NotezFileUtil;
-import de.util.NotezSystemUtil;
+import de.util.*;
 
 public class NotezTextPane extends BorderPane implements NotezComponent
 {
@@ -48,7 +39,8 @@ public class NotezTextPane extends BorderPane implements NotezComponent
 
             loader.load();
 
-            editToolBar(txt);
+            // XXX $TTobi always throws exceptions
+//            editToolBar(txt);
         }
     }
 

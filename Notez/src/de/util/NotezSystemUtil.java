@@ -11,7 +11,7 @@ public class NotezSystemUtil
 	/** int symbolizing a a unnormal ending */
 	public static final int FATAL = 1;
 	
-	private static NotezProperties systemProperties = new NotezFinalProperties();
+	private static NotezProperties systemProperties = NotezSystemProperties.getSystemProperties();
 
 	/**
 	 * Normal ending of this application
