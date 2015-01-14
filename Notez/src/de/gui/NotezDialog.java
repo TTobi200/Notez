@@ -6,48 +6,25 @@
  */
 package de.gui;
 
-import static de.notez.NotezProperties.NOTEZ_MAIL_USER;
-import static de.notez.NotezProperties.contains;
-import static de.notez.NotezProperties.get;
-import static de.notez.NotezProperties.setBoolean;
+import static de.notez.prop.NotezProperties.NOTEZ_MAIL_USER;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.beans.value.*;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
+import javafx.fxml.*;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToolBar;
+import javafx.scene.*;
+import javafx.scene.control.*;
 import javafx.scene.effect.BoxBlur;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.image.*;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import javafx.stage.*;
 import de.notez.NotezRemoteSync.NotezRemoteUser;
-import de.util.NotezFileUtil;
+import de.util.*;
 
 public class NotezDialog
 {
@@ -151,9 +128,9 @@ public class NotezDialog
             ICON_QUESTION,
             NotezOption.YES, NotezOption.NO, NotezOption.CANCEL);
 
-        if(contains(propKey) && !evenShowDialog)
+        if(NotezSystemUtil.getSystemProperties().containsKey(propKey) && !evenShowDialog)
         {
-            return Boolean.valueOf(get(propKey)) ?
+            return Boolean.valueOf(NotezSystemUtil.getSystemProperties().getString(propKey)) ?
                             NotezOption.YES : NotezOption.NO;
         }
 
@@ -175,12 +152,12 @@ public class NotezDialog
                     break;
 
                 case NO:
-                    setBoolean(propKey, false);
+                	NotezSystemUtil.getSystemProperties().putBoolean(propKey, false);
                     break;
 
                 case OK:
                 case YES:
-                    setBoolean(propKey, true);
+                	NotezSystemUtil.getSystemProperties().putBoolean(propKey, true);
                     break;
             }
         }
@@ -255,7 +232,7 @@ public class NotezDialog
             ICON_INFO,
             NotezOption.YES, NotezOption.NO, NotezOption.CANCEL);
 
-        String userName = get(NOTEZ_MAIL_USER);
+        String userName = NotezSystemUtil.getSystemProperties().getString(NOTEZ_MAIL_USER);
 
         TextField txtName = new TextField(userName);
         PasswordField txtPass = new PasswordField();

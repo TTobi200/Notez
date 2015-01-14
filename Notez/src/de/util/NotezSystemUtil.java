@@ -1,8 +1,7 @@
 package de.util;
 
 import javafx.application.Platform;
-import de.notez.prop.NotezFinalProperties;
-import de.notez.prop.NotezProperties;
+import de.notez.prop.*;
 import de.util.pref.NotezPreferences;
 
 public class NotezSystemUtil
@@ -11,7 +10,7 @@ public class NotezSystemUtil
 	public static final int NORMAL = 0;
 	/** int symbolizing a a unnormal ending */
 	public static final int FATAL = 1;
-
+	
 	private static NotezProperties systemProperties = new NotezFinalProperties();
 
 	/**

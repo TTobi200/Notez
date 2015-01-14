@@ -6,31 +6,18 @@
  */
 package de.notez;
 
-import static de.util.NotezXmlDomUtil.addAttribute;
-import static de.util.NotezXmlDomUtil.addElement;
-import static de.util.NotezXmlDomUtil.getDocumentBuilder;
-import static de.util.NotezXmlDomUtil.getSingleElement;
-import static de.util.NotezXmlDomUtil.getStringAttributeValue;
+import static de.util.NotezXmlDomUtil.*;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import javafx.beans.property.BooleanProperty;
 
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 
 import de.notez.NotezRemoteSync.NotezRemoteUser;
 import de.util.log.NotezLog;
@@ -79,7 +66,7 @@ public class NotezProperties
 	public static final String NOTEZ_MAIL_PORT = "Port";
 	public static final String NOTEZ_MAIL_USE_SSL = "UseSSL";
 
-	private static Map<String, String> properties;
+	public static Map<String, String> properties;
 
 	static
 	{

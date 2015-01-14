@@ -7,14 +7,11 @@
 package de.util;
 
 import java.awt.Desktop;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 
-import javafx.stage.FileChooser;
-import javafx.stage.Window;
-import de.notez.NotezProperties;
+import javafx.stage.*;
+import de.notez.prop.NotezProperties;
 
 public class NotezFileUtil
 {
@@ -126,7 +123,7 @@ public class NotezFileUtil
     public static File genNotezFile(String notezName)
 	{
 		return NotezFileUtil.canBeUsedAsFilename(notezName) ? new File(
-			NotezProperties.get(NotezProperties.NOTEZ_WORK_FOLDER) + File.separator + notezName
+			NotezSystemUtil.getSystemProperties().getString(NotezProperties.NOTEZ_WORK_FOLDER) + File.separator + notezName
 							+ NOTEZ_FILE_POSFIX) : null;
 	}
 }

@@ -5,19 +5,15 @@
  */
 package de;
 
-import static de.notez.NotezProperties.NOTEZ_REMOTE_FOLDER;
-import static de.notez.NotezProperties.get;
+import static de.notez.prop.NotezProperties.NOTEZ_REMOTE_FOLDER;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 import javafx.application.Application;
 import de.gui.NotezLoadSplash;
 import de.notez.NotezRemoteSync;
 import de.notez.network.NotezServer;
-import de.util.NotezLoggerUtil;
-import de.util.NotezPlatformUtil;
-import de.util.NotezSystemUtil;
+import de.util.*;
 import de.util.log.NotezLog;
 import de.util.pref.NotezPreferences;
 
@@ -65,7 +61,7 @@ public class Startup
 
 		NotezPlatformUtil.initialize();
 
-		NotezRemoteSync.initialize(new File(get(NOTEZ_REMOTE_FOLDER)));
+		NotezRemoteSync.initialize(new File(NotezSystemUtil.getSystemProperties().getString(NOTEZ_REMOTE_FOLDER)));
 
 		Application.launch(NotezLoadSplash.class, args);
 	}

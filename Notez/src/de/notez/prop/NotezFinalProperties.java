@@ -1,5 +1,7 @@
 package de.notez.prop;
 
+import java.util.Map;
+
 import javafx.beans.property.Property;
 
 /**
@@ -16,13 +18,19 @@ public class NotezFinalProperties extends NotezProperties
 		super();
 	}
 
+	public NotezFinalProperties(Map<String, Property<?>> map)
+	{
+		super(map);
+	}
+
 	@Override
 	public final Property<?> put(String key, Property<?> value) throws IllegalStateException
 	{
+		System.out.println(key + " - " + value);
 		if (containsKey(key))
 		{
 			throw new IllegalStateException(
-					"The final properties already have a property sved for key " + key);
+					"The final properties already have a property saved for key " + key + " value: " + value);
 		}
 		return super.put(key, value);
 	}

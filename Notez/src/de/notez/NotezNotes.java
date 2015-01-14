@@ -1,14 +1,13 @@
 package de.notez;
 
-import static de.notez.NotezProperties.NOTEZ_WORK_FOLDER;
-import static de.notez.NotezProperties.get;
+import static de.notez.prop.NotezProperties.NOTEZ_WORK_FOLDER;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import de.notez.data.NotezData;
-import de.util.NotezFileUtil;
+import de.util.*;
 
 /**
  * Utility methods for {@link NotezNote}
@@ -28,7 +27,7 @@ public class NotezNotes
 	public static NotezNote creNote()
 	{
 		return creNote(new File(
-			new File(get(NOTEZ_WORK_FOLDER))
+			new File(NotezSystemUtil.getSystemProperties().getString(NOTEZ_WORK_FOLDER))
 							+ File.separator
 							+ new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date(
 								System.currentTimeMillis()))

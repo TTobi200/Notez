@@ -6,29 +6,19 @@
  */
 package de.notez.share;
 
-import static de.notez.NotezProperties.NOTEZ_MAIL_HOST;
-import static de.notez.NotezProperties.NOTEZ_MAIL_PORT;
-import static de.notez.NotezProperties.NOTEZ_MAIL_USER;
-import static de.notez.NotezProperties.NOTEZ_MAIL_USE_SSL;
-import static de.notez.NotezProperties.get;
-import static de.notez.NotezProperties.getBoolean;
+import static de.notez.prop.NotezProperties.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Properties;
+import java.io.*;
+import java.util.*;
 
-import javax.mail.Message;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import javax.mail.*;
+import javax.mail.internet.*;
 
 import de.gui.NotezDialog;
 import de.gui.comp.NotezSettingsPane.NotezSettingsPaneTabPane;
 import de.notez.NotezNote;
 import de.notez.data.NotezData;
+import de.util.NotezSystemUtil;
 
 public class NotezMailShare extends NotezShareBase
 {
@@ -45,9 +35,9 @@ public class NotezMailShare extends NotezShareBase
     {
         try
         {
-            String host = get(NOTEZ_MAIL_HOST);
-            String port = get(NOTEZ_MAIL_PORT);
-            boolean useSSL = getBoolean(NOTEZ_MAIL_USE_SSL);
+            String host = NotezSystemUtil.getSystemProperties().getString(NOTEZ_MAIL_HOST);
+            String port = NotezSystemUtil.getSystemProperties().getString(NOTEZ_MAIL_PORT);
+            boolean useSSL = NotezSystemUtil.getSystemProperties().getBoolean(NOTEZ_MAIL_USE_SSL);
             if(isNullOrEmpty(host) || isNullOrEmpty(port))
             {
                 switch(NotezDialog.showQuestionDialog(note.getGui(),
@@ -97,7 +87,7 @@ public class NotezMailShare extends NotezShareBase
             // session.setDebug(true);
 
             MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(get(NOTEZ_MAIL_USER)));
+            message.setFrom(new InternetAddress(NotezSystemUtil.getSystemProperties().getString(NOTEZ_MAIL_USER)));
 
             message.addRecipient(Message.RecipientType.TO,
                 new InternetAddress(receipAdress));

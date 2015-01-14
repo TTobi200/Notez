@@ -1,18 +1,8 @@
 package de.gui;
 
-import static de.notez.NotezProperties.NOTEZ_OPEN_RECEIVED_NOTEZ_DIRECTLY;
-import static de.notez.NotezProperties.NOTEZ_SHOW_MESSAGE_ON_NEW_NOTEZ;
-import static de.notez.NotezProperties.get;
-import static de.notez.NotezProperties.setBoolean;
+import static de.notez.prop.NotezProperties.*;
 
-import java.awt.CheckboxMenuItem;
-import java.awt.Image;
-import java.awt.Menu;
-import java.awt.MenuItem;
-import java.awt.PopupMenu;
-import java.awt.SystemTray;
-import java.awt.Toolkit;
-import java.awt.TrayIcon;
+import java.awt.*;
 import java.awt.TrayIcon.MessageType;
 import java.io.IOException;
 
@@ -22,10 +12,10 @@ import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
 
-import de.notez.NotezNotes;
-import de.notez.NotezRemoteSync;
+import de.notez.*;
 import de.notez.data.NotezData;
 import de.notez.network.NotezServer;
+import de.util.NotezSystemUtil;
 
 public class NotezTray
 {
@@ -53,8 +43,8 @@ public class NotezTray
     {
         Platform.runLater(() ->
         {
-            init(get(NOTEZ_OPEN_RECEIVED_NOTEZ_DIRECTLY),
-                get(NOTEZ_SHOW_MESSAGE_ON_NEW_NOTEZ));
+            init(NotezSystemUtil.getSystemProperties().getString(NOTEZ_OPEN_RECEIVED_NOTEZ_DIRECTLY),
+            	NotezSystemUtil.getSystemProperties().getString(NOTEZ_SHOW_MESSAGE_ON_NEW_NOTEZ));
         });
         
         NotezServer.addRemoteListener(e ->
@@ -117,13 +107,13 @@ public class NotezTray
 
             rIOpenDirect.addItemListener(e ->
             {
-                setBoolean(NOTEZ_OPEN_RECEIVED_NOTEZ_DIRECTLY,
+            	NotezSystemUtil.getSystemProperties().putBoolean(NOTEZ_OPEN_RECEIVED_NOTEZ_DIRECTLY,
                     rIOpenDirect.getState());
             });
 
             rIShowMessage.addItemListener(e ->
             {
-                setBoolean(NOTEZ_SHOW_MESSAGE_ON_NEW_NOTEZ,
+            	NotezSystemUtil.getSystemProperties().putBoolean(NOTEZ_SHOW_MESSAGE_ON_NEW_NOTEZ,
                     rIShowMessage.getState());
             });
 

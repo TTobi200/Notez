@@ -1,34 +1,24 @@
 package de.gui;
 
-import static de.notez.NotezProperties.NOTEZ_WORK_FOLDER;
-import static de.notez.NotezProperties.get;
+import static de.notez.prop.NotezProperties.NOTEZ_WORK_FOLDER;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 
 import javafx.animation.FadeTransition;
-import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
-import javafx.concurrent.Worker;
+import javafx.application.*;
+import javafx.collections.*;
+import javafx.concurrent.*;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
+import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import javafx.scene.image.*;
+import javafx.scene.layout.*;
+import javafx.stage.*;
 import javafx.util.Duration;
-import de.notez.NotezNote;
-import de.notez.NotezNotes;
-import de.util.NotezFileUtil;
+import de.notez.*;
+import de.util.*;
 
 public class NotezLoadSplash extends Application
 {
@@ -58,7 +48,7 @@ public class NotezLoadSplash extends Application
 	@Override
 	public void start(final Stage initStage) throws Exception
 	{
-		File localNotezFolder = new File(get(NOTEZ_WORK_FOLDER,
+		File localNotezFolder = new File(NotezSystemUtil.getSystemProperties().getString(NOTEZ_WORK_FOLDER,
 			DEF_LOCAL_NOTEZ_FOLDER));
 
 		if(localNotezFolder.exists())

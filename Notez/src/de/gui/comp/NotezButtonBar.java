@@ -1,38 +1,20 @@
 package de.gui.comp;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.io.*;
+import java.util.*;
 
 import javafx.collections.ListChangeListener;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Cursor;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBase;
-import javafx.scene.control.Control;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DataFormat;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.TransferMode;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import de.gui.NotezGui;
+import javafx.fxml.*;
+import javafx.scene.*;
+import javafx.scene.control.*;
+import javafx.scene.image.*;
+import javafx.scene.input.*;
+import javafx.scene.layout.*;
+import de.gui.*;
 import de.gui.NotezGui.NotezGuiBody;
-import de.notez.NotezNote;
-import de.notez.NotezNotes;
-import de.notez.NotezProperties;
-import de.util.NotezFileUtil;
-import de.util.NotezListenerUtil;
-import de.util.NotezSystemUtil;
+import de.notez.*;
+import de.notez.prop.NotezProperties;
+import de.util.*;
 import de.util.log.NotezLog;
 
 public class NotezButtonBar extends AnchorPane implements NotezComponent

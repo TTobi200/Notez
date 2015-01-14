@@ -1,46 +1,19 @@
 package de.gui.comp;
 
-import static de.notez.NotezProperties.NOTEZ_ALWAYS_SAVE_ON_EXIT;
-import static de.notez.NotezProperties.NOTEZ_BTN_ADD;
-import static de.notez.NotezProperties.NOTEZ_BTN_GROUP;
-import static de.notez.NotezProperties.NOTEZ_BTN_PIN;
-import static de.notez.NotezProperties.NOTEZ_BTN_PRINT;
-import static de.notez.NotezProperties.NOTEZ_BTN_REMOVE;
-import static de.notez.NotezProperties.NOTEZ_BTN_SAVE;
-import static de.notez.NotezProperties.NOTEZ_BTN_SHARE;
-import static de.notez.NotezProperties.NOTEZ_LET_RECEIVER_RUNNING;
-import static de.notez.NotezProperties.NOTEZ_MAIL_HOST;
-import static de.notez.NotezProperties.NOTEZ_MAIL_PORT;
-import static de.notez.NotezProperties.NOTEZ_MAIL_USER;
-import static de.notez.NotezProperties.NOTEZ_MAIL_USE_SSL;
-import static de.notez.NotezProperties.NOTEZ_RECEIVER_ON_STARTUP;
-import static de.notez.NotezProperties.NOTEZ_REMOTE_FOLDER;
-import static de.notez.NotezProperties.NOTEZ_WORK_FOLDER;
-import static de.notez.NotezProperties.get;
+import static de.notez.prop.NotezProperties.*;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TitledPane;
+import javafx.fxml.*;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
-import de.gui.NotezDialog;
-import de.gui.NotezGui;
+import de.gui.*;
 import de.gui.NotezGui.NotezGuiBody;
-import de.notez.NotezProperties;
-import de.notez.NotezRemoteSync;
+import de.notez.*;
 import de.notez.NotezRemoteSync.NotezRemoteUser;
-import de.util.NotezFileUtil;
-import de.util.NotezSystemUtil;
+import de.notez.prop.NotezProperties;
+import de.util.*;
 import de.util.log.NotezLog;
 
 public class NotezSettingsPane extends BorderPane implements NotezComponent
@@ -156,12 +129,12 @@ public class NotezSettingsPane extends BorderPane implements NotezComponent
 	@FXML
 	private void saveSettings()
 	{
-		NotezProperties.set(NotezProperties.NOTEZ_WORK_FOLDER, txtPropNotezWorkFold.getText());
-		NotezProperties.set(NotezProperties.NOTEZ_REMOTE_FOLDER, txtPropNotezRemoteFold.getText());
+		NotezSystemUtil.getSystemProperties().putString(NotezProperties.NOTEZ_WORK_FOLDER, txtPropNotezWorkFold.getText());
+		NotezSystemUtil.getSystemProperties().putString(NotezProperties.NOTEZ_REMOTE_FOLDER, txtPropNotezRemoteFold.getText());
 
-		NotezProperties.set(NotezProperties.NOTEZ_MAIL_USER, txtEmail.getText());
-		NotezProperties.set(NotezProperties.NOTEZ_MAIL_HOST, txtHost.getText());
-		NotezProperties.set(NotezProperties.NOTEZ_MAIL_PORT, txtPort.getText());
+		NotezSystemUtil.getSystemProperties().putString(NotezProperties.NOTEZ_MAIL_USER, txtEmail.getText());
+		NotezSystemUtil.getSystemProperties().putString(NotezProperties.NOTEZ_MAIL_HOST, txtHost.getText());
+		NotezSystemUtil.getSystemProperties().putString(NotezProperties.NOTEZ_MAIL_PORT, txtPort.getText());
 
 		// TODO only switch if valid?
 		getGui().switchToBody(NotezGuiBody.TEXT);
@@ -251,12 +224,12 @@ public class NotezSettingsPane extends BorderPane implements NotezComponent
 
 	public void updateSettings()
 	{
-		txtPropNotezWorkFold.setText(get(NOTEZ_WORK_FOLDER));
-		txtPropNotezRemoteFold.setText(get(NOTEZ_REMOTE_FOLDER));
+		txtPropNotezWorkFold.setText(NotezSystemUtil.getSystemProperties().getString(NOTEZ_WORK_FOLDER));
+		txtPropNotezRemoteFold.setText(NotezSystemUtil.getSystemProperties().getString(NOTEZ_REMOTE_FOLDER));
 
-		txtEmail.setText(get(NOTEZ_MAIL_USER));
-		txtHost.setText(get(NOTEZ_MAIL_HOST));
-		txtPort.setText(get(NOTEZ_MAIL_PORT));
+		txtEmail.setText(NotezSystemUtil.getSystemProperties().getString(NOTEZ_MAIL_USER));
+		txtHost.setText(NotezSystemUtil.getSystemProperties().getString(NOTEZ_MAIL_HOST));
+		txtPort.setText(NotezSystemUtil.getSystemProperties().getString(NOTEZ_MAIL_PORT));
 
 		// Button invisibility
 		// cbAddNotez.selectedProperty().bindBidirectional(btnAdd.visibleProperty());
@@ -268,27 +241,17 @@ public class NotezSettingsPane extends BorderPane implements NotezComponent
 		// cbPrintNotez.selectedProperty().bindBidirectional(btnPrint.visibleProperty());
 
 		// Bin check boxes <-> settings
-		NotezProperties.bindBoolean(NOTEZ_RECEIVER_ON_STARTUP,
-			cbStartRecOnStartup.selectedProperty());
-		NotezProperties.bindBoolean(NOTEZ_LET_RECEIVER_RUNNING,
-			cbStartRecKeepRun.selectedProperty());
-		NotezProperties
-				.bindBoolean(NOTEZ_ALWAYS_SAVE_ON_EXIT, cbAlwaysAskToSave.selectedProperty());
-		NotezProperties.bindBoolean(NOTEZ_BTN_PIN, cbPinNotez.selectedProperty());
-		NotezProperties.bindBoolean(NOTEZ_BTN_GROUP, cbGroupNotez.selectedProperty());
-		NotezProperties.bindBoolean(NOTEZ_BTN_SHARE, cbShareNotez.selectedProperty());
-		NotezProperties.bindBoolean(NOTEZ_BTN_ADD, cbAddNotez.selectedProperty());
-		NotezProperties.bindBoolean(NOTEZ_BTN_SAVE, cbSaveNotez.selectedProperty());
-		NotezProperties.bindBoolean(NOTEZ_BTN_REMOVE, cbRemoveNotez.selectedProperty());
-		NotezProperties.bindBoolean(NOTEZ_BTN_PRINT, cbPrintNotez.selectedProperty());
-		NotezProperties.bindBoolean(NOTEZ_MAIL_USE_SSL, cbUseSSL.selectedProperty());
-		NotezProperties.bindBoolean(NOTEZ_BTN_PIN, cbPinNotez.selectedProperty());
-		NotezProperties.bindBoolean(NOTEZ_BTN_GROUP, cbGroupNotez.selectedProperty());
-		NotezProperties.bindBoolean(NOTEZ_BTN_SHARE, cbShareNotez.selectedProperty());
-		NotezProperties.bindBoolean(NOTEZ_BTN_ADD, cbAddNotez.selectedProperty());
-		NotezProperties.bindBoolean(NOTEZ_BTN_SAVE, cbSaveNotez.selectedProperty());
-		NotezProperties.bindBoolean(NOTEZ_BTN_REMOVE, cbRemoveNotez.selectedProperty());
-		NotezProperties.bindBoolean(NOTEZ_BTN_PRINT, cbPrintNotez.selectedProperty());
+		NotezSystemUtil.getSystemProperties().getBooleanProperty(NOTEZ_RECEIVER_ON_STARTUP, true).bind(cbStartRecOnStartup.selectedProperty());
+		NotezSystemUtil.getSystemProperties().getBooleanProperty(NOTEZ_LET_RECEIVER_RUNNING, false).bind(cbStartRecKeepRun.selectedProperty());
+		NotezSystemUtil.getSystemProperties().getBooleanProperty(NOTEZ_ALWAYS_SAVE_ON_EXIT, true).bind(cbAlwaysAskToSave.selectedProperty());
+		NotezSystemUtil.getSystemProperties().getBooleanProperty(NOTEZ_BTN_PIN, true).bind(cbPinNotez.selectedProperty());
+		NotezSystemUtil.getSystemProperties().getBooleanProperty(NOTEZ_BTN_GROUP, true).bind(cbGroupNotez.selectedProperty());
+		NotezSystemUtil.getSystemProperties().getBooleanProperty(NOTEZ_BTN_SHARE, true).bind(cbShareNotez.selectedProperty());
+		NotezSystemUtil.getSystemProperties().getBooleanProperty(NOTEZ_BTN_ADD, true).bind(cbAddNotez.selectedProperty());
+		NotezSystemUtil.getSystemProperties().getBooleanProperty(NOTEZ_BTN_SAVE, true).bind(cbSaveNotez.selectedProperty());
+		NotezSystemUtil.getSystemProperties().getBooleanProperty(NOTEZ_BTN_REMOVE, true).bind(cbRemoveNotez.selectedProperty());
+		NotezSystemUtil.getSystemProperties().getBooleanProperty(NOTEZ_BTN_PRINT, true).bind(cbPrintNotez.selectedProperty());
+		NotezSystemUtil.getSystemProperties().getBooleanProperty(NOTEZ_MAIL_USE_SSL, false).bind(cbUseSSL.selectedProperty());
 	}
 
 	public void switchToTab(NotezSettingsPaneTab tab)
