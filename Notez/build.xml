@@ -1,4 +1,4 @@
-<project name="install Notez" basedir="." default="clean">
+<project name="install Notez" basedir="." default="dist">
 	<description>
 		Install and link notez on the system
 	</description>
@@ -77,7 +77,7 @@
 		<copy file="bin/include/icons/logo.ico" todir="${applicationdir}" failonerror="false" />
 	</target>
 
-	<target name="clean" depends="dist">
+	<target name="clean" depends="init">
 		<delete dir="${dist.dir}" />
 	</target>
 
