@@ -47,8 +47,6 @@ public class NotezMailShare extends NotezShareBase
                 {
                     case OK:
                     case YES:
-                        // TODO do this better
-//                        note.switchToEMail();
                         note.getGui().getSettingsPane().switchToPane(NotezSettingsPaneTabPane.EMAIL);
                     default:
                     case CANCEL:

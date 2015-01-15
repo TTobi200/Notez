@@ -44,7 +44,7 @@ public class NotezTextPane extends BorderPane implements NotezComponent
 		}
 	}
 
-	// XXX soes not change anything
+	// XXX does not change anything
 	// private void editToolBar(HTMLEditor txt)
 	// {
 	// moveFromTo(txt, "PopupButton", 0, "ToolBar", 2);
@@ -304,7 +304,6 @@ public class NotezTextPane extends BorderPane implements NotezComponent
 
 		btnPrevPage.disableProperty().bind(
 			getNote().getData().getPageData().curPageIndexProperty().isEqualTo(0));
-		// FIXME: No textChangedProperty - try to do this with listener (1 / 2)
 		btnNextPage.disableProperty().bind(
 			getNote().getData()
 				.getPageData()
@@ -313,7 +312,6 @@ public class NotezTextPane extends BorderPane implements NotezComponent
 				.and(textProp.isEmpty()));
 
 		txt.setHtmlText(getNote().getData().getPageData().getText());
-		// FIXME: No textChangedProperty - try to do this with listener (2 / 2)
 		textProp.bindBidirectional(getNote().getData().getPageData().textProperty());
 
 		// XXX $TTobi200 better version of this code, but doesn't changing

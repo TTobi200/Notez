@@ -38,7 +38,6 @@ public class NotezTray
 
     private Menu itmNotOpened;
 
-    // FIXME $TTobi won't be called ???
     public NotezTray()
     {
         Platform.runLater(() ->
