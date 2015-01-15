@@ -3,7 +3,9 @@ package de.gui.comp;
 import static de.notez.prop.NotezProperties.*;
 
 import java.io.*;
+import java.util.*;
 
+import javafx.beans.property.*;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -113,30 +115,39 @@ public class NotezSettingsPane extends BorderPane implements NotezComponent
 	@FXML
 	private Button btnDeleteUser;
 
+	private List<PropertyBinding<?, ?>> propertyBindings;
+
 	public NotezSettingsPane() throws IOException
 	{
-		if (!NotezSystemUtil.isRunningInSceneBuilder())
+		if(!NotezSystemUtil.isRunningInSceneBuilder())
 		{
 			FXMLLoader loader = new FXMLLoader(
-					NotezFileUtil.getResourceURL(NotezFileUtil.FXML_FOLDER + File.separator + FXML));
+				NotezFileUtil.getResourceURL(NotezFileUtil.FXML_FOLDER + File.separator + FXML));
 			loader.setRoot(this);
 			loader.setController(this);
 
 			loader.load();
+
+			propertyBindings = new ArrayList<>();
 		}
 	}
 
 	@FXML
 	private void saveSettings()
 	{
-		NotezSystemUtil.getSystemProperties().putString(NotezProperties.NOTEZ_WORK_FOLDER, txtPropNotezWorkFold.getText());
-		NotezSystemUtil.getSystemProperties().putString(NotezProperties.NOTEZ_REMOTE_FOLDER, txtPropNotezRemoteFold.getText());
+		NotezSystemUtil.getSystemProperties().putString(NotezProperties.NOTEZ_WORK_FOLDER,
+			txtPropNotezWorkFold.getText());
+		NotezSystemUtil.getSystemProperties().putString(NotezProperties.NOTEZ_REMOTE_FOLDER,
+			txtPropNotezRemoteFold.getText());
 
-		NotezSystemUtil.getSystemProperties().putString(NotezProperties.NOTEZ_MAIL_USER, txtEmail.getText());
-		NotezSystemUtil.getSystemProperties().putString(NotezProperties.NOTEZ_MAIL_HOST, txtHost.getText());
-		NotezSystemUtil.getSystemProperties().putString(NotezProperties.NOTEZ_MAIL_PORT, txtPort.getText());
+		NotezSystemUtil.getSystemProperties().putString(NotezProperties.NOTEZ_MAIL_USER,
+			txtEmail.getText());
+		NotezSystemUtil.getSystemProperties().putString(NotezProperties.NOTEZ_MAIL_HOST,
+			txtHost.getText());
+		NotezSystemUtil.getSystemProperties().putString(NotezProperties.NOTEZ_MAIL_PORT,
+			txtPort.getText());
 
-		// TODO only switch if valid?
+		propertyBindings.forEach(PropertyBinding::onSave);
 		getGui().switchToBody(NotezGuiBody.TEXT);
 	}
 
@@ -145,7 +156,6 @@ public class NotezSettingsPane extends BorderPane implements NotezComponent
 	{
 		// Restore default values
 		updateSettings();
-		tableRemoteuser.setItems(NotezRemoteSync.getAllUsers());
 
 		getGui().switchToBody(NotezGuiBody.TEXT);
 	}
@@ -154,7 +164,7 @@ public class NotezSettingsPane extends BorderPane implements NotezComponent
 	private void deleteUser()
 	{
 		NotezRemoteUser user = tableRemoteuser.getSelectionModel().getSelectedItem();
-		if (user != null)
+		if(user != null)
 		{
 			try
 			{
@@ -193,7 +203,7 @@ public class NotezSettingsPane extends BorderPane implements NotezComponent
 			NotezLog.error("couls not add a new user", e);
 		}
 
-		if (user != null && user.getUsername() != null && user.getShare() != null)
+		if(user != null && user.getUsername() != null && user.getShare() != null)
 		{
 			NotezRemoteSync.addUser(user);
 		}
@@ -218,46 +228,55 @@ public class NotezSettingsPane extends BorderPane implements NotezComponent
 	{
 		tableRemoteuser.setItems(NotezRemoteSync.getAllUsers());
 		colUsername.setCellValueFactory(new PropertyValueFactory<NotezRemoteUser, String>(
-				"username"));
+			"username"));
 		colShare.setCellValueFactory(new PropertyValueFactory<NotezRemoteUser, String>("share"));
+
+		propertyBindings.add(new StringPropertyBinding(NOTEZ_WORK_FOLDER,
+			txtPropNotezWorkFold.textProperty()));
+		propertyBindings.add(new StringPropertyBinding(NOTEZ_REMOTE_FOLDER,
+			txtPropNotezRemoteFold.textProperty()));
+
+		propertyBindings.add(new StringPropertyBinding(NOTEZ_MAIL_USER, txtEmail.textProperty()));
+		propertyBindings.add(new StringPropertyBinding(NOTEZ_MAIL_HOST, txtHost.textProperty()));
+		propertyBindings.add(new StringPropertyBinding(NOTEZ_MAIL_PORT, txtPort.textProperty()));
+
+		propertyBindings.add(new BooleanPropertyBinding(NOTEZ_RECEIVER_ON_STARTUP,
+			cbStartRecOnStartup.selectedProperty()));
+		propertyBindings.add(new BooleanPropertyBinding(NOTEZ_LET_RECEIVER_RUNNING,
+			cbStartRecKeepRun.selectedProperty()));
+		propertyBindings.add(new BooleanPropertyBinding(NOTEZ_ALWAYS_SAVE_ON_EXIT,
+			cbAlwaysAskToSave.selectedProperty()));
+
+		propertyBindings.add(new BooleanPropertyBinding(NOTEZ_BTN_PIN,
+			cbPinNotez.selectedProperty()));
+		propertyBindings.add(new BooleanPropertyBinding(NOTEZ_BTN_GROUP,
+			cbGroupNotez.selectedProperty(), false));
+		propertyBindings.add(new BooleanPropertyBinding(NOTEZ_BTN_SHARE,
+			cbShareNotez.selectedProperty()));
+		propertyBindings.add(new BooleanPropertyBinding(NOTEZ_BTN_ADD,
+			cbAddNotez.selectedProperty()));
+		propertyBindings.add(new BooleanPropertyBinding(NOTEZ_BTN_SAVE,
+			cbSaveNotez.selectedProperty()));
+		propertyBindings.add(new BooleanPropertyBinding(NOTEZ_BTN_REMOVE,
+			cbRemoveNotez.selectedProperty()));
+		propertyBindings.add(new BooleanPropertyBinding(NOTEZ_BTN_PRINT,
+			cbPrintNotez.selectedProperty()));
+		propertyBindings.add(new BooleanPropertyBinding(NOTEZ_MAIL_USE_SSL,
+			cbUseSSL.selectedProperty(), false));
 	}
 
 	public void updateSettings()
 	{
-		txtPropNotezWorkFold.setText(NotezSystemUtil.getSystemProperties().getString(NOTEZ_WORK_FOLDER));
-		txtPropNotezRemoteFold.setText(NotezSystemUtil.getSystemProperties().getString(NOTEZ_REMOTE_FOLDER));
+		propertyBindings.forEach(PropertyBinding::onUpdate);
 
-		txtEmail.setText(NotezSystemUtil.getSystemProperties().getString(NOTEZ_MAIL_USER));
-		txtHost.setText(NotezSystemUtil.getSystemProperties().getString(NOTEZ_MAIL_HOST));
-		txtPort.setText(NotezSystemUtil.getSystemProperties().getString(NOTEZ_MAIL_PORT));
+		tableRemoteuser.setItems(NotezRemoteSync.getAllUsers());
 
-		// Button invisibility
-		// cbAddNotez.selectedProperty().bindBidirectional(btnAdd.visibleProperty());
-		// cbPinNotez.selectedProperty().bindBidirectional(btnPin.visibleProperty());
-		// cbRemoveNotez.selectedProperty().bindBidirectional(btnDelete.visibleProperty());
-		// cbSaveNotez.selectedProperty().bindBidirectional(btnSave.visibleProperty());
-		// cbShareNotez.selectedProperty().bindBidirectional(btnShare.visibleProperty());
-		// cbGroupNotez.selectedProperty().bindBidirectional(pickNote.visibleProperty());
-		// cbPrintNotez.selectedProperty().bindBidirectional(btnPrint.visibleProperty());
-
-		// Bin check boxes <-> settings
-		NotezSystemUtil.getSystemProperties().getBooleanProperty(NOTEZ_RECEIVER_ON_STARTUP, true).bind(cbStartRecOnStartup.selectedProperty());
-		NotezSystemUtil.getSystemProperties().getBooleanProperty(NOTEZ_LET_RECEIVER_RUNNING, false).bind(cbStartRecKeepRun.selectedProperty());
-		NotezSystemUtil.getSystemProperties().getBooleanProperty(NOTEZ_ALWAYS_SAVE_ON_EXIT, true).bind(cbAlwaysAskToSave.selectedProperty());
-		NotezSystemUtil.getSystemProperties().getBooleanProperty(NOTEZ_BTN_PIN, true).bind(cbPinNotez.selectedProperty());
-		NotezSystemUtil.getSystemProperties().getBooleanProperty(NOTEZ_BTN_GROUP, true).bind(cbGroupNotez.selectedProperty());
-		NotezSystemUtil.getSystemProperties().getBooleanProperty(NOTEZ_BTN_SHARE, true).bind(cbShareNotez.selectedProperty());
-		NotezSystemUtil.getSystemProperties().getBooleanProperty(NOTEZ_BTN_ADD, true).bind(cbAddNotez.selectedProperty());
-		NotezSystemUtil.getSystemProperties().getBooleanProperty(NOTEZ_BTN_SAVE, true).bind(cbSaveNotez.selectedProperty());
-		NotezSystemUtil.getSystemProperties().getBooleanProperty(NOTEZ_BTN_REMOVE, true).bind(cbRemoveNotez.selectedProperty());
-		NotezSystemUtil.getSystemProperties().getBooleanProperty(NOTEZ_BTN_PRINT, true).bind(cbPrintNotez.selectedProperty());
-		NotezSystemUtil.getSystemProperties().getBooleanProperty(NOTEZ_MAIL_USE_SSL, false).bind(cbUseSSL.selectedProperty());
 	}
 
 	public void switchToTab(NotezSettingsPaneTab tab)
 	{
 		getGui().switchToBody(NotezGuiBody.SETTINGS);
-		
+
 		switch(tab)
 		{
 			case LOCAL:
@@ -282,7 +301,7 @@ public class NotezSettingsPane extends BorderPane implements NotezComponent
 		tPaneSync.setExpanded(false);
 		tPaneButton.setExpanded(false);
 		tPaneFolder.setExpanded(false);
-		
+
 		switch(pane)
 		{
 			case EMAIL:
@@ -333,15 +352,30 @@ public class NotezSettingsPane extends BorderPane implements NotezComponent
 	 */
 	public static enum NotezSettingsPaneTabPane
 	{
-		/** Pane showing folder-related settings in the {@link NotezSettingsPaneTab#LOCAL local}-tab */
+		/**
+		 * Pane showing folder-related settings in the
+		 * {@link NotezSettingsPaneTab#LOCAL local}-tab
+		 */
 		FOLDER(NotezSettingsPaneTab.LOCAL),
-		/** Pane showing button-related settings in the {@link NotezSettingsPaneTab#LOCAL local}-tab */
+		/**
+		 * Pane showing button-related settings in the
+		 * {@link NotezSettingsPaneTab#LOCAL local}-tab
+		 */
 		BUTTON(NotezSettingsPaneTab.LOCAL),
-		/** Pane showing synchronization-related settings in the {@link NotezSettingsPaneTab#REMOTE remote}-tab */
+		/**
+		 * Pane showing synchronization-related settings in the
+		 * {@link NotezSettingsPaneTab#REMOTE remote}-tab
+		 */
 		SYNC(NotezSettingsPaneTab.REMOTE),
-		/** Pane showing eMail-related settings in the {@link NotezSettingsPaneTab#REMOTE remote}-tab */
+		/**
+		 * Pane showing eMail-related settings in the
+		 * {@link NotezSettingsPaneTab#REMOTE remote}-tab
+		 */
 		EMAIL(NotezSettingsPaneTab.REMOTE),
-		/** Pane showing sharing-related settings in the {@link NotezSettingsPaneTab#REMOTE remote}-tab */
+		/**
+		 * Pane showing sharing-related settings in the
+		 * {@link NotezSettingsPaneTab#REMOTE remote}-tab
+		 */
 		SHARE(NotezSettingsPaneTab.REMOTE);
 
 		/** The tab this pane is positioned in */
@@ -350,6 +384,94 @@ public class NotezSettingsPane extends BorderPane implements NotezComponent
 		private NotezSettingsPaneTabPane(NotezSettingsPaneTab tab)
 		{
 			this.TAB = tab;
+		}
+	}
+
+	/**
+	 * An internal binding of a property in this pane to a given systemproperty
+	 * 
+	 * @param <T> The type of the property used
+	 */
+	private abstract class PropertyBinding<T, P extends Property<T>>
+	{
+		/**  The default parameter for the property */
+		protected T def;
+		/** the property showing the systemproperty */
+		protected P prop;
+		/** The string representing the systemproperty */
+		protected String propertyString;
+
+		public PropertyBinding(String propertyString, P prop, T def)
+		{
+			this.propertyString = propertyString;
+			this.prop = prop;
+			this.def = def;
+		}
+
+		/**
+		 * Save the value stored in the given property in the systemproperty of the given String
+		 */
+		public abstract void onSave();
+
+		/**
+		 * Load the value of the given systemproperty into the given property.
+		 */
+		public abstract void onUpdate();
+	}
+
+	/**
+	 * A special propertybinding for Strings
+	 */
+	private class StringPropertyBinding extends PropertyBinding<String, StringProperty>
+	{
+		public StringPropertyBinding(String propertyString, StringProperty prop)
+		{
+			this(propertyString, prop, "");
+		}
+		
+		public StringPropertyBinding(String propertyString, StringProperty prop, String def)
+		{
+			super(propertyString, prop, def);
+		}
+
+		@Override
+		public void onSave()
+		{
+			NotezSystemUtil.getSystemProperties().putString(propertyString, prop.get());
+		}
+
+		@Override
+		public void onUpdate()
+		{
+			prop.set(NotezSystemUtil.getSystemProperties().getString(propertyString, ""));
+		}
+	}
+
+	/**
+	 * A special propertybinding for boolean
+	 */
+	private class BooleanPropertyBinding extends PropertyBinding<Boolean, BooleanProperty>
+	{
+		public BooleanPropertyBinding(String propertyString, BooleanProperty prop)
+		{
+			this(propertyString, prop, true);
+		}
+
+		public BooleanPropertyBinding(String propertyString, BooleanProperty prop, boolean def)
+		{
+			super(propertyString, prop, def);
+		}
+
+		@Override
+		public void onSave()
+		{
+			NotezSystemUtil.getSystemProperties().putBoolean(propertyString, prop.get());
+		}
+
+		@Override
+		public void onUpdate()
+		{
+			prop.set(NotezSystemUtil.getSystemProperties().getBoolean(propertyString, def));
 		}
 	}
 }
