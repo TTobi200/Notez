@@ -19,6 +19,8 @@ public class NotezNoteEvent extends NotezEvent
 	
 	/** super-eventtype of all notezevents */
 	public static final EventType<NotezNoteEvent> NOTEZ_NOTE_EVENT_TYPE = new EventType<NotezNoteEvent>(NOTEZ_EVENT_TYPE, "NotezNoteEvent");
+	public static final EventType<NotezNoteEvent> NOTEZ_NOTE_SAVED_EVENT_TYPE = new EventType<NotezNoteEvent>(NOTEZ_NOTE_EVENT_TYPE, "NotezNoteSavedEvent");
+	public static final EventType<NotezNoteEvent> NOTEZ_NOTE_LOADED_EVENT_TYPE = new EventType<NotezNoteEvent>(NOTEZ_NOTE_EVENT_TYPE, "NotezNoteLoadedEvent");
 	
 	/** the note, this event is related to */
 	protected NotezNote note;
@@ -28,12 +30,7 @@ public class NotezNoteEvent extends NotezEvent
 		this(note, NOTEZ_NOTE_EVENT_TYPE);
 	}
 	
-	public NotezNoteEvent(NotezNote note, Object source)
-	{
-		this(note, source, null, NOTEZ_NOTE_EVENT_TYPE);
-	}
-	
-	protected NotezNoteEvent(NotezNote note, EventType<? extends NotezNoteEvent> eventType)
+	public NotezNoteEvent(NotezNote note, EventType<? extends NotezNoteEvent> eventType)
 	{
 		this(note, null, null, eventType);
 	}

@@ -7,10 +7,12 @@ import java.util.*;
 import javafx.beans.binding.*;
 import javafx.beans.property.*;
 import javafx.collections.*;
+import javafx.event.*;
 import javafx.print.PrinterJob;
 import javafx.scene.control.TextArea;
 
 import com.sun.javafx.application.PlatformImpl;
+import com.sun.javafx.event.*;
 
 import de.gui.*;
 import de.gui.NotezGui.NotezGuiBody;
@@ -18,6 +20,7 @@ import de.gui.comp.NotezSettingsPane.NotezSettingsPaneTabPane;
 import de.notez.NotezRemoteSync.NotezRemoteUser;
 import de.notez.data.*;
 import de.notez.data.base.BaseNotezDataProperties;
+import de.notez.event.NotezNoteEvent;
 import de.notez.parser.*;
 import de.notez.prop.NotezProperties;
 import de.notez.share.NotezShareBase;
@@ -62,6 +65,8 @@ public class NotezNote
 	/** the childnote of this one */
 	protected ReadOnlyObjectWrapper<NotezNote> noteChild;
 
+	protected EventHandlerManager eventHandlerManager;
+
 	/**
 	 * Create a new note, that is or should be saved in the given file.
 	 * 
@@ -70,13 +75,14 @@ public class NotezNote
 	 */
 	public NotezNote(File file)
 	{
-		data = new BaseNotezDataProperties(
-			NotezFileUtil.removeEnding(file.getName()));
+		data = new BaseNotezDataProperties(NotezFileUtil.removeEnding(file.getName()));
 
 		noteFile = new ReadOnlyObjectWrapper<File>(file);
 
 		noteParent = new ReadOnlyObjectWrapper<NotezNote>(null);
 		noteChild = new ReadOnlyObjectWrapper<NotezNote>(null);
+
+		eventHandlerManager = new EventHandlerManager(this);
 
 		loadData(file);
 
@@ -97,43 +103,42 @@ public class NotezNote
 		notes.add(this);
 	}
 
-	BooleanBinding titleChanged;
-	BooleanBinding stageDataChanged;
-	BooleanBinding pagedDataChanged;
+	private BooleanProperty titleChanged;
+	private BooleanProperty stageDataChanged;
+	private BooleanProperty pagedDataChanged;
 
 	private void setListeners()
 	{
-		if(Objects.isNull(noteChanged))
+		noteChanged = new ReadOnlyBooleanWrapper();
+
+		// only parent can be set from outside, so the old parent has to get
+		// a null child while the new parents child has to be set
+		noteParent.addListener((p, o, n) ->
 		{
-			noteChanged = new ReadOnlyBooleanWrapper();
-
-			// only parent can be set from outside, so the old parent has to get
-			// a null child while the new parents child has to be set
-			noteParent.addListener((p, o, n) ->
+			if(Objects.nonNull(o) && o.noteChildProperty().get() == this)
 			{
-				if(Objects.nonNull(o) && o.noteChildProperty().get() == this)
-				{
-					o.setNoteChild(null);
-				}
-				if(Objects.nonNull(n))
-				{
-					n.setNoteChild(this);
-				}
-			});
-
-			noteChild.addListener((p, o, n) ->
+				o.setNoteChild(null);
+			}
+			if(Objects.nonNull(n))
 			{
-				if(Objects.nonNull(o) && o.noteParentProperty().get() == this)
-				{
-					o.setNoteParent(null);
-				}
-				// TODO
-			});
-		}
+				n.setNoteChild(this);
+			}
+		});
 
-		titleChanged = getData().titleProperty().isNotEqualTo(
-			getData().getTitle());
-		stageDataChanged = getData().getStageData()
+		noteChild.addListener((p, o, n) ->
+		{
+			if(Objects.nonNull(o) && o.noteParentProperty().get() == this)
+			{
+				o.setNoteParent(null);
+			}
+			// TODO
+		});
+		titleChanged = new SimpleBooleanProperty();
+		stageDataChanged = new SimpleBooleanProperty();
+		pagedDataChanged = new SimpleBooleanProperty();
+
+		titleChanged.bind(getData().titleProperty().isNotEqualTo(getData().getTitle()));
+		stageDataChanged.bind(getData().getStageData()
 			.stageXProperty()
 			.isNotEqualTo(getData().getStageData().getStageX(), .1)
 			.or(getData().getStageData()
@@ -144,14 +149,54 @@ public class NotezNote
 				.isNotEqualTo(getData().getStageData().getStageWidth(), .1))
 			.or(getData().getStageData()
 				.stageHeightProperty()
-				.isNotEqualTo(getData().getStageData().getStageHeight(), .1));
-		// TODO $DDD just controls the size of the pages, not their entry.
-		pagedDataChanged = Bindings.when(
+				.isNotEqualTo(getData().getStageData().getStageHeight(), .1)));
+
+		BooleanBinding b = Bindings.when(
 			getData().getPageData()
 				.sizeProperty()
 				.isEqualTo(getData().getPageData().getPages().size()))
 			.then(false)
 			.otherwise(true);
+
+		BooleanBinding notEqual = null;
+
+		for(NotezTextDataProperties textData : getData().getPageData().getPagesObservable())
+		{
+			BooleanBinding bb = textData.textProperty().isNotEqualTo(textData.getText());
+			if(Objects.isNull(notEqual))
+			{
+				notEqual = bb;
+			}
+			else
+			{
+				notEqual = notEqual.or(bb);
+			}
+		}
+
+		pagedDataChanged.bind(b.or(notEqual));
+
+		EventHandler<NotezNoteEvent> h = e ->
+		{
+			BooleanBinding nnotEqual = null;
+
+			for(NotezTextDataProperties textData : getData().getPageData().getPagesObservable())
+			{
+				BooleanBinding bb = textData.textProperty().isNotEqualTo(textData.getText());
+				if(Objects.isNull(nnotEqual))
+				{
+					nnotEqual = bb;
+				}
+				else
+				{
+					nnotEqual = nnotEqual.or(bb);
+				}
+			}
+
+			pagedDataChanged.bind(b.or(nnotEqual));
+		};
+
+		setOnSaved(h);
+		setOnLoaded(h);
 
 		noteChanged.bind(titleChanged.or(pagedDataChanged).or(stageDataChanged));
 	}
@@ -185,7 +230,8 @@ public class NotezNote
 
 		if(noteChanged.get() && askToSave)
 		{
-			if(NotezSystemUtil.getSystemProperties().getBoolean(NotezProperties.NOTEZ_ALWAYS_SAVE_ON_EXIT))
+			if(NotezSystemUtil.getSystemProperties().getBoolean(
+				NotezProperties.NOTEZ_ALWAYS_SAVE_ON_EXIT))
 			{
 				save();
 			}
@@ -193,8 +239,8 @@ public class NotezNote
 			{
 				try
 				{
-					switch(NotezDialog.showRememberQuestionDialog(gui,
-						"Save Changes", "Do you like to save the changes?",
+					switch(NotezDialog.showRememberQuestionDialog(gui, "Save Changes",
+						"Do you like to save the changes?",
 						NotezProperties.NOTEZ_ALWAYS_SAVE_ON_EXIT, true))
 					{
 						case CANCEL:
@@ -220,15 +266,11 @@ public class NotezNote
 		}
 
 		if(NotezRemoteSync.isRunning()
-		   && NotezNote.notezList()
-			   .stream()
-			   .filter(n -> n.getGui().isShowing())
-			   .count() != 0)
+		   && NotezNote.notezList().stream().filter(n -> n.getGui().isShowing()).count() != 0)
 		{
 			try
 			{
-				switch(NotezDialog.showRememberQuestionDialog(gui,
-					"Exit Notez Receiver",
+				switch(NotezDialog.showRememberQuestionDialog(gui, "Exit Notez Receiver",
 					"Keep Notez-Receiver running in background?",
 					NotezProperties.NOTEZ_LET_RECEIVER_RUNNING))
 				{
@@ -246,13 +288,12 @@ public class NotezNote
 			}
 			catch(IOException | InterruptedException e)
 			{
-				NotezLog.error(
-					"error while asking user for closing the the server", e);
+				NotezLog.error("error while asking user for closing the the server", e);
 				NotezRemoteSync.stopAll();
 			}
 		}
 
-//		NotezProperties.save();
+		// NotezProperties.save();
 		gui.hide();
 	}
 
@@ -373,17 +414,14 @@ public class NotezNote
 			}
 			catch(IOException | InterruptedException e)
 			{
-				NotezLog.error(
-					"Error while asking the user for creating the notez folder",
-					e);
+				NotezLog.error("Error while asking the user for creating the notez folder", e);
 			}
 		}
 
 		try
 		{
 			NotezParsers.save(this, note);
-			// TODO $DDD just solution for short
-			setListeners();
+			fireEvent(NotezNoteEvent.NOTEZ_NOTE_SAVED_EVENT_TYPE);
 		}
 		catch(IOException e)
 		{
@@ -463,8 +501,7 @@ public class NotezNote
 			.append("\r\n")
 			.append("Date: ")
 			.append(
-				new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Calendar.getInstance()
-					.getTime()))
+				new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Calendar.getInstance().getTime()))
 			.append("\r\n\r\n");
 
 		for(String s : tmp)
@@ -498,8 +535,7 @@ public class NotezNote
 		if(NotezRemoteSync.getAllUsers().isEmpty())
 		{
 			switch(NotezDialog.showQuestionDialog(gui, "No user to share with",
-				"You have no user registered to share with.\r\n"
-								+ "Like to add one?"))
+				"You have no user registered to share with.\r\n" + "Like to add one?"))
 			{
 				case CANCEL:
 				case CLOSE:
@@ -512,8 +548,7 @@ public class NotezNote
 					// Switch to share user settings and open add dialog
 					getGui().switchToBody(NotezGuiBody.SETTINGS);
 
-					getGui().getSettingsPane().switchToPane(
-						NotezSettingsPaneTabPane.SHARE);
+					getGui().getSettingsPane().switchToPane(NotezSettingsPaneTabPane.SHARE);
 
 					// TODO $ddd
 					NotezRemoteSync.addNewUser(getGui());
@@ -522,15 +557,13 @@ public class NotezNote
 			return;
 		}
 
-		NotezRemoteUser user = NotezDialog.showShareWithDialog(gui,
-			"Share Notez", "Share this Notez with ",
-			NotezRemoteSync.getAllUsers());
+		NotezRemoteUser user = NotezDialog.showShareWithDialog(gui, "Share Notez",
+			"Share this Notez with ", NotezRemoteSync.getAllUsers());
 
 		if(user != null)
 		{
 			String msg = "";
-			switch(NotezShareBase.shareNotez(this, noteFile.get(),
-				user.getShare()))
+			switch(NotezShareBase.shareNotez(this, noteFile.get(), user.getShare()))
 			{
 				default:
 				case NOT_SUPPORTED:
@@ -550,8 +583,7 @@ public class NotezNote
 					return;
 			}
 
-			NotezDialog.showInfoDialog(gui,
-				"Share Notez with " + user.getUsername(), msg);
+			NotezDialog.showInfoDialog(gui, "Share Notez with " + user.getUsername(), msg);
 		}
 	}
 
@@ -621,7 +653,7 @@ public class NotezNote
 
 		noteChild.set(note);
 	}
-	
+
 	@Override
 	public String toString()
 	{
@@ -635,5 +667,26 @@ public class NotezNote
 	public int getIndex()
 	{
 		return notezList().indexOf(this);
+	}
+
+	public <T extends NotezNoteEvent> void addEventHandler(EventType<T> eventType,
+					EventHandler<? super T> eventHandler)
+	{
+		eventHandlerManager.addEventHandler(eventType, eventHandler);
+	}
+
+	public void setOnSaved(EventHandler<? super NotezNoteEvent> handler)
+	{
+		eventHandlerManager.addEventHandler(NotezNoteEvent.NOTEZ_NOTE_SAVED_EVENT_TYPE, handler);
+	}
+
+	public void setOnLoaded(EventHandler<? super NotezNoteEvent> handler)
+	{
+		eventHandlerManager.addEventHandler(NotezNoteEvent.NOTEZ_NOTE_LOADED_EVENT_TYPE, handler);
+	}
+
+	protected void fireEvent(EventType<NotezNoteEvent> type)
+	{
+		eventHandlerManager.dispatchEvent(new NotezNoteEvent(this, type), new EventDispatchChainImpl());
 	}
 }
