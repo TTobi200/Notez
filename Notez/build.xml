@@ -4,6 +4,7 @@
 	</description>
 
 	<property file="build.properties" />
+	<property environment="env" />
 
 	<property name="prj.name" value="Notez" />
 	<property name="prj.class.main" value="de.Startup" />
@@ -17,6 +18,9 @@
 	<property name="applicationdir" value="${eclipse.home}/../${prj.name}/" />
 	<property name="prj.icon.name" value="${prj.name}.ico" />
 	<property name="reg" value="regedit.reg" />
+
+	<property name="compJar" value="${prj.name}Components.jar" />
+	<property name="library" location="${env.APPDATA}/Scene Builder/Library" />
 
 
 	<path id="compile.classpath">
@@ -110,6 +114,29 @@
 			<arg value="${reg}" />
 		</exec>
 		<delete file="${reg}" />
+	</target>
+
+	<target name="makeCompJar" depends="compile">
+		<jar destfile="${dist.dir}/${compJar}">
+			<fileset dir="${bin.dir}">
+				<!--include name="de/gui/**" />
+				<include name="de/util/**" />
+				<include name="de.notez.NotezNote*" /-->
+				<!-- all classes are connected to strong, almost every is needed ex- or implicit for the single components -->
+				<include name="de/**"/>
+			</fileset>
+			<fileset dir="${src.dir}">
+				<include name="include/fxml/**" />
+				<include name="include/icons/**" />
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="addJarToSceneBuilder" depends="makeCompJar">
+		<move file="${dist.dir}/${compJar}" todir="${library}" overwrite="true" />
+		<copy todir="${library}" overwrite="true">
+			<fileset dir="src/include" includes="**.css" />
+		</copy>
 	</target>
 
 </project>
