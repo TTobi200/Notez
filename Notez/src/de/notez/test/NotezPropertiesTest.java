@@ -3,11 +3,9 @@ package de.notez.test;
 import static org.junit.Assert.assertEquals;
 import javafx.beans.property.SimpleStringProperty;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.*;
 
 import de.notez.prop.*;
-import de.notez.prop.NotezProperties.NotezPropertyType;
 
 public class NotezPropertiesTest
 {
@@ -63,7 +61,7 @@ public class NotezPropertiesTest
 		p.putFloat("float", .5f);
 		p.putDouble("double", Double.MAX_VALUE);
 		p.putString("string", "test");
-		p.putObject("object", p);
+		p.putObject("object", new Object());
 
 		assertEquals(NotezProperties.NotezPropertyType.BOOL, p.getType("bool"));
 		assertEquals(NotezProperties.NotezPropertyType.INT, p.getType("int"));
@@ -130,7 +128,7 @@ public class NotezPropertiesTest
 		}
 		try
 		{
-			p.putObject("bool", p);
+			p.putObject("bool", new Object());
 			Assert.fail("putObject should have thrown an exception.");
 		}
 		catch(IllegalStateException e)

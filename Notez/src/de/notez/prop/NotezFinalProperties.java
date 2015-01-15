@@ -26,7 +26,6 @@ public class NotezFinalProperties extends NotezProperties
 	@Override
 	public final Property<?> put(String key, Property<?> value) throws IllegalStateException
 	{
-		System.out.println(key + " - " + value);
 		if (containsKey(key))
 		{
 			throw new IllegalStateException(
