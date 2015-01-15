@@ -11,7 +11,7 @@
 <fx:root type="AnchorPane" xmlns="http://javafx.com/javafx/8"
 	xmlns:fx="http://javafx.com/fxml/1" styleClass="background-darker">
 	<children>
-		<HBox AnchorPane.leftAnchor="0.0">
+		<HBox AnchorPane.leftAnchor="0.0" fx:id="hboxLeft" >
 			<children>
 				<ToggleButton fx:id="btnPin" mnemonicParsing="false"
 					opacity="1d" styleClass="background-darker" stylesheets="@/include/fxml/Stylesheets.css"

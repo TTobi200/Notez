@@ -3,7 +3,8 @@ package de.gui.comp;
 import java.io.*;
 import java.util.*;
 
-import javafx.collections.ListChangeListener;
+import javafx.application.Platform;
+import javafx.collections.*;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
@@ -61,11 +62,14 @@ public class NotezButtonBar extends AnchorPane implements NotezComponent
 
 	@FXML
 	private HBox hboxButtons;
+	@FXML
+	private HBox hboxLeft;
 
 	protected Image iVUnpinned;
 	protected Image iVPinned;
 
 	protected List<Node> buttons;
+	protected List<Node> leftSide;
 
 	public NotezButtonBar() throws IOException
 	{
@@ -79,6 +83,7 @@ public class NotezButtonBar extends AnchorPane implements NotezComponent
 			loader.load();
 
 			buttons = new ArrayList<>(hboxButtons.getChildren());
+			leftSide = new ArrayList<>(hboxLeft.getChildren());
 		}
 
 		iVPinned = new Image(NotezFileUtil.getResourceStream(ICON_PINNED));
@@ -206,36 +211,61 @@ public class NotezButtonBar extends AnchorPane implements NotezComponent
 					}
 					else if (c.wasAdded() || c.wasRemoved())
 					{
-						hboxButtons.getChildren().sort(
-							(o1, o2) -> buttons.indexOf(o1) - buttons.indexOf(o2));
+						Platform.runLater(() ->
+						FXCollections.sort(hboxButtons.getChildren(),
+							(o1, o2) -> buttons.indexOf(o1) - buttons.indexOf(o2)));
 
 						return;
 					}
 				}
 			});
-
+		
+		hboxLeft.getChildren().addListener(
+			(ListChangeListener<Node>)c -> {
+				while(c.next())
+				{
+					if (c.wasPermutated() || c.wasUpdated() || c.wasReplaced())
+					{
+						return;
+					}
+					else if (c.wasAdded() || c.wasRemoved())
+					{
+						Platform.runLater(() ->
+						FXCollections.sort(hboxLeft.getChildren(),
+							(o1, o2) -> leftSide.indexOf(o1) - leftSide.indexOf(o2)));
+						
+						return;
+					}
+				}
+			});
+		
 		bindButtonVisibility(btnDelete, NotezProperties.NOTEZ_BTN_REMOVE, hboxButtons.getChildren());
 		bindButtonVisibility(btnSave, NotezProperties.NOTEZ_BTN_SAVE, hboxButtons.getChildren());
 		bindButtonVisibility(btnAdd, NotezProperties.NOTEZ_BTN_ADD, hboxButtons.getChildren());
 		bindButtonVisibility(btnPrint, NotezProperties.NOTEZ_BTN_PRINT, hboxButtons.getChildren());
 		bindButtonVisibility(btnShare, NotezProperties.NOTEZ_BTN_SHARE, hboxButtons.getChildren());
-//		bindButtonVisibility(pickNote, NotezProperties.NOTEZ_, hboxButtons.getChildren());
+		bindButtonVisibility(pickNote, NotezProperties.NOTEZ_BTN_GROUP, hboxButtons.getChildren());
+		bindButtonVisibility(btnPin, NotezProperties.NOTEZ_BTN_PIN, hboxLeft.getChildren());
 	}
 
-	private void bindButtonVisibility(Node btn, String property, List<Node> listChildren)
+	private void bindButtonVisibility(Node node, String property, List<Node> listChildren)
 	{
 		NotezSystemUtil.getSystemProperties()
 		.getBooleanProperty(property, true)
 		.addListener((p, o, n) -> {
 			if (n.booleanValue())
 			{
-				listChildren.add(btn);
+				listChildren.add(node);
 			}
 			else
 			{
-				listChildren.remove(btn);
+				listChildren.remove(node);
 			}
 		});
+		if(!NotezSystemUtil.getSystemProperties().getBoolean(property))
+		{
+			listChildren.remove(node);
+		}
 	}
 
 	protected void setAsDndSource(final Node node)
