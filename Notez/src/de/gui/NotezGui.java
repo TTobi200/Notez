@@ -8,11 +8,14 @@ import javafx.beans.binding.*;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.*;
+import javafx.geometry.Insets;
 import javafx.scene.*;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.*;
 import javafx.util.Duration;
 import de.gui.comp.*;
@@ -55,7 +58,8 @@ public class NotezGui extends Stage
 	/**
 	 * Create a new gui representing the given note
 	 * 
-	 * @param note the note to be represented by this gui
+	 * @param note
+	 *            the note to be represented by this gui
 	 * @throws IOException
 	 */
 	public NotezGui(NotezNote note) throws IOException
@@ -64,26 +68,28 @@ public class NotezGui extends Stage
 
 		this.note = note;
 
-		FXMLLoader loader = new FXMLLoader(
-			NotezFileUtil.getResourceURL(FXML_PATH));
+		FXMLLoader loader = new FXMLLoader(NotezFileUtil.getResourceURL(FXML_PATH));
 		loader.setController(this);
 		BorderPane root = loader.load();
-		Scene scene = new Scene(root);
+		// Scene scene = new Scene(root);
 
-		// XXX Add this to gain drop shadow (1/2)
-		// Group g = new Group();
-		// Scene scene = new Scene(g);
-		// scene.setFill(null);
-		// root.setPadding(new Insets(10, 10, 10, 10));
-		// root.setEffect(new DropShadow());
+		Group g = new Group();
+		Scene scene = new Scene(g);
+		scene.setFill(Color.TRANSPARENT);
+		root.setPadding(new Insets(1));
+		root.setEffect(new DropShadow());
 
 		setScene(scene);
 		// Fixed set height/width needed for dialogs (relative to)
 		initStyle(StageStyle.TRANSPARENT);
 		getIcons().add(new Image(NotezFileUtil.getResourceStream(NOTEZ_LOGO)));
 
-		// XXX Add this to gain drop shadow (2/2)
-		// g.getChildren().add(root);
+		g.getChildren().add(root);
+
+		root.prefWidthProperty().bind(
+			widthProperty().subtract(root.getPadding().getLeft() + root.getPadding().getRight()));
+		root.prefHeightProperty().bind(
+			heightProperty().subtract(root.getPadding().getTop() + root.getPadding().getBottom()));
 
 		Collection<NotezComponent> comps = new HashSet<>();
 		comps.add(btns);
@@ -116,15 +122,13 @@ public class NotezGui extends Stage
 		{
 			try
 			{
-				NotezFileUtil.openFolderInBrowser(note.getNoteFile()
-					.getParentFile());
+				NotezFileUtil.openFolderInBrowser(note.getNoteFile().getParentFile());
 			}
 			catch(Exception e1)
 			{
 				try
 				{
-					NotezDialog.showExceptionDialog(this,
-						"Error while opening folder",
+					NotezDialog.showExceptionDialog(this, "Error while opening folder",
 						"Could not open the parent folder!", e1);
 				}
 				catch(Exception e2)
@@ -160,34 +164,34 @@ public class NotezGui extends Stage
 		{
 			final Duration DUR = Duration.seconds(1d);
 
-	        DoubleProperty x = new SimpleDoubleProperty(getX());
-	        DoubleProperty y = new SimpleDoubleProperty(getY());
+			DoubleProperty x = new SimpleDoubleProperty(getX());
+			DoubleProperty y = new SimpleDoubleProperty(getY());
 
-	        ChangeListener<Number> xLis = (xx, old, newOne) -> setX(newOne.doubleValue());
-	        x.addListener(xLis);
-	        ChangeListener<Number> yLis = (yy, old, newOne) -> setY(newOne.doubleValue());
-	        y.addListener(yLis);
+			ChangeListener<Number> xLis = (xx, old, newOne) -> setX(newOne.doubleValue());
+			x.addListener(xLis);
+			ChangeListener<Number> yLis = (yy, old, newOne) -> setY(newOne.doubleValue());
+			y.addListener(yLis);
 
-	        new Timeline(new KeyFrame(DUR, new KeyValue(x, getNote().getData().getStageData().getStageX()),
-	            new KeyValue(y, getNote().getData().getStageData().getStageY())))
-	            .play();
-			
-//			setX(getNote().getData().getStageData().getStageX());
-//			setY(getNote().getData().getStageData().getStageY());
-//			setWidth(getNote().getData().getStageData().getStageWidth());
-//			setHeight(getNote().getData().getStageData().getStageHeight());
+			new Timeline(new KeyFrame(DUR, new KeyValue(x, getNote().getData()
+				.getStageData()
+				.getStageX()), new KeyValue(y, getNote().getData().getStageData().getStageY()))).play();
+
+			// setX(getNote().getData().getStageData().getStageX());
+			// setY(getNote().getData().getStageData().getStageY());
+			// setWidth(getNote().getData().getStageData().getStageWidth());
+			// setHeight(getNote().getData().getStageData().getStageHeight());
 			getNote().getData().getStageData().bind(this);
-			
+
 			setAccelerators();
 		});
-		
+
 		NotezListenerUtil.addVisibleNodeHider(fileLink, fileLink);
-		
+
 		ChangeListener<Number> lisX = (p, o, n) ->
 		{
 			setX(n.doubleValue());
 		};
-		
+
 		ChangeListener<Number> lisY = (p, o, n) ->
 		{
 			setY(n.doubleValue() + getButtonBar().getHeight());
@@ -196,7 +200,7 @@ public class NotezGui extends Stage
 		{
 			setY(n.doubleValue() - getButtonBar().getHeight());
 		};
-		
+
 		getNote().noteParentProperty().addListener((p, o, n) ->
 		{
 			if(Objects.nonNull(o))
@@ -235,12 +239,12 @@ public class NotezGui extends Stage
 
 	protected void addAcceleratorToScene(Scene s, KeyCode key, Runnable run)
 	{
-		s.getAccelerators().put(
-			new KeyCodeCombination(key, KeyCombination.SHORTCUT_DOWN), run);
+		s.getAccelerators().put(new KeyCodeCombination(key, KeyCombination.SHORTCUT_DOWN), run);
 	}
 
 	/**
-	 * @param body The body to be shown in this gui
+	 * @param body
+	 *            The body to be shown in this gui
 	 */
 	public void switchToBody(NotezGuiBody body)
 	{
@@ -265,7 +269,8 @@ public class NotezGui extends Stage
 	}
 
 	/**
-	 * @param run The operation to only be done if this gui is showing
+	 * @param run
+	 *            The operation to only be done if this gui is showing
 	 */
 	public void doOnShowing(Runnable run)
 	{

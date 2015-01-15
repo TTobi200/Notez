@@ -81,6 +81,9 @@ public class NotezButtonBar extends AnchorPane implements NotezComponent
 			loader.setController(this);
 
 			loader.load();
+			
+			setStyle("background");
+			getStyleClass().addAll("background-darker");
 
 			buttons = new ArrayList<>(hboxButtons.getChildren());
 			leftSide = new ArrayList<>(hboxLeft.getChildren());
@@ -190,7 +193,7 @@ public class NotezButtonBar extends AnchorPane implements NotezComponent
 		{
 			if (o instanceof Control)
 			{
-				Tooltip tT = ((ButtonBase)o).getTooltip();
+				Tooltip tT = ((Control)o).getTooltip();
 				if (tT != null)
 				{
 					// Add Tooltip visibility
