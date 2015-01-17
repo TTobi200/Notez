@@ -1,30 +1,47 @@
 package de.notez;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Objects;
 
-import javafx.beans.binding.*;
-import javafx.beans.property.*;
-import javafx.collections.*;
-import javafx.event.*;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.print.PrinterJob;
 import javafx.scene.control.TextArea;
 
 import com.sun.javafx.application.PlatformImpl;
-import com.sun.javafx.event.*;
+import com.sun.javafx.event.EventDispatchChainImpl;
+import com.sun.javafx.event.EventHandlerManager;
 
-import de.gui.*;
+import de.gui.NotezDialog;
+import de.gui.NotezGui;
 import de.gui.NotezGui.NotezGuiBody;
 import de.gui.comp.NotezSettingsPane.NotezSettingsPaneTabPane;
 import de.notez.NotezRemoteSync.NotezRemoteUser;
-import de.notez.data.*;
+import de.notez.data.NotezData;
+import de.notez.data.NotezDataProperties;
+import de.notez.data.NotezTextDataProperties;
 import de.notez.data.base.BaseNotezDataProperties;
 import de.notez.event.NotezNoteEvent;
-import de.notez.parser.*;
+import de.notez.parser.NotezParsers;
+import de.notez.parser.UnsupportedVersionException;
 import de.notez.prop.NotezProperties;
 import de.notez.share.NotezShareBase;
-import de.util.*;
+import de.util.NotezDataUtil;
+import de.util.NotezFileUtil;
+import de.util.NotezSystemUtil;
 import de.util.log.NotezLog;
 
 /**
@@ -75,7 +92,8 @@ public class NotezNote
 	 */
 	public NotezNote(File file)
 	{
-		data = new BaseNotezDataProperties(NotezFileUtil.removeEnding(file.getName()));
+		data = new BaseNotezDataProperties(
+			NotezFileUtil.removeEnding(file.getName()));
 
 		noteFile = new ReadOnlyObjectWrapper<File>(file);
 
@@ -137,7 +155,8 @@ public class NotezNote
 		stageDataChanged = new SimpleBooleanProperty();
 		pagedDataChanged = new SimpleBooleanProperty();
 
-		titleChanged.bind(getData().titleProperty().isNotEqualTo(getData().getTitle()));
+		titleChanged.bind(getData().titleProperty().isNotEqualTo(
+			getData().getTitle()));
 		stageDataChanged.bind(getData().getStageData()
 			.stageXProperty()
 			.isNotEqualTo(getData().getStageData().getStageX(), .1)
@@ -160,9 +179,11 @@ public class NotezNote
 
 		BooleanBinding notEqual = null;
 
-		for(NotezTextDataProperties textData : getData().getPageData().getPagesObservable())
+		for(NotezTextDataProperties textData : getData().getPageData()
+			.getPagesObservable())
 		{
-			BooleanBinding bb = textData.textProperty().isNotEqualTo(textData.getText());
+			BooleanBinding bb = textData.textProperty().isNotEqualTo(
+				textData.getText());
 			if(Objects.isNull(notEqual))
 			{
 				notEqual = bb;
@@ -179,21 +200,23 @@ public class NotezNote
 		{
 			BooleanBinding nnotEqual = null;
 
-			for(NotezTextDataProperties textData : getData().getPageData().getPagesObservable())
+			for(NotezTextDataProperties textData : getData().getPageData()
+				.getPagesObservable())
 			{
-				BooleanBinding bb = textData.textProperty().isNotEqualTo(textData.getText());
+				BooleanBinding bb = textData.textProperty().isNotEqualTo(
+					textData.getText());
 				if(Objects.isNull(nnotEqual))
 				{
 					nnotEqual = bb;
 				}
-				else
-				{
-					nnotEqual = nnotEqual.or(bb);
-				}
-			}
+						else
+						{
+							nnotEqual = nnotEqual.or(bb);
+						}
+					}
 
-			pagedDataChanged.bind(b.or(nnotEqual));
-		};
+					pagedDataChanged.bind(b.or(nnotEqual));
+				};
 
 		setOnSaved(h);
 		setOnLoaded(h);
@@ -226,8 +249,6 @@ public class NotezNote
 	 */
 	public void close(boolean askToSave)
 	{
-		getGui().hide();
-
 		if(noteChanged.get() && askToSave)
 		{
 			if(NotezSystemUtil.getSystemProperties().getBoolean(
@@ -239,7 +260,8 @@ public class NotezNote
 			{
 				try
 				{
-					switch(NotezDialog.showRememberQuestionDialog(gui, "Save Changes",
+					switch(NotezDialog.showRememberQuestionDialog(gui,
+						"Save Changes",
 						"Do you like to save the changes?",
 						NotezProperties.NOTEZ_ALWAYS_SAVE_ON_EXIT, true))
 					{
@@ -263,14 +285,20 @@ public class NotezNote
 					NotezLog.error("Error while asking the user for saving", e);
 				}
 			}
+
+			getGui().hide();
 		}
 
 		if(NotezRemoteSync.isRunning()
-		   && NotezNote.notezList().stream().filter(n -> n.getGui().isShowing()).count() != 0)
+			&& NotezNote.notezList()
+				.stream()
+				.filter(n -> n.getGui().isShowing())
+				.count() != 0)
 		{
 			try
 			{
-				switch(NotezDialog.showRememberQuestionDialog(gui, "Exit Notez Receiver",
+				switch(NotezDialog.showRememberQuestionDialog(gui,
+					"Exit Notez Receiver",
 					"Keep Notez-Receiver running in background?",
 					NotezProperties.NOTEZ_LET_RECEIVER_RUNNING))
 				{
@@ -288,7 +316,8 @@ public class NotezNote
 			}
 			catch(IOException | InterruptedException e)
 			{
-				NotezLog.error("error while asking user for closing the the server", e);
+				NotezLog.error(
+					"error while asking user for closing the the server", e);
 				NotezRemoteSync.stopAll();
 			}
 		}
@@ -414,7 +443,9 @@ public class NotezNote
 			}
 			catch(IOException | InterruptedException e)
 			{
-				NotezLog.error("Error while asking the user for creating the notez folder", e);
+				NotezLog.error(
+					"Error while asking the user for creating the notez folder",
+					e);
 			}
 		}
 
@@ -501,7 +532,8 @@ public class NotezNote
 			.append("\r\n")
 			.append("Date: ")
 			.append(
-				new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Calendar.getInstance().getTime()))
+				new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Calendar.getInstance()
+					.getTime()))
 			.append("\r\n\r\n");
 
 		for(String s : tmp)
@@ -535,7 +567,8 @@ public class NotezNote
 		if(NotezRemoteSync.getAllUsers().isEmpty())
 		{
 			switch(NotezDialog.showQuestionDialog(gui, "No user to share with",
-				"You have no user registered to share with.\r\n" + "Like to add one?"))
+				"You have no user registered to share with.\r\n"
+								+ "Like to add one?"))
 			{
 				case CANCEL:
 				case CLOSE:
@@ -548,7 +581,8 @@ public class NotezNote
 					// Switch to share user settings and open add dialog
 					getGui().switchToBody(NotezGuiBody.SETTINGS);
 
-					getGui().getSettingsPane().switchToPane(NotezSettingsPaneTabPane.SHARE);
+					getGui().getSettingsPane().switchToPane(
+						NotezSettingsPaneTabPane.SHARE);
 
 					// TODO $ddd
 					NotezRemoteSync.addNewUser(getGui());
@@ -557,13 +591,15 @@ public class NotezNote
 			return;
 		}
 
-		NotezRemoteUser user = NotezDialog.showShareWithDialog(gui, "Share Notez",
+		NotezRemoteUser user = NotezDialog.showShareWithDialog(gui,
+			"Share Notez",
 			"Share this Notez with ", NotezRemoteSync.getAllUsers());
 
 		if(user != null)
 		{
 			String msg = "";
-			switch(NotezShareBase.shareNotez(this, noteFile.get(), user.getShare()))
+			switch(NotezShareBase.shareNotez(this, noteFile.get(),
+				user.getShare()))
 			{
 				default:
 				case NOT_SUPPORTED:
@@ -583,7 +619,8 @@ public class NotezNote
 					return;
 			}
 
-			NotezDialog.showInfoDialog(gui, "Share Notez with " + user.getUsername(), msg);
+			NotezDialog.showInfoDialog(gui,
+				"Share Notez with " + user.getUsername(), msg);
 		}
 	}
 
@@ -657,7 +694,8 @@ public class NotezNote
 	@Override
 	public String toString()
 	{
-		return new StringBuilder("NotezNote: ").append(data.toString()).toString();
+		return new StringBuilder("NotezNote: ").append(data.toString())
+			.toString();
 	}
 
 	/**
@@ -669,7 +707,8 @@ public class NotezNote
 		return notezList().indexOf(this);
 	}
 
-	public <T extends NotezNoteEvent> void addEventHandler(EventType<T> eventType,
+	public <T extends NotezNoteEvent> void addEventHandler(
+					EventType<T> eventType,
 					EventHandler<? super T> eventHandler)
 	{
 		eventHandlerManager.addEventHandler(eventType, eventHandler);
@@ -677,16 +716,19 @@ public class NotezNote
 
 	public void setOnSaved(EventHandler<? super NotezNoteEvent> handler)
 	{
-		eventHandlerManager.addEventHandler(NotezNoteEvent.NOTEZ_NOTE_SAVED_EVENT_TYPE, handler);
+		eventHandlerManager.addEventHandler(
+			NotezNoteEvent.NOTEZ_NOTE_SAVED_EVENT_TYPE, handler);
 	}
 
 	public void setOnLoaded(EventHandler<? super NotezNoteEvent> handler)
 	{
-		eventHandlerManager.addEventHandler(NotezNoteEvent.NOTEZ_NOTE_LOADED_EVENT_TYPE, handler);
+		eventHandlerManager.addEventHandler(
+			NotezNoteEvent.NOTEZ_NOTE_LOADED_EVENT_TYPE, handler);
 	}
 
 	protected void fireEvent(EventType<NotezNoteEvent> type)
 	{
-		eventHandlerManager.dispatchEvent(new NotezNoteEvent(this, type), new EventDispatchChainImpl());
+		eventHandlerManager.dispatchEvent(new NotezNoteEvent(this, type),
+			new EventDispatchChainImpl());
 	}
 }
