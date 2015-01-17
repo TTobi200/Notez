@@ -1,26 +1,46 @@
 package de.gui;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Objects;
 
-import javafx.animation.*;
-import javafx.beans.binding.*;
-import javafx.beans.property.*;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.fxml.*;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.scene.*;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.image.*;
-import javafx.scene.input.*;
-import javafx.scene.layout.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.stage.*;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import de.gui.comp.*;
-import de.notez.*;
-import de.util.*;
+import de.gui.comp.NotezButtonBar;
+import de.gui.comp.NotezComponent;
+import de.gui.comp.NotezSettingsPane;
+import de.gui.comp.NotezTextPane;
+import de.notez.NotezNote;
+import de.notez.NotezNotes;
+import de.util.NotezFileUtil;
+import de.util.NotezListenerUtil;
 import de.util.log.NotezLog;
 
 /**
@@ -68,7 +88,8 @@ public class NotezGui extends Stage
 
 		this.note = note;
 
-		FXMLLoader loader = new FXMLLoader(NotezFileUtil.getResourceURL(FXML_PATH));
+		FXMLLoader loader = new FXMLLoader(
+			NotezFileUtil.getResourceURL(FXML_PATH));
 		loader.setController(this);
 		BorderPane root = loader.load();
 		// Scene scene = new Scene(root);
@@ -87,9 +108,11 @@ public class NotezGui extends Stage
 		g.getChildren().add(root);
 
 		root.prefWidthProperty().bind(
-			widthProperty().subtract(root.getPadding().getLeft() + root.getPadding().getRight()));
+			widthProperty().subtract(
+				root.getPadding().getLeft() + root.getPadding().getRight()));
 		root.prefHeightProperty().bind(
-			heightProperty().subtract(root.getPadding().getTop() + root.getPadding().getBottom()));
+			heightProperty().subtract(
+				root.getPadding().getTop() + root.getPadding().getBottom()));
 
 		Collection<NotezComponent> comps = new HashSet<>();
 		comps.add(btns);
@@ -122,13 +145,15 @@ public class NotezGui extends Stage
 		{
 			try
 			{
-				NotezFileUtil.openFolderInBrowser(note.getNoteFile().getParentFile());
+				NotezFileUtil.openFolderInBrowser(note.getNoteFile()
+					.getParentFile());
 			}
 			catch(Exception e1)
 			{
 				try
 				{
-					NotezDialog.showExceptionDialog(this, "Error while opening folder",
+					NotezDialog.showExceptionDialog(this,
+						"Error while opening folder",
 						"Could not open the parent folder!", e1);
 				}
 				catch(Exception e2)
@@ -174,7 +199,9 @@ public class NotezGui extends Stage
 
 			new Timeline(new KeyFrame(DUR, new KeyValue(x, getNote().getData()
 				.getStageData()
-				.getStageX()), new KeyValue(y, getNote().getData().getStageData().getStageY()))).play();
+				.getStageX()), new KeyValue(y, getNote().getData()
+				.getStageData()
+				.getStageY()))).play();
 
 			// setX(getNote().getData().getStageData().getStageX());
 			// setY(getNote().getData().getStageData().getStageY());
@@ -239,7 +266,8 @@ public class NotezGui extends Stage
 
 	protected void addAcceleratorToScene(Scene s, KeyCode key, Runnable run)
 	{
-		s.getAccelerators().put(new KeyCodeCombination(key, KeyCombination.SHORTCUT_DOWN), run);
+		s.getAccelerators().put(
+			new KeyCodeCombination(key, KeyCombination.SHORTCUT_DOWN), run);
 	}
 
 	/**

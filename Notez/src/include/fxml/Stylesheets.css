@@ -109,3 +109,16 @@
         radial-gradient(center 50% 50%, radius 100%, 
         rgba(0,0,0,0.05), rgba(0,0,0,0.05));
 }
+
+.html-editor 
+{
+	-fx-base: rgb(253, 251, 182);
+	-fx-color: rgb(253, 251, 182);
+	
+	-fx-body-color: rgb(253, 251, 182);
+	-fx-background-color: rgb(253, 251, 182);
+	-fx-background: rgb(253, 251, 182);
+	-fx-border-color: rgb(253, 251, 182);
+
+	-fx-mark-color: rgb(253, 251, 182);
+}
