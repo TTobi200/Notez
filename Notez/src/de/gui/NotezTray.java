@@ -275,11 +275,10 @@ public class NotezTray implements NotezRemoteObjectListener
 		{
 			Platform.runLater(() ->
 			{
-				// TODO add sender username
 				try
 				{
 					showMsgNewNotez(NotezNotes.creNote((NotezData)e.getRemoteObject()).getGui(),
-						"Username");
+						e.getClient().getUser());
 					// showMsgNewNotez(NotezFrame.createNotezFrame((NotezData)e.getRemoteObject())
 					// .getStage(), "Username");
 				}

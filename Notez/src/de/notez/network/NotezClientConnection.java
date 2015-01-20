@@ -1,9 +1,6 @@
 package de.notez.network;
 
-import java.io.Closeable;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.util.Objects;
 
@@ -101,6 +98,11 @@ public class NotezClientConnection implements Closeable
 		{
 			out.writeObject(ro);
 		}
+	}
+	
+	public String getUser()
+	{
+		return socket.getInetAddress().getHostName();
 	}
 
 	@Override
