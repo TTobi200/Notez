@@ -6,181 +6,188 @@
  */
 package de.notez;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.util.Objects;
 
 import javafx.application.Platform;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.beans.property.*;
+import javafx.collections.*;
 import javafx.stage.Stage;
 
 import javax.swing.Timer;
 
-import de.gui.NotezDialog;
-import de.gui.NotezLoadSplash;
-import de.gui.NotezTray;
-import de.util.NotezFileUtil;
+import de.gui.*;
+import de.notez.prop.NotezSystemProperties;
+import de.util.*;
 
 public class NotezRemoteSync
 {
-    public static final String THREAD_NAME = NotezRemoteSync.class.getName();
+	public static final String THREAD_NAME = NotezRemoteSync.class.getName();
 
-    final static ObservableList<NotezRemoteUser> availableRemoteUser = FXCollections.observableArrayList();
+	private final static ObservableList<NotezRemoteUser> availableRemoteUser = FXCollections.observableArrayList();
 
-    public static ObservableList<File> notezFiles = FXCollections.observableArrayList();
+	public static ObservableList<File> notezFiles = FXCollections.observableArrayList();
 
-    private static File localRemFold;
-    private static Timer foldSync;
-    private static Thread tcpThread;
-    private static NotezTray tray;
+	private static File localRemFold;
+	private static Timer foldSync;
 
-    private NotezRemoteSync()
-    {
+	private NotezRemoteSync()
+	{
 
-    }
+	}
 
-    public static void initialize(File localRemFold)
-    {
-        NotezRemoteSync.localRemFold = localRemFold;
-        start();
-    }
+	public static void initialize(File localRemFold)
+	{
+		if(isInitialized())
+		{
+			return;
+		}
+		
+		NotezRemoteSync.localRemFold = localRemFold;
+		start();
+	}
+	
+	public static boolean isInitialized()
+	{
+		return Objects.nonNull(foldSync);
+	}
 
-    public static void start()
-    {
-        if(foldSync == null)
-        {
-            foldSync = creFoldSync(localRemFold);
-        }
-        foldSync.start();
-        
-        tray = new NotezTray();
-    }
+	public static void start()
+	{
+		if(foldSync == null)
+		{
+			foldSync = creFoldSync(localRemFold);
+		}
+		foldSync.start();
 
-    private static Timer creFoldSync(File folder)
-    {
-        return new Timer(1000, ae ->
-        {
-            Platform.runLater(() ->
-            {
-                try
-                {
-                    if(NotezFileUtil.directoryExists(folder))
-                    {
-                        for(File f : folder.listFiles())
-                        {
-                            if(NotezFileUtil.isNotez(f)
-                               && !notezFiles.contains(f))
-                            {
+		if(NotezSystemUtil.getSystemProperties().getBoolean(
+			NotezSystemProperties.NOTEZ_RECEIVER_ON_STARTUP, false))
+		{
+			NotezTray.addNotezTray();
+		}
+	}
 
-                                NotezLoadSplash.loadAllNotez(folder);
-                                notezFiles.add(f);
-                            }
-                        }
-                    }
-                }
-                catch(IOException e1)
-                {
-                    e1.printStackTrace();
-                }
-            });
-        });
-    }
+	private static Timer creFoldSync(File folder)
+	{
+		return new Timer(1000, ae ->
+		{
+			Platform.runLater(() ->
+			{
+				try
+				{
+					if(NotezFileUtil.directoryExists(folder))
+					{
+						for(File f : folder.listFiles())
+						{
+							if(NotezFileUtil.isNotez(f) && !notezFiles.contains(f))
+							{
 
-    public static synchronized void addUser(NotezRemoteUser user)
-    {
-        availableRemoteUser.add(user);
-    }
+								NotezLoadSplash.loadAllNotez(folder);
+								notezFiles.add(f);
+							}
+						}
+					}
+				}
+				catch(IOException e1)
+				{
+					e1.printStackTrace();
+				}
+			});
+		});
+	}
 
-    public static synchronized void removeUser(NotezRemoteUser user)
-    {
-        availableRemoteUser.remove(user);
-    }
-    
-    public static void addNewUser(Stage stage) throws IOException, InterruptedException
-    {
-        NotezRemoteUser user = NotezDialog.showAddUserDialog(stage);
+	public static synchronized void addUser(NotezRemoteUser user)
+	{
+		availableRemoteUser.add(user);
+	}
 
-        if(user != null && user.getUsername() != null
-           && user.getShare() != null)
-        {
-            addUser(user);
-        }
-    }
+	public static synchronized void removeUser(NotezRemoteUser user)
+	{
+		availableRemoteUser.remove(user);
+	}
 
-    public static NotezRemoteUser getUser(String username)
-    {
-        for(NotezRemoteUser u : availableRemoteUser)
-        {
-            if(u.getUsername().equals(username))
-            {
-                return u;
-            }
-        }
+	public static void addNewUser(Stage stage) throws IOException, InterruptedException
+	{
+		NotezRemoteUser user = NotezDialog.showAddUserDialog(stage);
 
-        return null;
-    }
+		if(user != null && user.getUsername() != null && user.getShare() != null)
+		{
+			addUser(user);
+		}
+	}
 
-    public static ObservableList<NotezRemoteUser> getAllUsers()
-    {
-        return availableRemoteUser;
-    }
+	public static NotezRemoteUser getUser(String username)
+	{
+		for(NotezRemoteUser u : availableRemoteUser)
+		{
+			if(u.getUsername().equals(username))
+			{
+				return u;
+			}
+		}
 
-    public static boolean isRunning()
-    {
-        return foldSync != null && tcpThread != null && foldSync.isRunning()
-               && tcpThread.isAlive();
-    }
+		return null;
+	}
 
-    public static void stopAll()
-    {
-        if(isRunning())
-        {
-            foldSync.stop();
-            tray.remove();
-            tcpThread.interrupt();
+	public static ObservableList<NotezRemoteUser> getAllUsers()
+	{
+		return availableRemoteUser;
+	}
 
-            foldSync = null;
-            tcpThread = null;
-        }
-    }
+	public static boolean isRunning()
+	{
+		return (foldSync != null && foldSync.isRunning()) || NotezTray.isNotezTrayAdded();
+	}
 
-    public static class NotezRemoteUser
-    {
-        private final SimpleStringProperty username;
-        private final SimpleObjectProperty<Object> share;
+	public static void stopAll()
+	{
+		if(isRunning())
+		{
+			if(Objects.nonNull(foldSync))
+			{
+				foldSync.stop();
+				foldSync = null;
+			}
 
-        public NotezRemoteUser(String userName, String share)
-        {
-            this.username = new SimpleStringProperty(userName);
-            this.share = new SimpleObjectProperty<Object>(share);
-        }
+			NotezTray.removeTrayIcon();
+		}
+	}
 
-        public Object getShare()
-        {
-            return share.get();
-        }
+	public static class NotezRemoteUser
+	{
+		private final SimpleStringProperty username;
+		private final SimpleObjectProperty<Object> share;
 
-        public void setShare(String share)
-        {
-            this.share.set(share);
-        }
+		public NotezRemoteUser(String userName, String share)
+		{
+			this.username = new SimpleStringProperty(userName);
+			this.share = new SimpleObjectProperty<Object>(share);
+		}
 
-        public String getUsername()
-        {
-            return username.get();
-        }
+		public Object getShare()
+		{
+			return share.get();
+		}
 
-        public void setUsername(String username)
-        {
-            this.username.set(username);
-        }
+		public void setShare(String share)
+		{
+			this.share.set(share);
+		}
 
-        @Override
-        public String toString()
-        {
-            return getUsername();
-        }
-    }
+		public String getUsername()
+		{
+			return username.get();
+		}
+
+		public void setUsername(String username)
+		{
+			this.username.set(username);
+		}
+
+		@Override
+		public String toString()
+		{
+			return getUsername();
+		}
+	}
 }

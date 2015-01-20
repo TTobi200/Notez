@@ -148,6 +148,8 @@ public class NotezSettingsPane extends BorderPane implements NotezComponent
 			txtPort.getText());
 
 		propertyBindings.forEach(PropertyBinding::onSave);
+		
+		NotezSystemUtil.getSystemProperties().save();
 		getGui().switchToBody(NotezGuiBody.TEXT);
 	}
 

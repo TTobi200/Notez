@@ -1,47 +1,30 @@
 package de.notez;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Objects;
+import java.util.*;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.ReadOnlyBooleanWrapper;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
+import javafx.beans.binding.*;
+import javafx.beans.property.*;
+import javafx.collections.*;
+import javafx.event.*;
 import javafx.print.PrinterJob;
 import javafx.scene.control.TextArea;
 
 import com.sun.javafx.application.PlatformImpl;
-import com.sun.javafx.event.EventDispatchChainImpl;
-import com.sun.javafx.event.EventHandlerManager;
+import com.sun.javafx.event.*;
 
-import de.gui.NotezDialog;
-import de.gui.NotezGui;
+import de.gui.*;
 import de.gui.NotezGui.NotezGuiBody;
 import de.gui.comp.NotezSettingsPane.NotezSettingsPaneTabPane;
 import de.notez.NotezRemoteSync.NotezRemoteUser;
-import de.notez.data.NotezData;
-import de.notez.data.NotezDataProperties;
-import de.notez.data.NotezTextDataProperties;
+import de.notez.data.*;
 import de.notez.data.base.BaseNotezDataProperties;
 import de.notez.event.NotezNoteEvent;
-import de.notez.parser.NotezParsers;
-import de.notez.parser.UnsupportedVersionException;
+import de.notez.parser.*;
 import de.notez.prop.NotezProperties;
 import de.notez.share.NotezShareBase;
-import de.util.NotezDataUtil;
-import de.util.NotezFileUtil;
-import de.util.NotezSystemUtil;
+import de.util.*;
 import de.util.log.NotezLog;
 
 /**
@@ -285,15 +268,15 @@ public class NotezNote
 					NotezLog.error("Error while asking the user for saving", e);
 				}
 			}
-
-			getGui().hide();
 		}
+		
+		getGui().hide();
 
 		if(NotezRemoteSync.isRunning()
 			&& NotezNote.notezList()
 				.stream()
 				.filter(n -> n.getGui().isShowing())
-				.count() != 0)
+				.count() == 0)
 		{
 			try
 			{
@@ -306,7 +289,7 @@ public class NotezNote
 					case CANCEL:
 					case CLOSE:
 					case NO:
-						NotezRemoteSync.stopAll();
+						NotezSystemUtil.exit();
 						break;
 					case OK:
 					case YES:
@@ -318,12 +301,9 @@ public class NotezNote
 			{
 				NotezLog.error(
 					"error while asking user for closing the the server", e);
-				NotezRemoteSync.stopAll();
+				NotezSystemUtil.exit();
 			}
 		}
-
-		// NotezProperties.save();
-		gui.hide();
 	}
 
 	/**

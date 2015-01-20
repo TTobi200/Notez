@@ -130,7 +130,7 @@ public class NotezDialog
 
         if(NotezSystemUtil.getSystemProperties().containsKey(propKey) && !evenShowDialog)
         {
-            return Boolean.valueOf(NotezSystemUtil.getSystemProperties().getString(propKey)) ?
+            return NotezSystemUtil.getSystemProperties().getBoolean(propKey) ?
                             NotezOption.YES : NotezOption.NO;
         }
 

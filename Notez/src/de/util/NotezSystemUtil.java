@@ -1,7 +1,8 @@
 package de.util;
 
 import javafx.application.Platform;
-import de.notez.prop.*;
+import de.notez.NotezRemoteSync;
+import de.notez.prop.NotezSystemProperties;
 import de.util.pref.NotezPreferences;
 
 public class NotezSystemUtil
@@ -11,7 +12,7 @@ public class NotezSystemUtil
 	/** int symbolizing a a unnormal ending */
 	public static final int FATAL = 1;
 	
-	private static NotezProperties systemProperties = NotezSystemProperties.getSystemProperties();
+	private static NotezSystemProperties systemProperties = NotezSystemProperties.getSystemProperties();
 
 	/**
 	 * Normal ending of this application
@@ -28,9 +29,14 @@ public class NotezSystemUtil
 	 */
 	public static void exit(int status)
 	{
-		NotezPreferences.setNotezRunning(false);
+		NotezRemoteSync.stopAll();
 		Platform.exit();
-		System.exit(status);
+		NotezPreferences.setNotezRunning(false);
+		
+		if(status != NORMAL)
+		{
+			System.exit(status);
+		}
 	}
 
 	public static boolean isRunningInSceneBuilder()
@@ -39,13 +45,8 @@ public class NotezSystemUtil
 						"scenebuilder");
 	}
 
-	public static NotezProperties getSystemProperties()
+	public static NotezSystemProperties getSystemProperties()
 	{
 		return systemProperties;
-	}
-
-	public static void setSystemProperties(NotezProperties systemProperties)
-	{
-		NotezSystemUtil.systemProperties = systemProperties;
 	}
 }
