@@ -3,6 +3,7 @@ package de.util;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Objects;
 
+import de.notez.NotezSystem;
 import de.util.log.NotezLog;
 
 public class NotezUncaughtExceptionHandler implements UncaughtExceptionHandler
@@ -29,6 +30,6 @@ public class NotezUncaughtExceptionHandler implements UncaughtExceptionHandler
 			NotezLog.fatal("Uncaught throwable", e);
 		}
 		
-		NotezSystemUtil.exit(NotezSystemUtil.FATAL);
+		NotezSystem.exit(NotezSystem.FATAL);
 	}
 }

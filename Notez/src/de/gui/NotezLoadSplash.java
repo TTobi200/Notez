@@ -18,7 +18,7 @@ import javafx.scene.layout.*;
 import javafx.stage.*;
 import javafx.util.Duration;
 import de.notez.*;
-import de.util.*;
+import de.util.NotezFileUtil;
 
 public class NotezLoadSplash extends Application
 {
@@ -48,7 +48,7 @@ public class NotezLoadSplash extends Application
 	@Override
 	public void start(final Stage initStage) throws Exception
 	{
-		File localNotezFolder = new File(NotezSystemUtil.getSystemProperties().getString(NOTEZ_WORK_FOLDER,
+		File localNotezFolder = new File(NotezSystem.getSystemProperties().getString(NOTEZ_WORK_FOLDER,
 			DEF_LOCAL_NOTEZ_FOLDER));
 
 		if(localNotezFolder.exists())

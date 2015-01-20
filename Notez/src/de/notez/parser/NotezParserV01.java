@@ -5,19 +5,13 @@
  */
 package de.notez.parser;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
+import java.io.*;
 import java.nio.file.Files;
 import java.util.Arrays;
 
 import de.notez.NotezNote;
 import de.notez.data.NotezData;
-import de.notez.data.base.BaseNotezData;
-import de.notez.data.base.BaseNotezPagedData;
-import de.notez.data.base.BaseNotezTextData;
+import de.notez.data.base.*;
 import de.util.NotezFileUtil;
 
 public class NotezParserV01 extends NotezParserBase

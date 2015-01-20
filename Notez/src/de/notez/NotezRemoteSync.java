@@ -18,7 +18,7 @@ import javax.swing.Timer;
 
 import de.gui.*;
 import de.notez.prop.NotezSystemProperties;
-import de.util.*;
+import de.util.NotezFileUtil;
 
 public class NotezRemoteSync
 {
@@ -60,7 +60,7 @@ public class NotezRemoteSync
 		}
 		foldSync.start();
 
-		if(NotezSystemUtil.getSystemProperties().getBoolean(
+		if(NotezSystem.getSystemProperties().getBoolean(
 			NotezSystemProperties.NOTEZ_RECEIVER_ON_STARTUP, false))
 		{
 			NotezTray.addNotezTray();

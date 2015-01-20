@@ -2,10 +2,8 @@ package de.notez.data.base;
 
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableStringValue;
-import de.notez.data.NotezTextData;
-import de.notez.data.NotezTextDataProperties;
-import de.util.NotezDataUtil;
-import de.util.NotezNonNullStringProperty;
+import de.notez.data.*;
+import de.util.*;
 
 /**
  * Basic implementation of the {@link NotezTextDataProperties}-interface

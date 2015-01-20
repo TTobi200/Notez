@@ -1,7 +1,6 @@
 package de.notez.data;
 
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 
 /**
  * {@link NotezData} holding their data with properties

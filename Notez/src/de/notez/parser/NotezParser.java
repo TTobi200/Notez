@@ -6,8 +6,7 @@
  */
 package de.notez.parser;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 import de.notez.NotezNote;
 import de.notez.data.NotezData;

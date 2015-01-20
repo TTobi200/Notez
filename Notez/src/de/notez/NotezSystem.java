@@ -1,16 +1,16 @@
-package de.util;
+package de.notez;
 
 import javafx.application.Platform;
-import de.notez.NotezRemoteSync;
 import de.notez.prop.NotezSystemProperties;
 import de.util.pref.NotezPreferences;
 
-public class NotezSystemUtil
+public class NotezSystem
 {
 	/** int symbolizing a a normal ending */
-	public static final int NORMAL = 0;
+	public static final int NORMAL = 0x0;
 	/** int symbolizing a a unnormal ending */
-	public static final int FATAL = 1;
+	public static final int FATAL = 0x1;
+	public static final int SERVER_ERROR = 0x10;
 	
 	private static NotezSystemProperties systemProperties = NotezSystemProperties.getSystemProperties();
 

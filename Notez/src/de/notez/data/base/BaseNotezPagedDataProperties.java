@@ -2,13 +2,9 @@ package de.notez.data.base;
 
 import java.util.Objects;
 
-import javafx.beans.property.ReadOnlyIntegerWrapper;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import de.notez.data.NotezPagedData;
-import de.notez.data.NotezTextData;
-import de.notez.data.NotezTextDataProperties;
+import javafx.beans.property.*;
+import javafx.collections.*;
+import de.notez.data.*;
 
 /**
  * Abase implementation of the {@link NotezTextDataProperties}-interface

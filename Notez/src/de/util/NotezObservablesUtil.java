@@ -7,8 +7,7 @@
 package de.util;
 
 import javafx.beans.InvalidationListener;
-import javafx.beans.property.ReadOnlyIntegerProperty;
-import javafx.beans.property.ReadOnlyIntegerWrapper;
+import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 
 public class NotezObservablesUtil

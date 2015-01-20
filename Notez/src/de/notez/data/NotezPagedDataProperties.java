@@ -1,7 +1,6 @@
 package de.notez.data;
 
-import javafx.beans.property.ReadOnlyIntegerProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 
 /**

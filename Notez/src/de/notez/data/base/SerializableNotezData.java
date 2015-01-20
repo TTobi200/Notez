@@ -1,17 +1,10 @@
 package de.notez.data.base;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
-import java.util.ArrayList;
-import java.util.Objects;
+import java.io.*;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import de.notez.data.NotezData;
-import de.notez.data.NotezPagedData;
-import de.notez.data.NotezStageData;
-import de.notez.data.NotezTextData;
+import de.notez.data.*;
 import de.notez.network.NotezRemoteObject;
 
 /**

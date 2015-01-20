@@ -6,8 +6,7 @@
  */
 package de.util.log;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.Objects;
 
 import de.util.NotezLoggerUtil;

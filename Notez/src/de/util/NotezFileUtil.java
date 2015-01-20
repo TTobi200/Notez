@@ -11,6 +11,7 @@ import java.io.*;
 import java.net.URL;
 
 import javafx.stage.*;
+import de.notez.NotezSystem;
 import de.notez.prop.NotezProperties;
 
 public class NotezFileUtil
@@ -120,7 +121,7 @@ public class NotezFileUtil
 	public static File genNotezFile(String notezName)
 	{
 		return NotezFileUtil.canBeUsedAsFilename(notezName) ? new File(
-			NotezSystemUtil.getSystemProperties().getString(NotezProperties.NOTEZ_WORK_FOLDER)
+			NotezSystem.getSystemProperties().getString(NotezProperties.NOTEZ_WORK_FOLDER)
 							+ File.separator + notezName + NOTEZ_FILE_POSFIX) : null;
 	}
 }

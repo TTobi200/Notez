@@ -8,10 +8,11 @@ package de;
 import static de.notez.prop.NotezProperties.NOTEZ_REMOTE_FOLDER;
 
 import java.io.*;
+import java.net.BindException;
 
 import javafx.application.Application;
 import de.gui.NotezLoadSplash;
-import de.notez.NotezRemoteSync;
+import de.notez.*;
 import de.notez.network.NotezServer;
 import de.util.*;
 import de.util.log.NotezLog;
@@ -29,14 +30,13 @@ public class Startup
 	{
 		try
 		{
-			NotezLoggerUtil.initLogging(LOGGING_FOLDER, DAYS_TO_SAVE_LOGS,
-				REORG_LOGS);
+			NotezLoggerUtil.initLogging(LOGGING_FOLDER, DAYS_TO_SAVE_LOGS, REORG_LOGS);
 		}
 		catch(IOException e)
 		{
 			System.err.println("Could not initialize logging to basic outputstreams.");
 			e.printStackTrace();
-			NotezSystemUtil.exit(NotezSystemUtil.FATAL);
+			NotezSystem.exit(NotezSystem.FATAL);
 		}
 
 		if(!DEBUG)
@@ -44,7 +44,7 @@ public class Startup
 			if(NotezPreferences.isNotezAlreadyRunning())
 			{
 				System.err.println("ERROR: Notez already running");
-				NotezSystemUtil.exit(NotezSystemUtil.FATAL);
+				NotezSystem.exit(NotezSystem.FATAL);
 			}
 
 			NotezPreferences.setNotezRunning(true);
@@ -54,6 +54,12 @@ public class Startup
 		{
 			NotezServer.initialize();
 		}
+		catch(BindException e)
+		{
+			NotezLog.fatal("The socket for notez is already in use, may notez is already running?"
+						   + System.lineSeparator() + "Shutting down notez", e);
+			NotezSystem.exit(NotezSystem.SERVER_ERROR);
+		}
 		catch(IOException e)
 		{
 			NotezLog.error("error while initializing the server", e);
@@ -61,7 +67,8 @@ public class Startup
 
 		NotezPlatformUtil.initialize();
 
-		NotezRemoteSync.initialize(new File(NotezSystemUtil.getSystemProperties().getString(NOTEZ_REMOTE_FOLDER)));
+		NotezRemoteSync.initialize(new File(NotezSystem.getSystemProperties().getString(
+			NOTEZ_REMOTE_FOLDER)));
 
 		Application.launch(NotezLoadSplash.class, args);
 	}

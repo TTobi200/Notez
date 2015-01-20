@@ -15,10 +15,9 @@ import javax.swing.SwingUtilities;
 
 import com.sun.javafx.application.PlatformImpl;
 
-import de.notez.NotezNotes;
+import de.notez.*;
 import de.notez.data.NotezData;
 import de.notez.network.*;
-import de.util.NotezSystemUtil;
 
 public class NotezTray implements NotezRemoteObjectListener
 {
@@ -85,9 +84,9 @@ public class NotezTray implements NotezRemoteObjectListener
 		PlatformImpl.runAndWait(() ->
 		{
 			init(
-				NotezSystemUtil.getSystemProperties()
+				NotezSystem.getSystemProperties()
 					.getBoolean(NOTEZ_OPEN_RECEIVED_NOTEZ_DIRECTLY),
-				NotezSystemUtil.getSystemProperties().getBoolean(NOTEZ_SHOW_MESSAGE_ON_NEW_NOTEZ));
+				NotezSystem.getSystemProperties().getBoolean(NOTEZ_SHOW_MESSAGE_ON_NEW_NOTEZ));
 		});
 	}
 
@@ -114,21 +113,21 @@ public class NotezTray implements NotezRemoteObjectListener
 			rIOpenDirect = new CheckboxMenuItem("Open directly", openEnabled);
 			rIShowMessage = new CheckboxMenuItem("Show message", messageEnabled);
 
-			NotezSystemUtil.getSystemProperties()
+			NotezSystem.getSystemProperties()
 				.getBooleanProperty(NOTEZ_OPEN_RECEIVED_NOTEZ_DIRECTLY)
 				.addListener((p, o, n) -> rIOpenDirect.setState(n.booleanValue()));
 			rIOpenDirect.addItemListener(e ->
 			{
-				NotezSystemUtil.getSystemProperties().putBoolean(
+				NotezSystem.getSystemProperties().putBoolean(
 					NOTEZ_OPEN_RECEIVED_NOTEZ_DIRECTLY, rIOpenDirect.getState());
 			});
 
-			NotezSystemUtil.getSystemProperties()
+			NotezSystem.getSystemProperties()
 				.getBooleanProperty(NOTEZ_SHOW_MESSAGE_ON_NEW_NOTEZ)
 				.addListener((p, o, n) -> rIShowMessage.setState(n.booleanValue()));
 			rIShowMessage.addItemListener(e ->
 			{
-				NotezSystemUtil.getSystemProperties().putBoolean(NOTEZ_SHOW_MESSAGE_ON_NEW_NOTEZ,
+				NotezSystem.getSystemProperties().putBoolean(NOTEZ_SHOW_MESSAGE_ON_NEW_NOTEZ,
 					rIShowMessage.getState());
 			});
 
@@ -139,7 +138,7 @@ public class NotezTray implements NotezRemoteObjectListener
 
 			itmExit.addActionListener(e ->
 			{
-				NotezSystemUtil.exit();
+				NotezSystem.exit();
 			});
 
 			itmNotezRec.add(rIOpenDirect);

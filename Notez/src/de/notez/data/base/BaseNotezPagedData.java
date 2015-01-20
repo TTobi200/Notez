@@ -1,10 +1,8 @@
 package de.notez.data.base;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import de.notez.data.NotezPagedData;
-import de.notez.data.NotezTextData;
+import de.notez.data.*;
 
 /**
  * A basic implementation of the {@link NotezPagedData}-interface

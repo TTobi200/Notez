@@ -6,21 +6,12 @@
  */
 package de.notez.parser;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
+import java.io.*;
 import java.util.Arrays;
 
 import de.notez.NotezNote;
 import de.notez.data.NotezData;
-import de.notez.data.base.BaseNotezData;
-import de.notez.data.base.BaseNotezPagedData;
-import de.notez.data.base.BaseNotezStageData;
-import de.notez.data.base.BaseNotezTextData;
+import de.notez.data.base.*;
 import de.util.NotezFileUtil;
 
 public class NotezParserV02 extends NotezParserBase

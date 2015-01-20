@@ -234,7 +234,7 @@ public class NotezNote
 	{
 		if(noteChanged.get() && askToSave)
 		{
-			if(NotezSystemUtil.getSystemProperties().getBoolean(
+			if(NotezSystem.getSystemProperties().getBoolean(
 				NotezProperties.NOTEZ_ALWAYS_SAVE_ON_EXIT))
 			{
 				save();
@@ -289,7 +289,7 @@ public class NotezNote
 					case CANCEL:
 					case CLOSE:
 					case NO:
-						NotezSystemUtil.exit();
+						NotezSystem.exit();
 						break;
 					case OK:
 					case YES:
@@ -301,7 +301,7 @@ public class NotezNote
 			{
 				NotezLog.error(
 					"error while asking user for closing the the server", e);
-				NotezSystemUtil.exit();
+				NotezSystem.exit();
 			}
 		}
 	}

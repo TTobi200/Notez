@@ -1,11 +1,8 @@
 package de.notez.data.base;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
-import de.notez.data.NotezPagedData;
-import de.notez.data.NotezTextData;
+import de.notez.data.*;
 import de.util.NotezDataUtil;
 
 /**

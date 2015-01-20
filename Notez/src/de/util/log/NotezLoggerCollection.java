@@ -6,9 +6,7 @@
  */
 package de.util.log;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.*;
 
 /**
  * A logger using a collection of loggers.

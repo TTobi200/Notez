@@ -3,12 +3,7 @@ package de.notez.data.base;
 import java.util.Objects;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import de.notez.data.NotezData;
-import de.notez.data.NotezDataProperties;
-import de.notez.data.NotezPagedData;
-import de.notez.data.NotezPagedDataProperties;
-import de.notez.data.NotezStageData;
-import de.notez.data.NotezStageDataProperties;
+import de.notez.data.*;
 
 /**
  * A basic implementation of the {@link NotezDataProperties}-interface

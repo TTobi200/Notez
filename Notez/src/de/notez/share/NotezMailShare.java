@@ -16,9 +16,8 @@ import javax.mail.internet.*;
 
 import de.gui.NotezDialog;
 import de.gui.comp.NotezSettingsPane.NotezSettingsPaneTabPane;
-import de.notez.NotezNote;
+import de.notez.*;
 import de.notez.data.NotezData;
-import de.util.NotezSystemUtil;
 
 public class NotezMailShare extends NotezShareBase
 {
@@ -35,9 +34,9 @@ public class NotezMailShare extends NotezShareBase
     {
         try
         {
-            String host = NotezSystemUtil.getSystemProperties().getString(NOTEZ_MAIL_HOST);
-            String port = NotezSystemUtil.getSystemProperties().getString(NOTEZ_MAIL_PORT);
-            boolean useSSL = NotezSystemUtil.getSystemProperties().getBoolean(NOTEZ_MAIL_USE_SSL);
+            String host = NotezSystem.getSystemProperties().getString(NOTEZ_MAIL_HOST);
+            String port = NotezSystem.getSystemProperties().getString(NOTEZ_MAIL_PORT);
+            boolean useSSL = NotezSystem.getSystemProperties().getBoolean(NOTEZ_MAIL_USE_SSL);
             if(isNullOrEmpty(host) || isNullOrEmpty(port))
             {
                 switch(NotezDialog.showQuestionDialog(note.getGui(),
@@ -85,7 +84,7 @@ public class NotezMailShare extends NotezShareBase
             // session.setDebug(true);
 
             MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(NotezSystemUtil.getSystemProperties().getString(NOTEZ_MAIL_USER)));
+            message.setFrom(new InternetAddress(NotezSystem.getSystemProperties().getString(NOTEZ_MAIL_USER)));
 
             message.addRecipient(Message.RecipientType.TO,
                 new InternetAddress(receipAdress));

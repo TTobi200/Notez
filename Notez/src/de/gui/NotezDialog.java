@@ -24,7 +24,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.*;
 import de.notez.NotezRemoteSync.NotezRemoteUser;
-import de.util.*;
+import de.notez.*;
+import de.util.NotezFileUtil;
 
 public class NotezDialog
 {
@@ -128,9 +129,9 @@ public class NotezDialog
             ICON_QUESTION,
             NotezOption.YES, NotezOption.NO, NotezOption.CANCEL);
 
-        if(NotezSystemUtil.getSystemProperties().containsKey(propKey) && !evenShowDialog)
+        if(NotezSystem.getSystemProperties().containsKey(propKey) && !evenShowDialog)
         {
-            return NotezSystemUtil.getSystemProperties().getBoolean(propKey) ?
+            return NotezSystem.getSystemProperties().getBoolean(propKey) ?
                             NotezOption.YES : NotezOption.NO;
         }
 
@@ -152,12 +153,12 @@ public class NotezDialog
                     break;
 
                 case NO:
-                	NotezSystemUtil.getSystemProperties().putBoolean(propKey, false);
+                	NotezSystem.getSystemProperties().putBoolean(propKey, false);
                     break;
 
                 case OK:
                 case YES:
-                	NotezSystemUtil.getSystemProperties().putBoolean(propKey, true);
+                	NotezSystem.getSystemProperties().putBoolean(propKey, true);
                     break;
             }
         }
@@ -232,7 +233,7 @@ public class NotezDialog
             ICON_INFO,
             NotezOption.YES, NotezOption.NO, NotezOption.CANCEL);
 
-        String userName = NotezSystemUtil.getSystemProperties().getString(NOTEZ_MAIL_USER);
+        String userName = NotezSystem.getSystemProperties().getString(NOTEZ_MAIL_USER);
 
         TextField txtName = new TextField(userName);
         PasswordField txtPass = new PasswordField();

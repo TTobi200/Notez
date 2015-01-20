@@ -1,37 +1,20 @@
 package de.notez.parser;
 
-import static de.util.NotezXmlDomUtil.addAttribute;
-import static de.util.NotezXmlDomUtil.addElement;
-import static de.util.NotezXmlDomUtil.getDocumentBuilder;
-import static de.util.NotezXmlDomUtil.getDoubleAttributeValue;
-import static de.util.NotezXmlDomUtil.getElements;
-import static de.util.NotezXmlDomUtil.getIntAttributeValue;
-import static de.util.NotezXmlDomUtil.getSingleElement;
+import static de.util.NotezXmlDomUtil.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.Objects;
+import java.io.*;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import org.w3c.dom.*;
 
 import de.notez.NotezNote;
-import de.notez.data.NotezData;
-import de.notez.data.NotezPagedData;
-import de.notez.data.NotezStageData;
-import de.notez.data.base.BaseNotezData;
-import de.notez.data.base.BaseNotezPagedData;
-import de.notez.data.base.BaseNotezStageData;
-import de.notez.data.base.BaseNotezTextData;
+import de.notez.data.*;
+import de.notez.data.base.*;
 import de.util.NotezFileUtil;
 
 public abstract class NotezXmlParserBase extends NotezParserBase

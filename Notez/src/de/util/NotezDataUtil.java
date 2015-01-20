@@ -8,10 +8,7 @@ package de.util;
 
 import java.util.stream.Collectors;
 
-import de.notez.data.NotezData;
-import de.notez.data.NotezPagedData;
-import de.notez.data.NotezStageData;
-import de.notez.data.NotezTextData;
+import de.notez.data.*;
 import de.notez.data.base.BaseNotezTextData;
 
 public class NotezDataUtil

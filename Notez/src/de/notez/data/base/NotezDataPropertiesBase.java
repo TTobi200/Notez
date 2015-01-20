@@ -1,16 +1,8 @@
 package de.notez.data.base;
 
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.property.StringProperty;
-import de.notez.data.NotezData;
-import de.notez.data.NotezDataProperties;
-import de.notez.data.NotezPagedData;
-import de.notez.data.NotezPagedDataProperties;
-import de.notez.data.NotezStageData;
-import de.notez.data.NotezStageDataProperties;
-import de.util.NotezDataUtil;
-import de.util.NotezNonNullStringProperty;
+import javafx.beans.property.*;
+import de.notez.data.*;
+import de.util.*;
 
 /**
  * a basis for implementations of the {@link NotezDataProperties}-interface

@@ -73,7 +73,7 @@ public class NotezButtonBar extends AnchorPane implements NotezComponent
 
 	public NotezButtonBar() throws IOException
 	{
-		if (!NotezSystemUtil.isRunningInSceneBuilder())
+		if (!NotezSystem.isRunningInSceneBuilder())
 		{
 			FXMLLoader loader = new FXMLLoader(
 					NotezFileUtil.getResourceURL(NotezFileUtil.FXML_FOLDER + File.separator + FXML));
@@ -253,7 +253,7 @@ public class NotezButtonBar extends AnchorPane implements NotezComponent
 
 	private void bindButtonVisibility(Node node, String property, List<Node> listChildren)
 	{
-		NotezSystemUtil.getSystemProperties()
+		NotezSystem.getSystemProperties()
 		.getBooleanProperty(property, true)
 		.addListener((p, o, n) -> {
 			if (n.booleanValue())
@@ -265,7 +265,7 @@ public class NotezButtonBar extends AnchorPane implements NotezComponent
 				listChildren.remove(node);
 			}
 		});
-		if(!NotezSystemUtil.getSystemProperties().getBoolean(property))
+		if(!NotezSystem.getSystemProperties().getBoolean(property))
 		{
 			listChildren.remove(node);
 		}

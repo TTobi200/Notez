@@ -1,8 +1,6 @@
 package de.notez.data.base;
 
-import de.notez.data.NotezData;
-import de.notez.data.NotezPagedData;
-import de.notez.data.NotezStageData;
+import de.notez.data.*;
 import de.util.NotezDataUtil;
 
 /**

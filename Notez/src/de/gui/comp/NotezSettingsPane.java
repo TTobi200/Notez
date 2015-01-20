@@ -15,7 +15,7 @@ import de.gui.NotezGui.NotezGuiBody;
 import de.notez.*;
 import de.notez.NotezRemoteSync.NotezRemoteUser;
 import de.notez.prop.NotezProperties;
-import de.util.*;
+import de.util.NotezFileUtil;
 import de.util.log.NotezLog;
 
 public class NotezSettingsPane extends BorderPane implements NotezComponent
@@ -119,7 +119,7 @@ public class NotezSettingsPane extends BorderPane implements NotezComponent
 
 	public NotezSettingsPane() throws IOException
 	{
-		if(!NotezSystemUtil.isRunningInSceneBuilder())
+		if(!NotezSystem.isRunningInSceneBuilder())
 		{
 			FXMLLoader loader = new FXMLLoader(
 				NotezFileUtil.getResourceURL(NotezFileUtil.FXML_FOLDER + File.separator + FXML));
@@ -135,21 +135,21 @@ public class NotezSettingsPane extends BorderPane implements NotezComponent
 	@FXML
 	private void saveSettings()
 	{
-		NotezSystemUtil.getSystemProperties().putString(NotezProperties.NOTEZ_WORK_FOLDER,
+		NotezSystem.getSystemProperties().putString(NotezProperties.NOTEZ_WORK_FOLDER,
 			txtPropNotezWorkFold.getText());
-		NotezSystemUtil.getSystemProperties().putString(NotezProperties.NOTEZ_REMOTE_FOLDER,
+		NotezSystem.getSystemProperties().putString(NotezProperties.NOTEZ_REMOTE_FOLDER,
 			txtPropNotezRemoteFold.getText());
 
-		NotezSystemUtil.getSystemProperties().putString(NotezProperties.NOTEZ_MAIL_USER,
+		NotezSystem.getSystemProperties().putString(NotezProperties.NOTEZ_MAIL_USER,
 			txtEmail.getText());
-		NotezSystemUtil.getSystemProperties().putString(NotezProperties.NOTEZ_MAIL_HOST,
+		NotezSystem.getSystemProperties().putString(NotezProperties.NOTEZ_MAIL_HOST,
 			txtHost.getText());
-		NotezSystemUtil.getSystemProperties().putString(NotezProperties.NOTEZ_MAIL_PORT,
+		NotezSystem.getSystemProperties().putString(NotezProperties.NOTEZ_MAIL_PORT,
 			txtPort.getText());
 
 		propertyBindings.forEach(PropertyBinding::onSave);
 		
-		NotezSystemUtil.getSystemProperties().save();
+		NotezSystem.getSystemProperties().save();
 		getGui().switchToBody(NotezGuiBody.TEXT);
 	}
 
@@ -439,13 +439,13 @@ public class NotezSettingsPane extends BorderPane implements NotezComponent
 		@Override
 		public void onSave()
 		{
-			NotezSystemUtil.getSystemProperties().putString(propertyString, prop.get());
+			NotezSystem.getSystemProperties().putString(propertyString, prop.get());
 		}
 
 		@Override
 		public void onUpdate()
 		{
-			prop.set(NotezSystemUtil.getSystemProperties().getString(propertyString, ""));
+			prop.set(NotezSystem.getSystemProperties().getString(propertyString, ""));
 		}
 	}
 
@@ -467,13 +467,13 @@ public class NotezSettingsPane extends BorderPane implements NotezComponent
 		@Override
 		public void onSave()
 		{
-			NotezSystemUtil.getSystemProperties().putBoolean(propertyString, prop.get());
+			NotezSystem.getSystemProperties().putBoolean(propertyString, prop.get());
 		}
 
 		@Override
 		public void onUpdate()
 		{
-			prop.set(NotezSystemUtil.getSystemProperties().getBoolean(propertyString, def));
+			prop.set(NotezSystem.getSystemProperties().getBoolean(propertyString, def));
 		}
 	}
 }

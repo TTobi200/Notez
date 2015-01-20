@@ -6,8 +6,7 @@
  */
 package de.notez.share;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 import de.notez.NotezNote;
 import de.notez.network.NotezServer;

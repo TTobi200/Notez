@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import de.notez.data.NotezData;
-import de.util.*;
+import de.util.NotezFileUtil;
 
 /**
  * Utility methods for {@link NotezNote}
@@ -27,7 +27,7 @@ public class NotezNotes
 	public static NotezNote creNote()
 	{
 		return creNote(new File(
-			new File(NotezSystemUtil.getSystemProperties().getString(NOTEZ_WORK_FOLDER))
+			new File(NotezSystem.getSystemProperties().getString(NOTEZ_WORK_FOLDER))
 							+ File.separator
 							+ new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date(
 								System.currentTimeMillis()))

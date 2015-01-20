@@ -2,11 +2,9 @@ package de.notez.data.base;
 
 import java.util.Objects;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.*;
 import javafx.stage.Stage;
-import de.notez.data.NotezStageData;
-import de.notez.data.NotezStageDataProperties;
+import de.notez.data.*;
 import de.util.NotezDataUtil;
 
 public class BaseNotezStageDataProperties implements NotezStageDataProperties

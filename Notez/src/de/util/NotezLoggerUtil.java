@@ -8,20 +8,14 @@ package de.util;
 
 import static de.util.NotezTimeUtil.DEFAULT_FORMATTER;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintStream;
+import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.nio.file.attribute.FileTime;
+import java.nio.file.attribute.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-import de.util.log.NotezLogLevel;
-import de.util.log.NotezLogger;
-import de.util.log.NotezLoggerCollection;
-import de.util.log.NotezStreamLogger;
+import de.util.log.*;
 
 /**
  * utility class for logging-related actions
