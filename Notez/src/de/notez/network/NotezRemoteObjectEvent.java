@@ -36,4 +36,10 @@ public class NotezRemoteObjectEvent extends NotezEvent
 	{
 		return client;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return "remoteevent - client:" + getClient() + ", object:" + getRemoteObject();
+	}
 }

@@ -86,7 +86,11 @@ public class NotezServer extends Thread implements NotezRemoteObjectListener
 	@Override
 	public void remoteObjectReceived(NotezRemoteObjectEvent e)
 	{
-		// TODO default handling if possible
+		NotezLog.debug("Received remoteevent: ");
+		if(e.getRemoteObject() instanceof NotezRemoteAction)
+		{
+			((NotezRemoteAction)e.getRemoteObject()).exec();
+		}
 	}
 
 	public static NotezClientConnection getConnection(String host)
