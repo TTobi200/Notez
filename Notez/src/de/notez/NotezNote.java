@@ -323,6 +323,11 @@ public class NotezNote
 	 */
 	public void delete(boolean askUser)
 	{
+		if(Objects.nonNull(System.getSecurityManager()))
+		{
+			System.getSecurityManager().checkPermission(NotezPermission.PERMISSION_NOTEZ_DELETE);
+		}
+		
 		if(askUser)
 		{
 			try

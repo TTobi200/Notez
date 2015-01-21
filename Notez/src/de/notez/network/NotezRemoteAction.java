@@ -17,5 +17,5 @@ public interface NotezRemoteAction extends NotezRemoteObject, Serializable
 	/**
 	 * Execute the task of this object.
 	 */
-	public void exec();
+	public void exec() throws SecurityException;
 }

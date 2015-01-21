@@ -35,16 +35,54 @@ public class NotezServer extends Thread implements NotezRemoteObjectListener
 			server.start();
 		}
 	}
+	
+	protected static Thread getRemoteActionThread()
+	{
+		return server.remoteActionThread;
+	}
+	
+	/** Thread for doing all {@link NotezRemoteAction}s */
+	protected Thread remoteActionThread;
+	/** all {@link NotezRemoteAction} to be done */
+	protected LinkedList<NotezRemoteAction> actions;
 
 	private NotezServer() throws IOException
 	{
 		serverSocket = new ServerSocket(SERVER_PORT);
+		actions = new LinkedList<>();
+		remoteActionThread = new Thread(() ->
+		{
+			while(true)
+			{
+				try
+				{
+					if(!actions.isEmpty())
+					{
+						actions.poll().exec();
+					}
+					Thread.sleep(1000);
+				}
+				catch(SecurityException e)
+				{
+					NotezLog.error("A remoteAction tried to do an action that was denied by the securitymanager", e);
+				}
+				catch(InterruptedException e)
+				{
+					NotezLog.warn("RemoteActionThread was interrupted while sleeping", e);
+				}
+			}
+		},
+		"RemoteActionThread");
+		
+		remoteActionThread.setDaemon(true);
 	}
 
 	@SuppressWarnings("resource")
 	@Override
 	public void run()
 	{
+		NotezSecurityManager.installSecurityManager();
+		remoteActionThread.start();
 		try
 		{
 			Socket socket;
@@ -89,7 +127,7 @@ public class NotezServer extends Thread implements NotezRemoteObjectListener
 		NotezLog.debug("Received remoteevent: ");
 		if(e.getRemoteObject() instanceof NotezRemoteAction)
 		{
-			((NotezRemoteAction)e.getRemoteObject()).exec();
+			actions.addLast((NotezRemoteAction)e.getRemoteObject());
 		}
 	}
 

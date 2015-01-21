@@ -11,7 +11,7 @@ public class NotezSystem
 	/** int symbolizing a a unnormal ending */
 	public static final int FATAL = 0x1;
 	public static final int SERVER_ERROR = 0x10;
-	
+
 	private static NotezSystemProperties systemProperties = NotezSystemProperties.getSystemProperties();
 
 	/**
@@ -25,14 +25,27 @@ public class NotezSystem
 	/**
 	 * Ending of this application with the given status
 	 *
-	 * @param status the return value
+	 * @param status
+	 *            the return value
 	 */
 	public static void exit(int status)
 	{
-		NotezRemoteSync.stopAll();
-		Platform.exit();
-		NotezPreferences.setNotezRunning(false);
-		
+		try
+		{
+			NotezRemoteSync.stopAll();
+			Platform.exit();
+			getSystemProperties().save();
+			NotezPreferences.setNotezRunning(false);
+		}
+		catch(Throwable t)
+		{
+			// error while exiting, change the status to notify the user
+			if(status == NORMAL)
+			{
+				status = FATAL;
+			}
+		}
+
 		if(status != NORMAL)
 		{
 			System.exit(status);
@@ -41,8 +54,7 @@ public class NotezSystem
 
 	public static boolean isRunningInSceneBuilder()
 	{
-		return System.getProperty("app.preferences.id", "").contains(
-						"scenebuilder");
+		return System.getProperty("app.preferences.id", "").contains("scenebuilder");
 	}
 
 	public static NotezSystemProperties getSystemProperties()
