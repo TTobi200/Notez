@@ -112,6 +112,8 @@ public class NotezGui extends Stage
 
 	private void setListeners()
 	{
+		titleProperty().bind(getNote().getData().titleProperty());
+		
 		fileLink.setText(note.getNoteFile().getAbsolutePath());
 		getNote().noteFileProperty().addListener((p, o, n) ->
 		{
