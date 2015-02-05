@@ -35,7 +35,7 @@ public class NotezTextPane extends BorderPane implements NotezComponent
 		{
 			FXMLLoader loader = new FXMLLoader(
 				NotezFileUtil.getResourceURL(NotezFileUtil.FXML_FOLDER
-												+ File.separator + FXML));
+												+ "/" + FXML));
 			loader.setRoot(this);
 			loader.setController(this);
 

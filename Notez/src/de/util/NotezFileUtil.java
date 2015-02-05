@@ -17,7 +17,7 @@ import de.notez.prop.NotezProperties;
 public class NotezFileUtil
 {
 	public static final String INCLUDE_FOLDER = "include";
-	public static final String FXML_FOLDER = INCLUDE_FOLDER + File.separator + "fxml";
+	public static final String FXML_FOLDER = INCLUDE_FOLDER + "/" + "fxml";
 	public static final String NOTEZ_FILE_POSFIX = ".notez";
 
 	public static boolean fileCanBeLoad(String filePath)

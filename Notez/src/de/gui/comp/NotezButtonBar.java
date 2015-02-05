@@ -76,7 +76,7 @@ public class NotezButtonBar extends AnchorPane implements NotezComponent
 		if (!NotezSystem.isRunningInSceneBuilder())
 		{
 			FXMLLoader loader = new FXMLLoader(
-					NotezFileUtil.getResourceURL(NotezFileUtil.FXML_FOLDER + File.separator + FXML));
+					NotezFileUtil.getResourceURL(NotezFileUtil.FXML_FOLDER + "/" + FXML));
 			loader.setRoot(this);
 			loader.setController(this);
 
